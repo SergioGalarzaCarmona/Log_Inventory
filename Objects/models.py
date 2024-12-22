@@ -6,7 +6,7 @@ from Users.models import Subprofile
 class Group(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    image = models.ImageField(default='default_group.jpg',upload_to='media/objects_images')
+    image = models.ImageField(default='default_group.jpg',upload_to='objects_images')
     in_charge = models.ForeignKey(Subprofile, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -20,7 +20,7 @@ class Object(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    image = models.ImageField(default='default.jpg',upload_to='media/objects_images')
+    image = models.ImageField(default='default.jpg',upload_to='objects_images')
     description = models.TextField()
     stock = models.IntegerField()
     date_added = models.DateTimeField(auto_now_add=True)

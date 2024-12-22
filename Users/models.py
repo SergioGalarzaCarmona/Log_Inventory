@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg',upload_to='media/profile_images')
+    image = models.ImageField(default='default.jpg',upload_to='profile_images')
     
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -17,7 +17,7 @@ class Profile(models.Model):
 class GroupSubprofiles(models.Model):
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    image = models.ImageField(default='default_group.jpg',upload_to='media/profile_images')
+    image = models.ImageField(default='default_group.jpg',upload_to='profile_images')
     
     def __str__(self):
         return f'{self.name} Group'
@@ -29,7 +29,7 @@ class GroupSubprofiles(models.Model):
 class Subprofile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    image = models.ImageField(default='default.jpg',upload_to='media/profile_images')
+    image = models.ImageField(default='default.jpg',upload_to='profile_images')
     
     def __str__(self):
         return f'{self.user.username} Subprofile'
