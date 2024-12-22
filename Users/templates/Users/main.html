@@ -1,0 +1,89 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="../../static/CSS/mainStyles.css">
+    <title>Sidebar</title>
+</head>
+<body>
+    <aside class="sidebar">
+        <form class="sidebar__form">
+            <input type="checkbox" id="open-menu">
+            <label class="material-symbols-outlined close-menu" for="open-menu">chevron_left</label>
+            <label class="material-symbols-outlined open-menu" for="open-menu">chevron_right</label>
+        </form>
+        <nav class="sidebar__nav">
+            <ul>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">add</span>
+                        <p>Crear</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">delete</span>
+                        <p>Eliminar</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">partner_exchange</span>
+                        <p>Prestamos</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">event_note</span>
+                        <p>Transacciones</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">groups</span>
+                        <p>Usuarios</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar__profile">
+            <ul>
+                <li class="sidebar__item">
+                    <a href="#" class="item--profile sidebar__item-link">
+                        <img src="{%static '/IMAGES/Guts.jpg'%}" alt="profile-img">
+                        <span class="profile-option">Guts</span>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">Logout</span>
+                        <p>Logout</p>
+                    </a>   
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <main> 
+        <div class="filter-bar container"> 
+            <div class="filter-bar__filter-container row">
+                <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-1">
+                <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-1">
+                <input type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-1">
+                <div class="filter-bar__name col-4">
+                    <input type="text">
+                    <input value="search" type="submit" class="material-symbols-outlined">
+                </div>
+                <div class="filter-bar__logo-container col-5">
+                    <img src="{%static '/IMAGES/logo.webp'%}" alt="logo" class="logo">
+                </div>
+            </div>
+        </div>
+        <div class="objects-area">
+        </div>
+    </main>
+</body>
+</html>

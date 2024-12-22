@@ -43,4 +43,6 @@ def sign_up(request):
         image = request.FILES.get('image','defaul.jpg')
         Profile.objects.create(user=user,image=image)
         return redirect('home')
-    
+
+def main(request):
+    return render(request, 'Users/main.html')

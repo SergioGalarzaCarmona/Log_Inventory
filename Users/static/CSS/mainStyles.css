@@ -1,0 +1,316 @@
+* {
+    box-sizing: border-box;
+}
+
+body, div, ul, li, a, h1, h2, h3, h4, p {
+    margin: 0;
+    padding: 0;
+}
+
+label, .sidebar__nav {
+    user-select: none;
+}
+
+.container {
+    margin: 0;
+    padding: 0;
+}
+
+.row {
+    margin: 0;
+}
+
+@media (min-width: 992px) {
+    .container, .container-lg, .container-md, .container-sm {
+        max-width: 100%;
+    }
+}
+
+body {
+    --bg-color: #fff;
+    --sidebar-color: color-mix(in srgb, #000 25%, #fff);
+    --dark-color: #222;
+    --fb-color: #003366;
+    background-color: var(--bg-color);
+    font-family: Montserrat;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+/*  SIDEBAR STYLES  */
+
+.sidebar {
+    background-color: var(--sidebar-color);
+    position: fixed;
+    height: 100dvh;
+    width: clamp(220px, 20vw, 300px);
+    font-size: clamp(1rem, 2.2vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0px 0px 30px 0px;
+}
+
+.sidebar__nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.sidebar__nav > ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 60dvh;
+    width: 100%;
+}
+
+.sidebar__item-link {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    font-size: .9rem;
+    padding-right: 6px;
+    color: var(--dark-color);
+    position: relative;
+    transition: border-radius .4s;
+}
+
+.sidebar__item-link:hover {
+    background-color: var(--bg-color);
+    border-radius: 36px 0 0 36px;
+}
+
+.sidebar__item-link::before, .sidebar__item-link::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    background-color: transparent;
+    transition: border-radius .4s;
+}
+
+.sidebar__item-link:hover::before {
+    top: -18px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 0 4px var(--bg-color);
+}
+
+.sidebar__item-link:hover::after {
+    bottom: -18px;
+    border-top-right-radius: 25px;
+    box-shadow: 4px -4px 0 4px var(--bg-color);
+}
+
+.sidebar__item-link > span {
+    padding: 12px;
+    font-size: 2rem;
+}
+
+.sidebar__item-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+.sidebar__profile img {
+    border-radius: 50%;
+    width: 2rem;
+}
+
+.item--profile .profile-option {
+    font-size: .9rem;
+}
+
+.item--profile {
+    width: 100%;
+    padding: 7.5px;
+    padding-left: 12px;
+    padding-right: 0;
+}
+
+.item--profile:hover img {
+    opacity: .7;
+}
+
+.sidebar__form {
+    position: absolute;
+    z-index: 20;
+    right: -1rem;
+    top: 1rem;
+}
+
+.open-menu {
+    transition: background-color .2s;
+}
+
+.close-menu {
+    transition: font-weight .2s, color .2s;
+}
+
+input[type="checkbox"], .open-menu {
+    display: none;
+}
+
+.sidebar label {
+    position: relative;
+    background-color: var(--fb-color);
+    color: var(--sidebar-color);
+    font-size: 2rem;
+    border-radius: 50%;
+    padding: .4rem;
+}
+
+.sidebar label::before, .sidebar label::after {
+    content: "";
+    background-color: var(--bg-color);
+    position: absolute;
+    width: 10px;
+    height: 25px;
+    background-color: transparent;
+}
+
+.sidebar label::before {
+    top: -25px;
+    left: 19px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 0 4px var(--fb-color);
+}
+
+.sidebar label::after {
+    bottom: -25px;
+    left: 19px;
+    border-top-right-radius: 25px;
+    box-shadow: 4px -4px 0 4px var(--fb-color);
+}
+
+.sidebar:has(input[type="checkbox"]:checked) .close-menu {
+    display: none;
+}
+
+.sidebar:has(input[type="checkbox"]:checked) .open-menu {
+    display: block;
+} 
+
+input[type="checkbox"]:checked ~ label {
+    color: var(--fb-color);
+    background-color: var(--sidebar-color);
+}
+
+.sidebar:has(input[type="checkbox"]:checked) :is(.sidebar__form) {
+    right: 6px;
+}
+
+input[type="checkbox"]:checked ~ label::before, input[type="checkbox"]:checked ~ label::after {
+    display: none;
+}
+
+.sidebar:has(input[type="checkbox"]:checked) {
+    width: fit-content;
+}
+
+
+.sidebar:has(input[type="checkbox"]:checked) :is(.sidebar__item-link > p, .profile-option) {
+    display: none;
+}
+
+.open-menu:hover, .close-menu {
+    cursor: pointer;
+}
+
+.sidebar__form > .open-menu:hover {
+    background-color: var(--bg-color);
+}
+
+.sidebar__form > .close-menu:hover {
+    color: var(--bg-color);
+    font-weight: bold;
+}
+
+
+/*  MAIN STYLES  */
+
+main {
+    height: 100dvh;
+    width: clamp(calc(100vw - 300px), calc(100vw - 20vw), calc(100vw - 220px));
+    background-color: var(--bg-color);
+    position: fixed;
+    right: 0;
+}
+
+aside:has(input[type="checkbox"]:checked) ~ main {
+    width: calc(100vw - 62px);
+}
+
+.filter-bar {
+    width: 100%;
+    height: calc(2rem + 44.78px);
+    background-color: var(--fb-color);
+}
+
+.filter-bar__filter-container {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+.filter-bar__filter-container  > div, .filter-bar__filter-container > input  {
+    color: var(--bg-color);
+    display: grid;
+    place-content: center;
+}
+
+.filter-bar__filter-container > input {
+    background-color: transparent;
+    border: none;
+}
+
+.filter-bar__filter-container > input:hover {
+    color: #D2B48C;
+}
+
+.filter-bar__z-a {
+    transform: rotate(180deg);
+}
+
+.filter-bar__filter-container > .filter-bar__name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.filter-bar__name > input {
+    height: auto;
+}
+
+.filter-bar__name > input[type="text"] {
+    width: 80%;
+    outline: none;
+}
+
+.filter-bar__name > input[type="submit"] {
+    width: 20%;
+}
+
+.filter-bar__filter-container > .filter-bar__logo-container {
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.logo {
+    height: clamp(20px, 10dvh, 80px);
+    width: clamp(40px, 20dvh, 160px);
+}
+
+.objects-area {
+    width: 100%;
+    height: calc(100dvh - (2rem + 44.78px));
+    background-image: url(../IMAGES/Escritorio.jpg);
+    background-size: cover;
+}
