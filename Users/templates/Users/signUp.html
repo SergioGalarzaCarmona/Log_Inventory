@@ -1,0 +1,5 @@
+<form method="POST" enctype="multipart/form-data" class="signUp-form">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" name="signup" value="Registrarse">
+</form>

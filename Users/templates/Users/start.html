@@ -3,32 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start</title>
+    <title>Welcome</title>
 </head>
 <body>
     <div>
-        <form method="POST" enctype="multipart/form-data" class="signUp-form">
-            {% csrf_token %}
-            {% if messages %}
-            <div class="message">
-                {% if 'username' not in messages %}
-                    <p>Si aún asi quieres crear el usuario, reescribe las contraseñas, vuelve a subir la imagen de perfil y haz click en "Sí".
-                        Ten en cuenta que esto esto es por su seguridad y no nos hacemos cargo de lo que ocurra con su cuenta si no sigue las recomendaciones sobre la contraseña</p>
-                    </p>
-                    <input type="submit"  name="confirmation" value="Sí">
-                {% endif %}
-            </div> 
-            {% endif %}
-            {{ SignUpForm }}
-            <input type="submit" name="SignUp Confirmation" value="Registrarse">
-        </form>
+        {% include 'Users/signUp.html' %}
     </div>
     <div>
-            <form method="POST" enctype="multipart/form-data" class="logIn-form">
-        {% csrf_token %}
-        {{ LogInForm.as_p }}
-        <input type="submit" name="LogIn Confirmation" value="Iniciar Sesión">
-    </form>
+        {% include 'Users/logIn.html' %}
     </div>
 </body>
 </html>
