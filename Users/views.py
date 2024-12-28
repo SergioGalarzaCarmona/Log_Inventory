@@ -11,8 +11,8 @@ def home(request):
 def start(request):
     if request.method == 'GET':
         return render(request, 'Users/start.html',{
-        'signUp-form': RegisterUser(),
-        "LogIn-form": LoginUser(),
+        'SignUpForm': RegisterUser(),
+        "LogInForm": LoginUser(),
     })
     else:
         if "SignUp Confirmation" in request.POST:
@@ -21,31 +21,34 @@ def start(request):
                 user = User.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password1'])
                 image = request.FILES.get('image','defaul.jpg')
                 Profile.objects.create(user=user,image=image)
-                return redirect('home')
+                return redirect('main')
             form = RegisterUser(request.POST)
             if request.POST['password1'] != request.POST['password2']:
                 return render(request, 'Users/start.html', {
-                    'signUp-form': RegisterUser(request.POST,request.FILES),
+                    'SignUpForm': RegisterUser(request.POST,request.FILES),
+                    'LogIn-form': LoginUser(request.POST),
                     'messages': 'Las contraseñas no coinciden'
                     })
             if not form.is_valid():
                 errors = form.errors
                 if 'username' in errors:
                     return render(request, 'Users/start.html', {
-                        'signUp-form': RegisterUser(request.POST,request.FILES),
+                        'SignUpForm': RegisterUser(request.POST,request.FILES),
+                        'LogIn-form': LoginUser(request.POST),
                         'messages': errors,
                     }
                     )
             
                 return render(request, 'Users/start.html', {
-                    'signUp-form': RegisterUser(request.POST,request.FILES),
+                    'SignUpForm': RegisterUser(request.POST,request.FILES),
+                    'LogIn-form': LoginUser(request.POST),
                     'messages': errors,
                 })
         
             user = form.save()
             image = request.FILES.get('image','defaul.jpg')
             Profile.objects.create(user=user,image=image)
-            return redirect('home')
+            return redirect('main')
     
         elif "LogIn Confirmation" in request.POST:
             confirmation = request.POST.get("LogIn Confirmation", False)

@@ -15,18 +15,18 @@
                     <p>Si aún asi quieres crear el usuario, reescribe las contraseñas, vuelve a subir la imagen de perfil y haz click en "Sí".
                         Ten en cuenta que esto esto es por su seguridad y no nos hacemos cargo de lo que ocurra con su cuenta si no sigue las recomendaciones sobre la contraseña</p>
                     </p>
-                    <input type="submit"  name="SignUp Confirmation" value="Crear Usuario">
+                    <input type="submit"  name="confirmation" value="Sí">
                 {% endif %}
             </div> 
             {% endif %}
-            {{ signUp-form.as_p }}
-            <input type="submit" value="Registrarse">
+            {{ SignUpForm }}
+            <input type="submit" name="SignUp Confirmation" value="Registrarse">
         </form>
     </div>
     <div>
             <form method="POST" enctype="multipart/form-data" class="logIn-form">
         {% csrf_token %}
-        {{ logIn-form.as_p }}
+        {{ LogInForm.as_p }}
         <input type="submit" name="LogIn Confirmation" value="Iniciar Sesión">
     </form>
     </div>
