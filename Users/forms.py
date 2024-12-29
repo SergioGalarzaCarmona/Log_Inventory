@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 
@@ -14,11 +14,10 @@ class RegisterUser(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
         help_texts = {k:"" for k in fields}
 
-class LoginUser(forms.Form):
+class LoginUser(AuthenticationForm):
     username = forms.CharField(max_length=30,label='Nombre de Usuario', required=True, widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario','class' : ''}))
     password = forms.CharField(max_length=30,label='Contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña','class' : ''}))
     
     class Meta:
         model = User
         fields = ['username', 'password']
-        help_texts = {k:"" for k in fields}
