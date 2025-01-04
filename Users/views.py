@@ -21,18 +21,21 @@ def logIn(request):
         })
         
 def signUp(request):
+    class_container = 'active'
     form = RegisterUser(request.POST)
     registered_email = User.objects.filter(email=request.POST['email'])
     if len(registered_email) != 0:
         return render(request, 'Users/start.html', {
             'form': RegisterUser(request.POST,request.FILES),
             'form_login': LoginUser,
-            'messages': 'El correo ya esta registrado'
+            'messages': 'El correo ya esta registrado',
+            'class' : class_container
             })
     if not form.is_valid():
             return render(request, 'Users/start.html', {
                 'form': RegisterUser(request.POST,request.FILES),
                 'form_login': LoginUser,
+                'class' : class_container
             })
     user = form.save()
     image = request.FILES.get('image','default.jpg')
