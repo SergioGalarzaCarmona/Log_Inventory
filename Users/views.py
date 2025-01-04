@@ -9,27 +9,30 @@ def home(request):
     return render(request, 'Users/home.html')
 
 def logIn(request):
-    user = authenticate(username=request.POST['username'], password=request.POST['password'])
-    if user is None:
-         return render(request, 'Users/start.html', {
-            'form': RegisterUser,
-            'form_login': LoginUser(request.POST),
-            'error': 'Usuario o Contraseña Incorrectos',
-        })
-    else:
+    user = authenticate(username=request.POST['username'], password=request.POST['password'], is_active=True)
+    if user is not None:
         login(request, user)
         return redirect('main')
+    else:
+        return render(request, 'Users/start.html', {
+            'form': RegisterUser,
+            'form_login': LoginUser(request.POST),
+            'error': 'Usuario o contraseña incorrectos'
+        })
         
 def signUp(request):
     form = RegisterUser(request.POST)
-    if request.POST['password1'] != request.POST['password2']:
+    registered_email = User.objects.filter(email=request.POST['email'])
+    if len(registered_email) != 0:
         return render(request, 'Users/start.html', {
             'form': RegisterUser(request.POST,request.FILES),
-            'messages': 'Las contraseñas no coinciden'
+            'form_login': LoginUser,
+            'messages': 'El correo ya esta registrado'
             })
     if not form.is_valid():
             return render(request, 'Users/start.html', {
-                'form_login': RegisterUser(request.POST,request.FILES),
+                'form': RegisterUser(request.POST,request.FILES),
+                'form_login': LoginUser,
             })
     user = form.save()
     image = request.FILES.get('image','default.jpg')
