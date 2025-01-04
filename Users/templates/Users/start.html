@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/CSS/startUpStyles.css">
     <title>Welcome</title>
 </head>
 <body>
-    <div>
-        {% include 'Users/signUp.html' %}
+    <div class="container">
+        <div class="sign-up">
+            {% include 'Users/signUp.html' %}
+        </div>
+        <div class="log-in">
+            {% include 'Users/logIn.html' %}
+        </div>
+        <div class="toogle-container">
+            <div class="toogle">
+                <div class="toogle-panel toogle-left">
+                    <h3>¡Bienvenido!</h3>
+                    <p>Si ya tienes una cuenta</p>
+                    <button class="hidden" id="login">Inicia Sesión</button>
+                </div>
+                <div class="toogle-panel toogle-right">
+                    <h3>¡Hola de nuevo!</h3>
+                    <p>Si no tienes una cuenta</p>
+                    <button class="hidden" id="register">Registrate</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        {% include 'Users/logIn.html' %}
-    </div>
+    <script src="../../static/SCRIPTS/startScript.js"></script>
 </body>
 </html>

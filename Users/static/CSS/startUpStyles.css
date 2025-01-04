@@ -1,0 +1,203 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    --bg-color: #fff;
+    --sidebar-color: color-mix(in srgb, #000 25%, #fff);
+    --dark-color: #222;
+    --fb-color: #003366;
+    --wood: #8B5E3C;
+    height: 100dvh;
+    width: 100dvw;
+    display: grid;
+    place-items: center;
+    background-image: url(../IMAGES/Troncos.jpg);
+    background-size: cover;
+    font-family: Montserrat;
+}
+
+.container {
+    background-color: var(--sidebar-color);
+    border-radius: 75px;
+    box-shadow: 0 5px 15px rgb(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: clamp(50%, 768px, 100%);
+    height: 480px;
+}
+
+.container p {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
+}
+
+.container span {
+    font-size: 12px;
+}
+
+.container a {
+    color: #333;
+    font-size: 13px;
+    text-decoration: none;
+    margin: 15px 0 10px;
+}
+
+.container button, form > input[type="submit"] {
+    background-color: var(--fb-color);
+    color: #fff;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0,5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.container button.hidden {
+    background-color: transparent;
+    border-color: var(--bg-color);
+    font-family: Montserrat;
+    transition: border-color .3s, color .3s, background-color .3s;
+}
+
+.container button.hidden:hover {
+    border-color: transparent;
+    outline: var(--wood) 5px solid;
+    color: var(--wood);
+    background-color: var(--bg-color);
+}
+
+.container form {
+    background-color: var(--sidebar-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
+}
+
+form > div {
+    width: 100%;
+}
+
+.container input {
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+.sign-up, .log-in, .toogle-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transition: all .5s ease-in-out;
+}
+
+.log-in {
+    left: 0;
+    z-index: 2;
+}
+
+.container.active .log-in{
+    transform: translateX(100%);
+}
+
+.sign-up {
+    left: 0;
+    z-index: 1;
+    opacity: 0;
+}
+
+.container.active .sign-up{
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move .5s;
+}
+
+.toogle-container {
+    position: absolute;
+    left: 50%;
+    overflow: hidden;
+    border-radius: 75px;
+    z-index: 10;
+}
+
+.container.active .toogle-container {
+    transform: translateX(-100%);
+}
+
+.toogle {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--fb-color);
+    height: 100%;
+    color: #fff;
+    position: relative;
+    left: -100%;
+    width: 200%;
+    transform: translate(0);
+    transition: all .5s ease-in-out;
+}
+
+.container.active .toogle {
+    transform: translateX(50%);
+}
+
+.toogle-panel {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    transform: translateX(0);
+    transition: all .5s ease-in-out;
+}
+
+.toogle-left {
+    transform: translateX(-200%);
+}
+
+.container.active .toogle-left {
+    transform: translateX(0);
+}
+
+.toogle-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.active .toogle-right {
+    transform: translateX(200%);
+}
+
+@keyframes move {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
