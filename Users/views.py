@@ -3,6 +3,7 @@ from .forms import RegisterUser, LoginUser
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
 from .models import Profile
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
@@ -14,7 +15,7 @@ def logIn(request):
         login(request, user)
         return redirect('main')
     else:
-        return render(request, 'Users/start.html', {
+        return render(request, 'Users/authenticate.html', {
             'form': RegisterUser,
             'form_login': LoginUser(request.POST),
             'error': 'Usuario o contraseña incorrectos'
@@ -25,14 +26,14 @@ def signUp(request):
     form = RegisterUser(request.POST)
     registered_email = User.objects.filter(email=request.POST['email'])
     if len(registered_email) != 0:
-        return render(request, 'Users/start.html', {
+        return render(request, 'Users/authenticate.html', {
             'form': RegisterUser(request.POST,request.FILES),
             'form_login': LoginUser,
             'messages': 'El correo ya esta registrado',
             'class' : class_container
             })
     if not form.is_valid():
-            return render(request, 'Users/start.html', {
+            return render(request, 'Users/authenticate.html', {
                 'form': RegisterUser(request.POST,request.FILES),
                 'form_login': LoginUser,
                 'class' : class_container
@@ -43,9 +44,9 @@ def signUp(request):
     login(request, user)
     return redirect('main')
 
-def start(request):
+def authenticate(request):
     if request.method == 'GET':
-        return render(request, 'Users/start.html',{
+        return render(request, 'Users/authenticate.html',{
         'form': RegisterUser,
         'form_login': LoginUser,
         })
@@ -61,6 +62,7 @@ def Logout(request):
     logout(request)
     return redirect('home')
 
+@login_required
 def main(request):
     return render(request, 'Users/main.html',{
         'user': request.user

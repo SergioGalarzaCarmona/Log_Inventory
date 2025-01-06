@@ -4,5 +4,5 @@
     {% csrf_token %}
     {{ form_login }}
     <input type="submit"  value="Iniciar Sesión">
-    <a href="#">Olvidé la contraseña</a>
+    <a href="{% url 'password_reset' %}">Olvidé la contraseña</a>
 </form>
