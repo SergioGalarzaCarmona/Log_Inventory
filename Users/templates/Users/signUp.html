@@ -1,6 +1,9 @@
 <form method="POST" enctype="multipart/form-data" class="signUp-form">
-    <h2>Crear cuenta</h2>
+    <h2 class="{{class_h2}}">Crear cuenta</h2>
     {% csrf_token %}
     {{ form }}
     <input type="submit" name="signup" value="Registrarse">
+    <div class="button-container">
+        ¿Ya tienes cuenta?<button class="logIn-button" id="login-responsive">Iniciar Sesión</button>
+    </div>
 </form> 
