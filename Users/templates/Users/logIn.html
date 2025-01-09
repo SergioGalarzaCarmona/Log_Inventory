@@ -1,8 +1,11 @@
 <form method="POST" class="logIn-form">
     <h2>Iniciar Sesión</h2>
-    {{error}}
     {% csrf_token %}
     {{ form_login }}
     <input type="submit"  value="Iniciar Sesión">
+    <div class="error">{{error}}</div>
     <a href="#">Olvidé la contraseña</a>
+    <div class="button-container">
+        ¿No tienes cuenta?<button class="signUp-button" id="register-responsive">Registrarse</button>
+    </div>
 </form>

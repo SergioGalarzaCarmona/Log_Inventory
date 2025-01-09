@@ -22,6 +22,7 @@ def logIn(request):
         
 def signUp(request):
     class_container = 'active'
+    class_h2 = "no-margin"
     form = RegisterUser(request.POST)
     registered_email = User.objects.filter(email=request.POST['email'])
     if len(registered_email) != 0:
@@ -35,7 +36,8 @@ def signUp(request):
             return render(request, 'Users/start.html', {
                 'form': RegisterUser(request.POST,request.FILES),
                 'form_login': LoginUser,
-                'class' : class_container
+                'class' : class_container,
+                "class_h2": class_h2,
             })
     user = form.save()
     image = request.FILES.get('image','default.jpg')
