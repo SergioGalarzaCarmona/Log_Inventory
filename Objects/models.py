@@ -11,7 +11,7 @@ class Group(models.Model):
     
     def __str__(self):
         return f'{self.name} Object Group '
-    
+
     class Meta:
         verbose_name = 'Group'
         verbose_name_plural = 'Groups'
