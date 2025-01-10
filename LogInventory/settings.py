@@ -12,12 +12,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-sys.stdout.reconfigure(encoding='utf-8')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -80,12 +79,12 @@ WSGI_APPLICATION = 'LogInventory.wsgi.application'
 DATABASES = {
     "default":
        {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": 'LogInventory',
-            "USER": 'LogInventory',
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": 'log_inventory',
+            "USER": 'log_inventory',
             "PASSWORD": 'mazamorraconavena',
-            "HOST": 'localhost',
-            "PORT": 5432,
+            "HOST": '127.0.0.1',
+            "PORT": 5433,
             'OPTIONS': {
             'client_encoding': 'UTF8',
         },
