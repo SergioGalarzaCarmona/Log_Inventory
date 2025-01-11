@@ -1,11 +1,50 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Log Inventory</title>
+    <link rel="icon" href="{%static '/images/LogoMini.webp'%}" type="image/webp">
+    <meta name="description" content="Home software de inventario Log Inventory">
+    <meta name="keywords" content="Log Inventory, software inventario, inventario instituciones, software de inventario online, sistema de inventario para colegios, gestión de inventario">
+    <meta name="author" content="Log Inventory">
+    <meta name="robots" content="index, follow">
 </head>
 <body>
-    
+    <nav>
+        <img src="{%static '/images/Logo.webp'%}" alt="Log Inventory" class="logo">
+        <ul class="nav-bar">
+            <li class="navbar__item">Home</li>
+            <li class="navbar__item">About</li>
+            <li class="navbar__item">Services</li>
+            <li class="navbar__item">Contact</li>
+            <li class="navbar__item">Login</li>
+        </ul>
+    </nav>
+    <main>
+        <section class="hero">
+            <h1 class="hero__title">¡Gestiona tu inventario!</h1>
+            <p class="hero__description"></p>
+            <button class="hero__button">Get Started</button>
+        </section>
+        <section class="about">
+            <h2 class="about__title">Sobre nosotros</h2>
+            <p class="about__description">Log Inventory es un software de inventario para instituciones educativas, que permite llevar un control de los activos de la institución, así como también de los préstamos de los mismos.</p>
+        </section>
+        <section class="services">
+            <h2 class="services__title">¿Qué herramientas ofrecemos?</h2>
+            <ul class="services__list">
+                <li class="services__item">Control de activos</li>
+                <li class="services__item">Préstamos de activos</li>
+                <li class="services__item">Reportes de activos</li>
+            </ul>
+        </section>
+        <section class="contact">
+            <h2 class="contact__title">Contacto</h2>
+            
+        </section>
+    </main>
+    <footer></footer>
 </body>
 </html>
