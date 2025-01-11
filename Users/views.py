@@ -46,7 +46,7 @@ def signUp(request):
     login(request, user)
     return redirect('main')
 
-def authenticate(request):
+def authenticate_user(request):
     if request.method == 'GET':
         return render(request, 'Users/authenticate.html',{
         'form': RegisterUser,
