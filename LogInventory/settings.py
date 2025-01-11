@@ -82,9 +82,9 @@ DATABASES = {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": 'log_inventory',
             "USER": 'log_inventory',
-            "PASSWORD": 'mazamorraconavena',
-            "HOST": '127.0.0.1',
-            "PORT": 5433,
+            "PASSWORD": 'y2I8a8mqulgAkHsv0pP1H1AFgJZgavU9',
+            "HOST": 'dpg-cu07vatsvqrc73beibmg-a.oregon-postgres.render.com',
+            "PORT": 5432,
             'OPTIONS': {
             'client_encoding': 'UTF8',
         },
