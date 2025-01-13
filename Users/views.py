@@ -24,7 +24,6 @@ def logIn(request):
 def signUp(request):
     class_h2 = "no-margin"
     form = RegisterUser(request.POST)
-    registered_email = User.objects.filter(email=request.POST['email'])
     if not form.is_valid():
             return render(request, 'Users/authenticate.html', {
                 'form': RegisterUser(request.POST,request.FILES),
@@ -32,10 +31,10 @@ def signUp(request):
                 'class' : 'active',
                 "class_h2": class_h2,
             })
-    #user = form.save()
-    #image = request.FILES.get('image','default.jpg')
-    #Profile.objects.create(user=user,image=image)
-    #login(request, user)
+    user = form.save()
+    image = request.FILES.get('image','default.jpg')
+    Profile.objects.create(user=user,image=image)
+    login(request, user)
     return redirect('main')
 
 def authenticate_user(request,type):
@@ -47,8 +46,7 @@ def authenticate_user(request,type):
         })
     else:
         sign_up = request.POST.get('signup', False)
-        confirmation = request.POST.get('confirmation', False)
-        if sign_up or confirmation:
+        if sign_up:
             return signUp(request)
         return logIn(request)
 
