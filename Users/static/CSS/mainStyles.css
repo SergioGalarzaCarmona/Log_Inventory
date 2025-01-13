@@ -31,7 +31,7 @@ body {
     --sidebar-color: color-mix(in srgb, #000 25%, #fff);
     --dark-color: #222;
     --fb-color: #003366;
-    --wood: #8B5E3C;
+    --wood: #8B5E3C; 
     background-color: var(--bg-color);
     font-family: Montserrat;
     display: flex;
@@ -312,6 +312,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 .objects-area {
     width: 100%;
     height: calc(100dvh - (2rem + 44.78px));
-    background-image: url(../IMAGES/Escritorio.jpg);
+    background-image: url(../IMAGES/Escritorio.webp);
     background-size: cover;
 }

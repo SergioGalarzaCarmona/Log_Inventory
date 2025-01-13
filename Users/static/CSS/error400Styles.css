@@ -1,0 +1,87 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    font-family: "Montserrat";
+    background-color: #18233f;
+    color: #fff;
+}
+
+.error {
+    display: grid;
+    margin-bottom: -5vh;
+}
+
+h1 {
+    justify-self: center;
+    font-size: 6rem;
+    margin: 0;
+    filter: drop-shadow(0px 0px 12px #fff) ;
+}
+
+.typewritter {
+    display: flex;
+    flex-direction: column;
+    height: 20vh;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: auto;
+    filter: drop-shadow(0px 0px 12px #fff) drop-shadow(0px 0px 3px #fff9);
+}
+
+p {
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    overflow: hidden;
+    animation: growth 7s both steps(77);
+    position: relative;
+    white-space: nowrap;
+}
+
+p::selection {
+    background-color: transparent;
+}
+
+p::before {
+    content: "";
+    background-color: #fff; 
+    height: 100%;
+    width: 1px;
+    position: absolute;
+    right: 0;
+    border-radius: 4px;
+    animation: titilar .5s infinite alternate;
+}
+
+.image__container {
+    height: 47vh;
+    width: 40vw;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+@keyframes growth {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes titilar {
+    from {
+        opacity: 0;
+    }
+
+    to{
+        opacity: 1;
+    }
+}

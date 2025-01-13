@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+}
+
+body, div, ul, li, a, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    --bg-color: #fff;
+    --sidebar-color: color-mix(in srgb, #000 25%, #fff);
+    --dark-color: #222;
+    --fb-color: #003366;
+    --wood: #8B5E3C;
+    background-color: var(--bg-color);
+    font-family: Montserrat;
+}
+
+header {
+    background-image: url(../IMAGES/Almacén.webp);
+}
