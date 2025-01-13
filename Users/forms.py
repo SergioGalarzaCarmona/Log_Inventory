@@ -17,7 +17,7 @@ class RegisterUser(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError('El email ya está registrado')
+            raise forms.ValidationError('El email ya está registrado.')
         return email
 class LoginUser(AuthenticationForm):
     username = forms.CharField(max_length=30,label='Nombre de Usuario', required=True, widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario','class' : ''}))
@@ -39,3 +39,22 @@ class SetPassword(SetPasswordForm):
     
     class Meta:
         fields = ['new_password1', 'new_password2']
+
+class EditUserForm(forms.ModelForm):
+    username = forms.CharField(max_length=30,label='Nombre de Usuario', required=True, widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario','class' : ''}))
+    email = forms.EmailField(max_length=254,label='Correo Electrónico',required=True, widget=forms.EmailInput(attrs={'placeholder': 'Correo Electrónico','class' : ''}))
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+        
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('El nombre de usuario ya está registrado.')
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('El email ya está registrado.')
+        return email

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+from .forms import EditUserForm
 
 # Create your views here.
 def home(request):
@@ -60,3 +61,21 @@ def main(request):
     return render(request, 'Users/main.html',{
         'user': request.user
     })
+
+@login_required
+def profile(request,username):
+    user = User.objects.get(username=username)
+    if request.user != user:
+        logout(request)
+        return redirect('/authenticate_user/deactivate')
+    profile = Profile.objects.get(user=request.user)
+    form = EditUserForm(instance=user)
+    if request.method == 'GET':
+        return render(request, 'Users/profile.html',{
+            'profile': profile,
+            'form' : form
+        })
+    else:
+        return render(request, 'Users/profile.html',{
+            'profile': profile
+        })
