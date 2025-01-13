@@ -7,7 +7,7 @@ from Users.forms import PasswordReset, SetPassword
 
 urlpatterns = [
     path('', home, name='home'),
-    path('authenticate_user/', authenticate_user, name='authenticate'),
+    path('authenticate_user/<str:type>', authenticate_user, name='authenticate'),
     path('work_space/', main, name='main'),
     path('logout/', Logout, name='logout'),
     path('reset/', PasswordResetView.as_view(template_name = 'Users/password_reset.html', form_class = PasswordReset), name='password_reset'),

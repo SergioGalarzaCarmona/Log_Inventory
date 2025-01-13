@@ -2,6 +2,13 @@
     <h2 class="{{class_h2}}">Crear cuenta</h2>
     {% csrf_token %}
     {{ form }}
+    {% if messages %}
+    <ul class="errorlist">
+        <li>
+            {{messages}}
+        </li>
+    </ul>
+    {% endif %}
     <input type="submit" name="signup" value="Registrarse">
     <div class="button-container">
         ¿Ya tienes cuenta?<button class="logIn-button" id="login-responsive">Iniciar Sesión</button>

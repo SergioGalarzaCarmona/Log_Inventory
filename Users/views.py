@@ -22,35 +22,28 @@ def logIn(request):
         })
         
 def signUp(request):
-    class_container = 'active'
     class_h2 = "no-margin"
     form = RegisterUser(request.POST)
     registered_email = User.objects.filter(email=request.POST['email'])
-    if len(registered_email) != 0:
-        return render(request, 'Users/authenticate.html', {
-            'form': RegisterUser(request.POST,request.FILES),
-            'form_login': LoginUser,
-            'messages': 'El correo ya esta registrado',
-            'class' : class_container
-            })
     if not form.is_valid():
             return render(request, 'Users/authenticate.html', {
                 'form': RegisterUser(request.POST,request.FILES),
                 'form_login': LoginUser,
-                'class' : class_container,
+                'class' : 'active',
                 "class_h2": class_h2,
             })
-    user = form.save()
-    image = request.FILES.get('image','default.jpg')
-    Profile.objects.create(user=user,image=image)
-    login(request, user)
+    #user = form.save()
+    #image = request.FILES.get('image','default.jpg')
+    #Profile.objects.create(user=user,image=image)
+    #login(request, user)
     return redirect('main')
 
-def authenticate_user(request):
+def authenticate_user(request,type):
     if request.method == 'GET':
         return render(request, 'Users/authenticate.html',{
         'form': RegisterUser,
         'form_login': LoginUser,
+        'class' : type,
         })
     else:
         sign_up = request.POST.get('signup', False)
