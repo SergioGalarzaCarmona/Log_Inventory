@@ -122,7 +122,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-LOGIN_URL = '/sign up/'
+LOGIN_URL = '/authenticate_user/deactive'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 

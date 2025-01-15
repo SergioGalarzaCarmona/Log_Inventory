@@ -57,7 +57,7 @@
         <div class="sidebar__profile">
             <ul>
                 <li class="sidebar__item">
-                    <a href="#" class="item--profile sidebar__item-link">
+                    <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link">
                         <img src="../../../media/{{user.profile.image}}" alt="profile-img">
                         <span class="profile-option">{{user.username}}</span>
                     </a>
