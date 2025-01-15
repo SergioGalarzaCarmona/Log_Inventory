@@ -7,16 +7,139 @@ body, div, ul, li, a, h1, h2, p {
     padding: 0;
 }
 
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding: 0 !important;
+}
+
 body {
+    height: 100dvh;
+    width: 100%;
     --bg-color: #fff;
     --sidebar-color: color-mix(in srgb, #000 25%, #fff);
     --dark-color: #222;
     --fb-color: #003366;
     --wood: #8B5E3C;
-    background-color: var(--bg-color);
     font-family: Montserrat;
+    scroll-behavior: smooth;
 }
 
 header {
-    background-image: url(../IMAGES/Almacén.webp);
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../IMAGES/Almacén.webp);
+    background-size: cover;
+    position: relative;
+}
+
+nav {
+    position: absolute;
+    z-index: 100;
+}
+
+.navbar-brand {
+    width: 15dvw;
+    filter: drop-shadow(5px 4px 2px var(--sidebar-color));
+    margin-right: calc(100dvw - 15dvw - 640px);
+}
+
+.navbar-brand__logo {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.nav-item {
+    margin-left: 25px;
+    font-size: 1.2rem;
+    letter-spacing: .2px;
+    position: relative;
+}
+
+.nav-item::after {
+    content: "";
+    height: 3px;
+    width: 0;
+    background-color: #009688;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transition: width .5s;
+}
+
+.nav-item:hover::after {
+    width: 100%;
+}
+
+
+.hero {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    place-content: center;
+    color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+h1 {
+    font-size: 4.5rem;
+    letter-spacing: 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.hero__description {
+    width: 60%;
+    font-size: 1.1rem;
+    letter-spacing: .8px;
+    text-align: center;
+    
+}
+
+.hero__button {
+    width: 200px;
+    position: relative;
+    padding: 9px 0;
+    margin-top: 50px;
+    text-align: center;
+    border-radius: 25px;
+    font-weight: bold;
+    outline: 2px solid #009688;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.hero__button:hover {
+    outline: none;
+}
+
+span {
+    background-color: #009688;
+    height: 100%;
+    width: 0;
+    border-radius: 25px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    transition: width .5s;
+}
+
+.hero__button:hover span {
+    width: 100%;
+}
+
+main {
+    width: 100%;
 }
