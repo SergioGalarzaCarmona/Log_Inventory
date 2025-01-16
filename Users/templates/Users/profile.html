@@ -14,6 +14,15 @@
             <form method="POST">
                 {% csrf_token %}
                 {{form}}
+                <div>
+                    <label for="password_id">Contraseña</label>
+                    <input type='password' name='password' id="password_id"  placeholder='Password' disabled value='password'>
+                    <button>
+                        <a href="{% url 'change_password' %}">
+                            cambiar contraseña(cambiar a imagen)
+                        </a>
+                    </button>
+                </div>
             </form>
         </div>
     </main>
