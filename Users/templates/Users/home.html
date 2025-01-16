@@ -38,7 +38,7 @@
                             <a class="nav-link text-white" href="#">Contacto</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Iniciar Sesión</a>
+                            <a class="nav-link text-white" href="{% url 'authenticate' type='deactivate' %}">Iniciar Sesión</a>
                         </li>
                     </ul>
                 </div>
@@ -47,7 +47,7 @@
         <section class="hero">
             <h1 class="hero__title">¡Gestiona tu inventario!</h1>
             <p class="hero__description">Log Inventory es un software de inventario online gratuito, desarrollado con un enfoque accesible para instituciones educativas, ¡únetenos y disfruta de nuestras herramientas!</p>
-            <button class="hero__button"><span></span>Registrarse</button>
+            <button class="hero__button"><span></span><a href="{% url 'authenticate' type='active' %}">Registrarse</a></button>
         </section>
     </header>
     <main>
