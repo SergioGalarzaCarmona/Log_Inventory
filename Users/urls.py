@@ -2,7 +2,7 @@ from django.urls import path
 from .views import home, authenticate_user, main, Logout, profile
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
 from Users.forms import PasswordReset, SetPassword
 
 urlpatterns = [
@@ -13,6 +13,8 @@ urlpatterns = [
     path('reset_done/', PasswordResetDoneView.as_view(template_name = 'Users/password_reset_done.html'), name = 'password_reset_done'),
     path('reset/<uidb64>/<token>',  PasswordResetConfirmView.as_view(template_name = 'Users/password_reset_confirm.html',form_class = SetPassword), name = 'password_reset_confirm'),
     path('reset_complete/', PasswordResetCompleteView.as_view(template_name = 'Users/password_reset_complete.html'), name = 'password_reset_complete'),
+    path('change_password/', PasswordChangeView.as_view(template_name = 'Users/change_password.html', form_class = SetPassword, success_url='/authenticate_user/deacticate'), name='change_password'),
+    path('change_password_done/', PasswordChangeDoneView.as_view(template_name = 'Users/change_password_done.html'), name='change_password_done'),
     path('work_space/', main, name='main'),
     path('profile/<str:username>', profile, name='profile'),
     

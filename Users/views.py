@@ -79,3 +79,4 @@ def profile(request,username):
         return render(request, 'Users/profile.html',{
             'profile': profile
         })
+        
