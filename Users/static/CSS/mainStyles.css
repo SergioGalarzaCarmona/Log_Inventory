@@ -305,8 +305,9 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 .logo {
-    height: clamp(20px, 10dvh, 80px);
-    width: clamp(40px, 20dvh, 160px);
+    height: clamp(15px, calc(10dvh - 5px), 75px);
+    width: clamp(42px, calc(28dvh - 5px), 210px);
+    margin: 2.5px 0;
 }
 
 .objects-area {

@@ -19,6 +19,27 @@ body {
     font-family: Montserrat;
 }
 
+nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.home-link__container  a {
+    color: var(--bg-color);
+}
+
+.material-symbols-outlined {
+    font-size: 2.5rem;
+    font-weight: bolder;
+    margin: 10px 15px;
+    transition: filter .3s;
+}
+
+.material-symbols-outlined:hover {
+    filter: drop-shadow(0 0 5px #fff);
+}
+
 .container {
     background-color: var(--sidebar-color);
     border-radius: 75px;
@@ -260,6 +281,10 @@ form > h2 {
 }
 
 @media (max-width: 767px) {
+    nav {
+        display: none;
+    }
+
     .container {
         height: 710px;
     }

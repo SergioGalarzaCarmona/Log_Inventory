@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/authenticateStyles.css'%}">
     <title>Comenzar</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
@@ -11,8 +12,15 @@
     <meta name="keywords" content="iniciar sesión Log Inventory, Log Inventory, cuenta Log Inventory">
     <meta name="author" content="Log Inventory">
     <meta name="robots" content="index, follow">
-</head>
+</head> 
 <body>
+    <nav>
+        <div class="home-link__container">
+            <a title="Volver al home" class="home-link" href="{% url 'home' %}">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </a>
+        </div>
+    </nav>
     <div class="container {{class}}">
         <div class="sign-up">
             {% include 'Users/signUp.html' %}
