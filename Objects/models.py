@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from Users.models import Subprofile
 
 # Create your models here.
-class Group(models.Model):
+class ObjectsGroup(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     image = models.ImageField(default='default_group.jpg',upload_to='objects_images')
@@ -17,7 +17,7 @@ class Group(models.Model):
         verbose_name_plural = 'Groups'
 
 class Object(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(ObjectsGroup, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     image = models.ImageField(default='default.jpg',upload_to='objects_images')
