@@ -74,14 +74,14 @@
     <main> 
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
-                <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-1">
-                <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-1">
-                <input type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-1">
-                <div class="filter-bar__name col-4">
+                <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0">
+                <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0">
+                <input type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-md-1 col-3">
+                <div class="filter-bar__name col-md-4 col-8">
                     <input type="text">
                     <input value="search" type="submit" class="material-symbols-outlined">
                 </div>
-                <div class="filter-bar__logo-container col-5">
+                <div class="filter-bar__logo-container col-md-5 col-0">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
             </div>
@@ -89,5 +89,6 @@
         <div class="objects-area">
         </div>
     </main>
+    <script src="{%static '/SCRIPTS/mainScript.js'%}"></script>
 </body>
 </html>

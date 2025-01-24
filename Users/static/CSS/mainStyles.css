@@ -250,6 +250,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     width: 100%;
     height: calc(2rem + 44.78px);
     background-color: var(--fb-color);
+    container-name: filter-bar;
 }
 
 .filter-bar__filter-container {
@@ -316,3 +317,21 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     background-image: url(../IMAGES/Escritorio.webp);
     background-size: cover;
 }
+
+
+/* MEDIA QUERIES */
+
+@media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+
+    .filter-bar__filter-container > .filter-bar__z-a , .filter-bar__filter-container > .filter-bar__a-z, .filter-bar__filter-container > .filter-bar__logo-container {
+        display: none;
+    }
+
+    .sidebar__form {
+        display: none;
+    }
+}
+
