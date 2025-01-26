@@ -7,25 +7,6 @@ body, div, ul, li, a, h1, h2, h3, h4, p {
     padding: 0;
 }
 
-label, .sidebar__nav {
-    user-select: none;
-}
-
-.container {
-    margin: 0;
-    padding: 0;
-}
-
-.row {
-    margin: 0;
-}
-
-@media (min-width: 992px) {
-    .container, .container-lg, .container-md, .container-sm {
-        max-width: 100%;
-    }
-}
-
 body {
     --bg-color: #fff;
     --sidebar-color: color-mix(in srgb, #000 25%, #fff);
@@ -34,11 +15,7 @@ body {
     --wood: #8B5E3C; 
     background-color: var(--bg-color);
     font-family: Montserrat;
-    display: flex;
-    flex-flow: row nowrap;
 }
-
-/*  SIDEBAR STYLES  */
 
 .sidebar {
     background-color: var(--sidebar-color);
@@ -115,7 +92,6 @@ body {
     color: inherit;
     text-decoration: none;
 }
-
 
 .sidebar__profile img {
     border-radius: 50%;
@@ -232,7 +208,6 @@ input[type="checkbox"]:checked ~ label::before, input[type="checkbox"]:checked ~
 }
 
 
-/*  MAIN STYLES  */
 
 main {
     height: 100dvh;
@@ -253,51 +228,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     container-name: filter-bar;
 }
 
-.filter-bar__filter-container {
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-}
-
-.filter-bar__filter-container  > div, .filter-bar__filter-container > input  {
-    color: var(--bg-color);
-    display: grid;
-    place-content: center;
-}
-
-.filter-bar__filter-container > input {
-    background-color: transparent;
-    border: none;
-}
-
-.filter-bar__filter-container > input:hover {
-    color: #D2B48C;
-}
-
-.filter-bar__z-a {
-    transform: rotate(180deg);
-}
-
-.filter-bar__filter-container > .filter-bar__name {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.filter-bar__name > input {
-    height: auto;
-}
-
-.filter-bar__name > input[type="text"] {
-    width: 80%;
-    outline: none;
-}
-
-.filter-bar__name > input[type="submit"] {
-    width: 20%;
-}
-
 .filter-bar__filter-container > .filter-bar__logo-container {
     height: 100%;
     display: flex;
@@ -308,30 +238,12 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 .logo {
     height: clamp(15px, calc(10dvh - 5px), 75px);
     width: clamp(42px, calc(28dvh - 5px), 210px);
-    margin: 2.5px 0;
+    margin: 2.5px 5px;
 }
 
-.objects-area {
-    width: 100%;
-    height: calc(100dvh - (2rem + 44.78px));
-    background-image: url(../IMAGES/Escritorio.webp);
-    background-size: cover;
-} 
-
-
-/* MEDIA QUERIES */
 
 @media (max-width: 768px) {
-    .logo {
-        display: none;
-    }
-
-    .filter-bar__filter-container > .filter-bar__z-a , .filter-bar__filter-container > .filter-bar__a-z, .filter-bar__filter-container > .filter-bar__logo-container {
-        display: none;
-    }
-
     .sidebar__form {
         display: none;
     }
 }
-

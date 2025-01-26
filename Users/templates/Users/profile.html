@@ -1,12 +1,87 @@
+{%load static%}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{profile.user.username}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="{%static '/CSS/profileStyles.css'%}">
+    <title>Perfil</title>
+    <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
+    <meta name="description" content="Home software de inventario Log Inventory">
+    <meta name="keywords" content="Log Inventory, software inventario, inventario instituciones, software de inventario online, sistema de inventario para colegios, gestión de inventario">
+    <meta name="author" content="Log Inventory">
+    <meta name="robots" content="index, follow">
 </head>
 <body>
+    <aside class="sidebar">
+        <form class="sidebar__form">
+            <input type="checkbox" id="open-menu">
+            <label class="material-symbols-outlined close-menu" for="open-menu">chevron_left</label>
+            <label class="material-symbols-outlined open-menu" for="open-menu">chevron_right</label>
+        </form>
+        <nav class="sidebar__nav">
+            <ul>
+                <li class="sidebar__item">
+                    <a href="{% url 'main' %}" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">view_object_track</span>
+                        <p>Objetos</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">add</span>
+                        <p>Crear</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">partner_exchange</span>
+                        <p>Prestamos</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">event_note</span>
+                        <p>Transacciones</p>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">groups</span>
+                        <p>Usuarios</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar__profile">
+            <ul>
+                <li class="sidebar__item">
+                    <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link">
+                        <img src="../../../media/{{user.profile.image}}" alt="profile-img">
+                        <span class="profile-option">{{user.username}}</span>
+                    </a>
+                </li>
+                <li class="sidebar__item">
+                    <a href="{% url 'logout' %}" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">Logout</span>
+                        <p>Logout</p>
+                    </a>   
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+
+
     <main>
+        <div class="filter-bar container"> 
+            <div class="filter-bar__filter-container">
+                <div class="filter-bar__logo-container">
+                    <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
+                </div>
+            </div>
+        </div>
         <div>
             <img src="/media/{{profile.image}}" alt="">
         </div>
@@ -26,5 +101,6 @@
             </form>
         </div>
     </main>
+    <script src="{%static '/SCRIPTS/mainScript.js'%}"></script>
 </body>
 </html>
