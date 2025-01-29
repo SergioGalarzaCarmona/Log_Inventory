@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
-from .forms import RegisterUser, LoginUser
+from .forms import RegisterUser, LoginUser, RegisterSubuser
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
-from .models import Profile
+from .models import Profile, Subprofile
 from django.contrib.auth.decorators import login_required
 from .forms import EditUserForm
+from django import forms
 
 # Create your views here.
 def home(request):
@@ -33,8 +34,7 @@ def signUp(request):
                 "class_h2": class_h2,
             })
     user = form.save()
-    image = request.FILES.get('image','default.jpg')
-    Profile.objects.create(user=user,image=image)
+    form.create_profile(user)
     login(request, user)
     return redirect('main')
 
@@ -79,4 +79,20 @@ def profile(request,username):
         return render(request, 'Users/profile.html',{
             'profile': profile
         })
+        
+@login_required
+def manage_subusers(request):
+    if request.method == 'GET':
+        return render(request, 'Users/subusers.html',{
+        'form': RegisterSubuser(request),
+    })
+    else:
+        form = RegisterSubuser(request,request.POST,request.FILES)
+        if not form.is_valid():
+            return render(request, 'Users/subusers.html',{
+            'form': RegisterSubuser(request,request.POST,request.FILES),
+        })
+        form.create_subprofile()
+        print('Subuser created')
+        return redirect('manage_subusers')
         
