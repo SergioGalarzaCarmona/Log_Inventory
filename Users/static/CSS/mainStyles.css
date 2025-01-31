@@ -303,6 +303,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     display: flex;
     justify-content: end;
     align-items: center;
+    padding-right: .75rem;
 }
 
 .logo {

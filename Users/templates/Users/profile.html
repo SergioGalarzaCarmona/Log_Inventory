@@ -71,21 +71,19 @@
             </ul>
         </div>
     </aside>
-
-
-
     <main>
-        <div class="filter-bar container"> 
+        <div class="filter-bar"> 
             <div class="filter-bar__filter-container">
+                <div class="name">{{profile.user.username}}</div>
                 <div class="filter-bar__logo-container">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
             </div>
         </div>
-        <div>
-            <img src="/media/{{profile.image}}" alt="">
-        </div>
-        <div>
+        <div class="profile-container">
+            <div class="profile-img-container">
+                <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
+            </div>
             <form method="POST">
                 {% csrf_token %}
                 {{form}}

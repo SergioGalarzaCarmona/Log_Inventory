@@ -228,22 +228,82 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     container-name: filter-bar;
 }
 
+.filter-bar__filter-container {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .filter-bar__filter-container > .filter-bar__logo-container {
     height: 100%;
+    padding-right: .75rem;
     display: flex;
     justify-content: end;
     align-items: center;
 }
 
+.name {
+    max-width: clamp(100% - 42px, 100% - calc(28dvh - 5px), 100% - 210px);
+    height: 100%;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    color: var(--bg-color);
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+}
+
 .logo {
     height: clamp(15px, calc(10dvh - 5px), 75px);
     width: clamp(42px, calc(28dvh - 5px), 210px);
-    margin: 2.5px 5px;
+    margin: 2.5px 0px;
+}
+
+.profile-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    place-content: center;
+    background-image: url(../IMAGES/Escritorio.webp);
+    background-size: cover;
+    padding-top: calc(2rem + 44.78px);
+}
+
+.profile-img-container {
+    width: 37.5%;
+    height: 75%;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px 0 0 20px;
+    border: var(--sidebar-color) 5px solid;
+    border-right: none;
+}
+
+.profile-container form {
+    height: 75%;
+    background-color: var(--sidebar-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 20px;
+    border-radius: 0 20px 20px 0;
 }
 
 
 @media (max-width: 768px) {
     .sidebar__form {
+        display: none;
+    }
+
+    .filter-bar__filter-container > .filter-bar__logo-container {
         display: none;
     }
 }
