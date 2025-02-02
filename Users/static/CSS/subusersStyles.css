@@ -1,0 +1,12 @@
+.create_subgroup_chekbox{
+    display: none;
+}
+
+.create_subgroup {
+    display: none;
+}
+
+
+.create_subgroup_chekbox:checked > .create_subgroup {
+    display: block;
+}

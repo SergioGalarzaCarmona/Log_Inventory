@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
-from .forms import RegisterUser, LoginUser, RegisterSubuser
+from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login,logout
-from .models import Profile, Subprofile
+from django.contrib.auth import authenticate, login, logout
+from .models import Profile, Subprofile, SubprofilesGroup
 from django.contrib.auth.decorators import login_required
 from .forms import EditUserForm
 from django import forms
@@ -87,12 +87,26 @@ def manage_subusers(request):
         'form': RegisterSubuser(request),
     })
     else:
-        form = RegisterSubuser(request,request.POST,request.FILES)
-        if not form.is_valid():
-            return render(request, 'Users/subusers.html',{
-            'form': RegisterSubuser(request,request.POST,request.FILES),
-        })
-        form.create_subprofile()
-        print('Subuser created')
-        return redirect('manage_subusers')
+        create = request.POST.get('username', False)
+        if create:
+            form = RegisterSubuser(request,request.POST,request.FILES)
+            subprofile = form.create_subprofile(commit=False)
+        else: 
+            form = RegisterSubprofileGroup(request,request.POST,request.FILES)
+            
+            if not form.is_valid():
+                if create:
+                    return render(request, 'Users/subusers.html',{
+                    'form': form,
+                    'created_subgroup' : 'checked',
+                })
+                else:
+                    return render(request, 'Users/subusers.html',{
+                    'form': RegisterSubuser(request),
+                    'form_group': form,
+                    'created_subgroup' : 'checked',
+                })
+            subprofile.save()
+            SubprofilesGroup.objects.create(profile_id=Profile.objects.get(user=request.user),subprofile_id=subprofile,name='',image='',permissions_id=1)
+            return redirect('manage_subusers')
         

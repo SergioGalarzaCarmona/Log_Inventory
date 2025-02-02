@@ -1,8 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Profile, Subprofile
+from .models import Profile, Subprofile, SubprofilesGroup
 from django.core.exceptions import ValidationError
+from django.contrib.auth.hashers import make_password
 
 class RegisterUser(UserCreationForm):
     
@@ -111,13 +112,20 @@ class RegisterSubuser(forms.ModelForm):
         self.request = request
         super().__init__(*args, **kwargs)
         
-    def create_subprofile(self):
+    def create_subprofile(self,commit=True):
+        
         image = self.cleaned_data.get('image','default.jpg')
         username = self.cleaned_data['username']
         email = self.cleaned_data['email']
         password1 = self.cleaned_data['password1']
         profile = Profile.objects.get(user=self.request.user)
-        Subprofile.objects.create(username = username,email = email,password= password1,image=image,profile_id=profile)
+        
+        if commit:
+            return Subprofile.objects.create(username = username,email = email,password= make_password(password1),image=image,profile_id=profile)
+        else: 
+            profile = self.save(commit=commit)
+            return profile
+        
     
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -152,4 +160,27 @@ class RegisterSubuser(forms.ModelForm):
         return password1,password2
     
     
+class RegisterSubprofileGroup(forms.ModelForm):
+    name = forms.CharField(max_length=24,
+                           required = True, 
+                           widget=forms.TextInput(attrs={'placeholder': 'Nombre del Grupo','class' : ''}))
+    image = forms.ImageField(
+        required=False,
+        widget = forms.FileInput(attrs={'class' : ''}))
+
+
+    
+    class Meta:
+        model = SubprofilesGroup
+        fields = ['name','image']
+        
+    def __init__(self,request, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+        
+    def create_subprofile_group(self):
+        name = self.cleaned_data['name']
+        image = self.cleaned_data.get('image','default_group.jpg')
+        profile = Profile.objects.get(user=self.request.user)
+        SubprofilesGroup.objects.create(name=name,image=image,profile_id=profile)
     

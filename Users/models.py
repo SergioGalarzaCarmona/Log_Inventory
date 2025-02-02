@@ -58,11 +58,21 @@ class Subprofile(models.Model):
 
 
 class SubprofilesGroup(models.Model):
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    subprofile_id = models.ForeignKey(Subprofile, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    image = models.ImageField(default='default_group.jpg',upload_to='profile_images')
-    permissions = models.ForeignKey(PermissionsGroup, on_delete=models.CASCADE)
+    profile_id = models.ForeignKey(
+        Profile, 
+        on_delete=models.CASCADE)
+    subprofile_id = models.ForeignKey(
+        Subprofile,
+        on_delete=models.CASCADE,
+        null=True)
+    name = models.CharField(
+        max_length=100)
+    image = models.ImageField(
+        default='default_group.jpg',
+        upload_to='profile_images')
+    permissions = models.ForeignKey(
+        PermissionsGroup, 
+        on_delete=models.CASCADE)
     
     def __str__(self):
         return f'{self.name} Group'
