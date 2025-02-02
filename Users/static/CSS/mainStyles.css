@@ -116,6 +116,9 @@ body {
     text-decoration: none;
 }
 
+.profile-option {
+    text-transform: none;
+}
 
 .sidebar__profile img {
     border-radius: 50%;
