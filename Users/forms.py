@@ -44,6 +44,12 @@ class PasswordReset(PasswordResetForm):
     class Meta:
         fields = ['email']
         
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError('El email no está registrado.')
+        return email
+        
 class SetPassword(SetPasswordForm):
     new_password1 = forms.CharField(max_length=30,label='Nueva contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña','class' : ''}))
     new_password2 = forms.CharField(max_length=30,label='Confirmación de  nueva contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Confirmar Contraseña','class' : ''}))

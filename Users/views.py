@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Profile, Subprofile, SubprofilesGroup
 from django.contrib.auth.decorators import login_required
 from .forms import EditUserForm
-from django import forms
+from django.contrib.auth.views import PasswordResetConfirmView
+from .forms import SetPassword
 
 # Create your views here.
 def home(request):
