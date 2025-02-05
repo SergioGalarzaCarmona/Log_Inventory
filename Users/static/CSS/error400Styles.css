@@ -3,7 +3,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     font-family: "Montserrat";
     background-color: #18233f;
     color: #fff;
