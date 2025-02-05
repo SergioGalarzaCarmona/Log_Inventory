@@ -1,13 +1,19 @@
 {%load static%}
+<nav>
+    <div class="home-link__container"> 
+        <a title="Volver al home" class="home-link" href="{% url 'home' %}">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+    </div>
+</nav>
 <div class="error">
     <h1>
         Error 400
     </h1>
     <div class="typewritter">
         <p>La URL no corresponde a ningún link creado o ya ha pasado el tiempo estimado.</p>
-        <a href="{% url 'home' %}">Iniciar sesión</a>
     </div>
 </div>
 <div class="image__container">
     <img src="{%static '/IMAGES/totoro-walking.webp'%}" alt="Totoro walking">
-</div>
+</div> 

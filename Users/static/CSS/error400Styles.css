@@ -1,4 +1,4 @@
-body{
+body {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,6 +9,28 @@ body{
     color: #fff;
     margin: 0;
 }
+
+nav { 
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.home-link__container  a {
+    color: var(--bg-color);
+}
+
+.material-symbols-outlined {
+    font-size: 2.5rem;
+    font-weight: bolder;
+    margin: 10px 15px;
+    transition: filter .3s;
+}
+
+.material-symbols-outlined:hover {
+    filter: drop-shadow(0 0 5px #fff);
+}
+
 
 .error {
     display: grid;
@@ -84,5 +106,42 @@ img {
 
     to{
         opacity: 1;
+    }
+}
+
+@media (max-width: 1024px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .typewritter {
+        width: 100%;
+        height: 15vh;
+        margin: 0;
+    }
+
+    p {
+        width: 80%;
+        position: static;
+        font-size: 1rem;
+        animation: none;
+        white-space: normal;
+        letter-spacing: 0;
+        text-align: center;
+    }
+
+    p::before {
+        display: none;
+    }
+
+    .image__container {
+        height: 35vh;
+        width: 30vh;
+        background-image: url(../IMAGES/Totoro.webp);
+        background-size: cover;
+    }
+
+    .image__container img {
+        display: none;
     }
 }
