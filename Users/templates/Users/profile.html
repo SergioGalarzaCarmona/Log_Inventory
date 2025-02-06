@@ -46,7 +46,7 @@
                     </a>
                 </li>
                 <li class="sidebar__item">
-                    <a href="#" class="sidebar__item-link">
+                    <a href="{% url 'manage_subusers' %}" class="sidebar__item-link">
                         <span class="material-symbols-outlined">groups</span>
                         <p>Usuarios</p>
                     </a>
@@ -83,18 +83,28 @@
             <div class="profile-img-container">
                 <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
             </div>
+            
             <form method="POST">
                 {% csrf_token %}
+
+                <div>
+                    <p>
+                        {{message}}
+                    </p>
+                </div>
                 {{form}}
                 <div>
                     <label for="password_id">Contraseña</label>
-                    <input type='password' name='password' id="password_id"  placeholder='Password' disabled value='password'>
+                    <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
                     <button>
                         <a href="{% url 'change_password' %}">
                             cambiar contraseña(cambiar a imagen)
                         </a>
                     </button>
-                    <input type="checkbox" value="Actualizar">
+                </div>
+                <input type="checkbox" value="Actualizar">
+                <div>
+                    <input type="submit" value="Actualizar">
                 </div>
             </form>
         </div>
