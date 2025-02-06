@@ -1,14 +1,19 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .models import Profile, Subprofile, SubprofilesGroup
+from .models import Profile, SubprofilesGroup
 from django.contrib.auth.decorators import login_required
 from .forms import EditUserForm
-from django.contrib.auth.views import PasswordResetConfirmView
-from .forms import SetPassword
+from django.views.generic import TemplateView
 
 # Create your views here.
+
+
+class Error404View(TemplateView):
+    template_name = 'Users/error_404.html'
+
+
 def home(request):
     return render(request, 'Users/home.html')
 
@@ -65,21 +70,37 @@ def main(request):
 
 @login_required
 def profile(request,username):
-    user = User.objects.get(username=username)
+    try:
+        user = User.objects.get(username=username)
+        user_pk = user.pk
+    except:
+        return render(request, 'Users/error_404.html')  
     if request.user != user:
         logout(request)
         return redirect('/authenticate_user/deactivate')
     profile = Profile.objects.get(user=request.user)
-    form = EditUserForm(instance=user)
+    form = EditUserForm(user_pk = user_pk,instance=user)
     if request.method == 'GET':
         return render(request, 'Users/profile.html',{
             'profile': profile,
             'form' : form
         })
     else:
-        return render(request, 'Users/profile.html',{
-            'profile': profile
-        })
+        form_post = EditUserForm(request.POST,initial=form.initial,user_pk = user_pk)
+        if not form_post.has_changed():
+            return render(request, 'Users/profile.html',{
+                'profile': profile,
+                'form' : form,
+                'message': 'Los datos no han sido actualizados'
+            })
+        else:
+            if not form_post.is_valid():
+                return render(request, 'Users/profile.html',{
+                'profile': profile,
+                'form' : form_post,
+            })
+            form_post.save()
+            return redirect('main')
         
 @login_required
 def manage_subusers(request):
@@ -110,4 +131,3 @@ def manage_subusers(request):
             subprofile.save()
             SubprofilesGroup.objects.create(profile_id=Profile.objects.get(user=request.user),subprofile_id=subprofile,name='',image='',permissions_id=1)
             return redirect('manage_subusers')
-        
