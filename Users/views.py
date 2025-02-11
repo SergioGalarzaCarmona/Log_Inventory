@@ -91,16 +91,23 @@ def profile(request,username):
             return render(request, 'Users/profile.html',{
                 'profile': profile,
                 'form' : form,
-                'message': 'Los datos no han sido actualizados'
+                'message': 'Los datos no han sido actualizados',
+                'checked': 'checked',
             })
-        else:
-            if not form_post.is_valid():
-                return render(request, 'Users/profile.html',{
-                'profile': profile,
-                'form' : form_post,
-            })
-            form_post.save()
-            return redirect('main')
+        if not form_post.is_valid():
+            return render(request, 'Users/profile.html',{
+            'profile': profile,
+            'form' : form_post,
+            'checked': 'checked',
+        })
+        if not form_post.validate_password():
+            return render(request, 'Users/profile.html',{
+            'profile': profile,
+            'form' : form_post,
+            'checked': 'checked',
+        })
+        form_post.save()
+        return redirect('main')
         
 @login_required
 def manage_subusers(request):

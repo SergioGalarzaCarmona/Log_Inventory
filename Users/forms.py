@@ -89,9 +89,9 @@ class EditUserForm(forms.ModelForm):
     password = forms.CharField(
         max_length=30,
         label='Contraseña',
-        required=False, 
+        required=True, 
         error_messages={
-            'invalid': 'La contraseña es incorrecta.'
+            'invalid': 'La contraseña no coincide.'
         },
         widget=forms.PasswordInput(
             attrs={
@@ -119,6 +119,7 @@ class EditUserForm(forms.ModelForm):
             error = ValidationError(self.field['password'].error_messages['invalid'], 
                                     code='invalid')
             self.add_error('password', error)
+        return True
         
     def clean_username(self):
         username = self.cleaned_data['username']
