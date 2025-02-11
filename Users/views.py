@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup
+from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .models import Profile, SubprofilesGroup
@@ -83,31 +83,39 @@ def profile(request,username):
     if request.method == 'GET':
         return render(request, 'Users/profile.html',{
             'profile': profile,
-            'form' : form
+            'form' : form,
+            'image_form' : SetImageForm()
         })
     else:
-        form_post = EditUserForm(request.POST,initial=form.initial,user_pk = user_pk)
-        if not form_post.has_changed():
-            return render(request, 'Users/profile.html',{
+        image = request.FILES.get('image',False)
+        if image:
+            profile = Profile.objects.get(user=request.user)
+            profile.image = image
+            profile.save()
+            return redirect('main')
+        else:
+            form_post = EditUserForm(request.POST,initial=form.initial,user_pk = user_pk)
+            if not form_post.has_changed():
+                return render(request, 'Users/profile.html',{
+                    'profile': profile,
+                    'form' : form,
+                    'message': 'Los datos no han sido actualizados',
+                    'image_form' : SetImageForm(),
+                })
+            if not form_post.is_valid():
+                return render(request, 'Users/profile.html',{
                 'profile': profile,
-                'form' : form,
-                'message': 'Los datos no han sido actualizados',
-                'checked': 'checked',
+                'form' : form_post,
+                'image_form' : SetImageForm(),
             })
-        if not form_post.is_valid():
-            return render(request, 'Users/profile.html',{
-            'profile': profile,
-            'form' : form_post,
-            'checked': 'checked',
-        })
-        if not form_post.validate_password():
-            return render(request, 'Users/profile.html',{
-            'profile': profile,
-            'form' : form_post,
-            'checked': 'checked',
-        })
-        form_post.save()
-        return redirect('main')
+            if not form_post.validate_password():
+                return render(request, 'Users/profile.html',{
+                'profile': profile,
+                'form' : form_post,
+                'image_form' : SetImageForm(),
+            })
+            form_post.save()
+            return redirect('main')
         
 @login_required
 def manage_subusers(request):

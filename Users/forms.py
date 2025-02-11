@@ -142,6 +142,19 @@ class EditUserForm(forms.ModelForm):
             self.add_error('email', error)
         return email
     
+    
+class SetImageForm(forms.Form):
+    image = forms.ImageField(
+        label='Imagen de Perfil',
+        required=True, 
+        widget=forms.FileInput(attrs={'class' : ''})
+        )
+    class Meta:
+        fields = ['image']
+        
+        
+        
+    
 class RegisterSubuser(forms.ModelForm):
     username = forms.CharField(
         max_length=30,label='Nombre de Usuario',
