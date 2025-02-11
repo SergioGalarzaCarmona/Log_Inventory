@@ -24,8 +24,7 @@ class RegisterUser(UserCreationForm):
             raise forms.ValidationError('El email ya está registrado.')
         return email
     
-    def create_profile(self,user):
-        image = self.cleaned_data['image']
+    def create_profile(self,user,image = None):
         if image == None:
             image = 'default.jpg'
         Profile.objects.create(user=user,image=image)

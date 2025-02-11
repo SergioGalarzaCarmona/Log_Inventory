@@ -40,7 +40,7 @@ def signUp(request):
                 "class_h2": class_h2,
             })
     user = form.save()
-    form.create_profile(user)
+    form.create_profile(user,request.FILES['image'])
     login(request, user)
     return redirect('main')
 
