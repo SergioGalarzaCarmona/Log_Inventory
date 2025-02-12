@@ -99,7 +99,9 @@ body {
 }
 
 .item--profile .profile-option {
-    font-size: .9rem;
+    font-size: 1.2rem;
+    text-transform: none;
+    letter-spacing: .8px;
 }
 
 .item--profile {
@@ -275,14 +277,15 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 .profile-img-container {
     width: 37.5%;
     height: 75%;
+    background-color: var(--sidebar-color);
+    border-radius: 20px 0 0 20px;
+    border: var(--fb-color) 5px solid;
 }
 
 .profile-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 20px 0 0 20px;
-    border: var(--fb-color) 5px solid;
 }
 
 .profile-container form {
