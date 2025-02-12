@@ -82,6 +82,11 @@
         <div class="profile-container">
             <div class="profile-img-container">
                 <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
+                <form method="POST" enctype="multipart/form-data" class="image_form">
+                    {% csrf_token %}
+                    {{image_form}}
+                    <input type="submit" id='id_submit' value="Cambiar imagen">
+                </form>
             </div>
             
             <form method="POST">
