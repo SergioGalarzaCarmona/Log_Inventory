@@ -100,8 +100,8 @@ class EditUserForm(forms.ModelForm):
         )
     class Meta:
         model = User
-        fields = ['username', 'email']
-        
+        fields = ['username', 'email', "password"]
+        required_css_class = ""
     
     def __init__(self, *args, **kwargs):
         if 'user_pk' in kwargs:

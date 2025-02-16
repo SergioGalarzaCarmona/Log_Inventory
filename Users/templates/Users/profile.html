@@ -81,7 +81,14 @@
         </div>
         <div class="profile-container">
             <div class="profile-img-container">
-                <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
+                <label for="id_image">
+                    <div class="img-overlay">
+                        <button>
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                    <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
+                </label>
                 <form method="POST" enctype="multipart/form-data" class="image_form">
                     {% csrf_token %}
                     {{image_form}}
