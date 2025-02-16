@@ -126,7 +126,9 @@ body {
 }
 
 .item--profile .profile-option {
-    font-size: .9rem;
+    font-size: 1.2rem;
+    text-transform: none;
+    letter-spacing: .8px;
 }
 
 .item--profile {
