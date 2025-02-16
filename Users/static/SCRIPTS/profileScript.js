@@ -6,4 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 })
 
+const delete_button = document.getElementById('id_delete_button')
+delete_button.addEventListener('click',function () {
+    const checkbox = document.getElementById('id_delete_checkbox')
+    checkbox.checked = true
+    document.getElementById('delete_image').click()
+})
 

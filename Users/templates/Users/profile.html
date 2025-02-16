@@ -83,9 +83,14 @@
             <div class="profile-img-container">
                 <label for="id_image">
                     <div class="img-overlay">
-                        <button>
+                        <button id = 'id_delete_button'>
                             <span class="material-symbols-outlined">delete</span>
                         </button>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="checkbox" name="delete_image" id="id_delete_checkbox" hidden>
+                            <input type="submit" id="delete_image" value="submit" hidden>
+                        </form>
                     </div>
                     <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
                 </label>
@@ -98,7 +103,7 @@
             
             <form method="POST">
                 {% csrf_token %}
-                
+
                 <div>
                     <p>
                         {{message}}

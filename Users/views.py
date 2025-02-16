@@ -88,11 +88,25 @@ def profile(request,username):
         })
     else:
         image = request.FILES.get('image',False)
+        delete_image = request.POST.get('delete_image',False)
         if image:
             profile = Profile.objects.get(user=request.user)
             profile.image = image
             profile.save()
-            return redirect('main')
+            return render(request, 'Users/profile.html',{
+                    'profile': profile,
+                    'form' : form,
+                    'image_form' : SetImageForm(),
+                })
+        elif delete_image:
+            profile = profile = Profile.objects.get(user=request.user)
+            profile.image = 'default.jpg'
+            profile.save()
+            return render(request, 'Users/profile.html',{
+                    'profile': profile,
+                    'form' : form,
+                    'image_form' : SetImageForm(),
+                })
         else:
             form_post = EditUserForm(request.POST,initial=form.initial,user_pk = user_pk)
             if not form_post.has_changed():
