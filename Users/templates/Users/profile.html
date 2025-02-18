@@ -109,16 +109,22 @@
                     </p>
                 </div>
                 <div>
+                    
+                </div>
+                <div>
                     <label for="id_username">Nombre de Usuario:</label>
+                    {{form.errors.username}}
                     {{form.username}}
                 </div>
                 <div>
                     <label for="id_email">Correo Electrónico:</label>
+                    {{form.errors.email}}
                     {{form.email}}
                 </div>
                 <dialog id="modify-confirmation">
                     <div>
                         <label for="id_password"></label>
+                        {
                         {{form.password}}
                     </div> 
                     <div>
@@ -130,6 +136,7 @@
                     <label for="password_id">Contraseña</label>
                     <div>
                         <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
+                        {form.errors.password}}
                         <a title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>
                     </div>
                 </div>
