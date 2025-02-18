@@ -103,26 +103,38 @@
             
             <form method="POST">
                 {% csrf_token %}
-
                 <div>
                     <p>
                         {{message}}
                     </p>
                 </div>
-                {{form}}
                 <div>
+                    <label for="id_username">Nombre de Usuario:</label>
+                    {{form.username}}
+                </div>
+                <div>
+                    <label for="id_email">Correo Electrónico:</label>
+                    {{form.email}}
+                </div>
+                <dialog id="modify-confirmation">
+                    <div>
+                        <label for="id_password"></label>
+                        {{form.password}}
+                    </div> 
+                    <div>
+                        <input type="submit" value="Actualizar">
+                    </div>
+                    <button id="close-dialog">Cerrar</button>
+                </dialog>
+                <div class="modify-password">
                     <label for="password_id">Contraseña</label>
-                    <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
-                    <button>
-                        <a href="{% url 'change_password' %}">
-                            cambiar contraseña(cambiar a imagen)
-                        </a>
-                    </button>
+                    <div>
+                        <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
+                        <a title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>
+                    </div>
                 </div>
                 <input type="checkbox" value="Actualizar">
-                <div>
-                    <input type="submit" value="Actualizar">
-                </div>
+                <button id="open-dialog">Cambiar Información</button>
             </form>
         </div>
     </main>

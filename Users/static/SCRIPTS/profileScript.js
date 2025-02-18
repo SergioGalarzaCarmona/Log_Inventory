@@ -13,3 +13,6 @@ delete_button.addEventListener('click',function () {
     document.getElementById('delete_image').click()
 })
 
+const dialog = document.getElementById("modify-confirmation");
+document.getElementById("open-dialog").addEventListener("click", () => dialog.showModal());
+document.getElementById("close-dialog").addEventListener("click", () => dialog.close());

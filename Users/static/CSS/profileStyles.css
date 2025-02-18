@@ -338,7 +338,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 20px;
+    padding: 0 40px;
     border-radius: 0 20px 20px 0;
 }
 
@@ -358,6 +358,32 @@ form input:focus {
     outline: var(--wood) 1px solid;
 }
 
+form > div {
+    width: 100%;
+}
+
+.modify-password div {
+    display: flex;
+    flex-direction: row;
+}
+
+.modify-password a {
+    position: relative;
+    top: 5px;
+    text-decoration: none;
+    color: var(--fb-color);
+    padding: 5px;
+    padding-right: 0;
+    transition: color .1s;
+}
+
+.modify-password a:hover {
+    color: #335a94;
+}
+
+.modify-password .material-symbols-outlined {
+    font-size: 1.85rem;
+}
 
 @media (max-width: 768px) {
     .sidebar__form {
@@ -367,4 +393,5 @@ form input:focus {
     .filter-bar__filter-container > .filter-bar__logo-container {
         display: none;
     }
+
 }
