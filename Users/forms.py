@@ -24,8 +24,7 @@ class RegisterUser(UserCreationForm):
             raise forms.ValidationError('El email ya está registrado.')
         return email
     
-    def create_profile(self,user):
-        image = self.cleaned_data['image']
+    def create_profile(self,user,image = None):
         if image == None:
             image = 'default.jpg'
         Profile.objects.create(user=user,image=image)
@@ -101,8 +100,7 @@ class EditUserForm(forms.ModelForm):
         )
     class Meta:
         model = User
-        fields = ['username', 'email']
-        
+        fields = ['username', 'email', "password"]
     
     def __init__(self, *args, **kwargs):
         if 'user_pk' in kwargs:
@@ -142,6 +140,19 @@ class EditUserForm(forms.ModelForm):
                                     code='unique')
             self.add_error('email', error)
         return email
+    
+    
+class SetImageForm(forms.Form):
+    image = forms.ImageField(
+        label='Imagen de Perfil',
+        required=True, 
+        widget=forms.FileInput(attrs={'class' : ''})
+        )
+    class Meta:
+        fields = ['image']
+        
+        
+        
     
 class RegisterSubuser(forms.ModelForm):
     username = forms.CharField(

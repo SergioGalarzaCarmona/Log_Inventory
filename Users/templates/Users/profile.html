@@ -81,34 +81,64 @@
         </div>
         <div class="profile-container">
             <div class="profile-img-container">
-                <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
+                <label for="id_image">
+                    <div class="img-overlay">
+                        <button id = 'id_delete_button'>
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="checkbox" name="delete_image" id="id_delete_checkbox" hidden>
+                            <input type="submit" id="delete_image" value="submit" hidden>
+                        </form>
+                    </div>
+                    <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
+                </label>
+                <form method="POST" enctype="multipart/form-data" class="image_form">
+                    {% csrf_token %}
+                    {{image_form}}
+                    <input type="submit" id='id_submit' value="Cambiar imagen">
+                </form>
             </div>
             
             <form method="POST">
                 {% csrf_token %}
-
                 <div>
                     <p>
                         {{message}}
                     </p>
                 </div>
-                {{form}}
                 <div>
+                    <label for="id_username">Nombre de Usuario:</label>
+                    {{form.username}}
+                </div>
+                <div>
+                    <label for="id_email">Correo Electrónico:</label>
+                    {{form.email}}
+                </div>
+                <dialog id="modify-confirmation">
+                    <div>
+                        <label for="id_password"></label>
+                        {{form.password}}
+                    </div> 
+                    <div>
+                        <input type="submit" value="Actualizar">
+                    </div>
+                    <button id="close-dialog">Cerrar</button>
+                </dialog>
+                <div class="modify-password">
                     <label for="password_id">Contraseña</label>
-                    <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
-                    <button>
-                        <a href="{% url 'change_password' %}">
-                            cambiar contraseña(cambiar a imagen)
-                        </a>
-                    </button>
+                    <div>
+                        <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
+                        <a title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>
+                    </div>
                 </div>
                 <input type="checkbox" value="Actualizar">
-                <div>
-                    <input type="submit" value="Actualizar">
-                </div>
+                <button id="open-dialog">Cambiar Información</button>
             </form>
         </div>
     </main>
     <script src="{%static '/SCRIPTS/mainScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/profileScript.js'%}"></script>
 </body>
 </html>
