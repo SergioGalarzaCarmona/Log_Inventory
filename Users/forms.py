@@ -117,7 +117,7 @@ class EditUserForm(forms.ModelForm):
             error = ValidationError(self.field['password'].error_messages['invalid'], 
                                     code='invalid')
             self.add_error('password', error)
-        return True
+        return True 
         
     def clean_username(self):
         username = self.cleaned_data['username']

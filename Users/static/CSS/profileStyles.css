@@ -16,7 +16,7 @@ body {
     background-color: var(--bg-color);
     font-family: Montserrat;
 }
-
+ 
 .sidebar {
     background-color: var(--sidebar-color);
     position: fixed;
@@ -383,6 +383,10 @@ form > div {
 
 .modify-password .material-symbols-outlined {
     font-size: 1.85rem;
+}
+
+dialog {
+    border: none;
 }
 
 @media (max-width: 768px) {
