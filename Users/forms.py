@@ -68,7 +68,8 @@ class EditUserForm(forms.ModelForm):
         },
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Nombre de Usuario','class' : ''
+                'placeholder': 'Nombre de Usuario',
+                'class' : ''
                 }
             )
         )
@@ -81,7 +82,8 @@ class EditUserForm(forms.ModelForm):
         },
         widget=forms.EmailInput(
             attrs={
-                'placeholder': 'Correo Electrónico','class' : ''
+                'placeholder': 'Correo Electrónico',
+                'class' : ''
                 }
             )
         )
@@ -94,7 +96,8 @@ class EditUserForm(forms.ModelForm):
         },
         widget=forms.PasswordInput(
             attrs={
-                'placeholder': 'Contraseña','class' : ''
+                'placeholder': 'Contraseña',
+                'class' : ''
                 }
             )
         )
@@ -109,23 +112,23 @@ class EditUserForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
     
     
-    def validate_password(self):
-        username = self.cleaned_data.get('username','default')
-        password = self.cleaned_data.get('password','default')
+    def clean_password(self):
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
         user = authenticate(username=username, password=password)
         if user is None:
-            error = ValidationError(self.field['password'].error_messages['invalid'], 
+            error = ValidationError(self.fields['password'].error_messages['invalid'], 
                                     code='invalid')
             self.add_error('password', error)
-        return True 
+        return password
         
     def clean_username(self):
         username = self.cleaned_data['username']
         users = User.objects.filter(username=username).exclude(pk=self.user_pk)
-        if len(users) > 0:
-            error = ValidationError(self.fields['username'].error_messages['unique'], 
-                                    code='unique')
-            self.add_error('username', error)
+        if int(len(users)) > 0:
+                error = ValidationError(self.fields['username'].error_messages['unique'],
+                                        code='unique')
+                self.add_error('username', error)
         if len(username) < 8:
             error = ValidationError(self.fields['username'].error_messages['is_too_short'], 
                                     code='is_too_short')

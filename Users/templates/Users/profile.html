@@ -135,12 +135,12 @@
                     <label for="password_id">Contraseña</label>
                     <div>
                         <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
+                        {{form.errros.password}}
                         <a title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>
                     </div>
                 </div>
                 <input type="checkbox" value="Actualizar">
                 <button id="open-dialog">Cambiar Información</button>
-                <p>{{form.errors.password}}</p>
             </form>
         </div>
     </main>

@@ -40,7 +40,8 @@ def signUp(request):
                 "class_h2": class_h2,
             })
     user = form.save()
-    form.create_profile(user,request.FILES['image'])
+    image = request.POST.get('image','default.jpg')
+    form.create_profile(user,image)
     login(request, user)
     return redirect('main')
 
@@ -108,6 +109,7 @@ def profile(request,username):
                     'image_form' : SetImageForm(),
                 })
         else:
+            
             form_post = EditUserForm(request.POST,initial=form.initial,user_pk = user_pk)
             if not form_post.has_changed():
                 return render(request, 'Users/profile.html',{
@@ -122,12 +124,7 @@ def profile(request,username):
                 'form' : form_post,
                 'image_form' : SetImageForm(),
             })
-            if not form_post.validate_password():
-                return render(request, 'Users/profile.html',{
-                'profile': profile,
-                'form' : form_post,
-                'image_form' : SetImageForm(),
-            })
+            
             form_post.save()
             return redirect('main')
         
