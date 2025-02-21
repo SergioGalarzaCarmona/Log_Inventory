@@ -100,7 +100,6 @@
                     <input type="submit" id='id_submit' value="Cambiar imagen">
                 </form>
             </div>
-            
             <form method="POST">
                 {% csrf_token %}
                 <div>
@@ -109,7 +108,6 @@
                     </p>
                 </div>
                 <div>
-                    
                 </div>
                 <div>
                     <label for="id_username">Nombre de Usuario:</label>
@@ -121,18 +119,8 @@
                     {{form.errors.email}}
                     {{form.email}}
                 </div>
-                <dialog id="modify-confirmation">
-                    <div>
-                        <label for="id_password"></label>
-                        {{form.password}}
-                    </div> 
-                    <div>
-                        <input type="submit" value="Actualizar">
-                    </div>
-                    <button id="close-dialog">Cerrar</button>
-                </dialog>
                 <div class="modify-password">
-                    <label for="password_id">Contraseña</label>
+                    <label for="password_id">Contraseña:</label>
                     <div>
                         <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
                         {{form.errros.password}}
@@ -141,6 +129,16 @@
                 </div>
                 <input type="checkbox" value="Actualizar">
                 <button id="open-dialog">Cambiar Información</button>
+                <dialog id="modify-confirmation">
+                    <div>
+                        <label for="id_password">Ingresar Contraseña:</label>
+                        {{form.password}}
+                    </div> 
+                    <div>
+                        <input type="submit" value="Actualizar">
+                    </div>
+                    <button class="material-symbols-outlined" id="close-dialog">Close</button>
+                </dialog>
             </form>
         </div>
     </main>

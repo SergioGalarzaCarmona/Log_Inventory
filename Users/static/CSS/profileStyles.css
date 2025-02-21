@@ -332,6 +332,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 .profile-container > form {
+    width: 37.5%;
     height: 75%;
     background-color: var(--sidebar-color);
     display: flex;
@@ -342,10 +343,19 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     border-radius: 0 20px 20px 0;
 }
 
+.errorlist {
+    list-style: none;
+}
+
+.errorlist li {
+    color: #e24;
+    font-size: .9rem;
+}
+
 form input {
     background-color: #eee;
     border: none;
-    margin: 8px 0;
+    margin: 10px 0;
     padding: 10px 15px;
     font-size: 13px;
     font-family: inherit;
@@ -385,11 +395,44 @@ form > div {
     font-size: 1.85rem;
 }
 
-dialog {
-    border: none;
+#open-dialog, dialog input[type="submit"] {
+    width: 100%;
+    background-color: var(--fb-color);
+    color: #fff;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: Montserrat;;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: box-shadow .3s;
+    outline: none;
 }
 
-@media (max-width: 768px) {
+#open-dialog:hover, dialog input[type="submit"]:hover {
+    box-shadow: 7px 7px 0px rgb(100, 166, 231),
+                -7px -7px 0px #335a94;
+}
+
+dialog {
+    border: none;
+    border-radius: 20px;
+    padding: 20px 40px;
+}
+
+#close-dialog {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
     .sidebar__form {
         display: none;
     }
@@ -398,4 +441,25 @@ dialog {
         display: none;
     }
 
+    .profile-container {
+        flex-direction: column;
+        position: relative;
+        align-items: center;
+    }
+
+    .profile-img-container {
+        position: absolute;
+        top: 7.5%;
+        width: 90%;
+        height: 25%;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .profile-container form {
+        position: absolute;
+        bottom: 17.5%;
+        width: 90%;
+        height: 50%;
+        border-radius: 0 0 20px 20px;
+    }
 }

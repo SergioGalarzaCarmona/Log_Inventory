@@ -116,17 +116,13 @@ body {
     text-decoration: none;
 }
 
-.profile-option {
-    text-transform: none;
-}
-
-.sidebar__profile img {
+.sidebar__profile img { 
     border-radius: 50%;
     width: 2rem;
 }
 
 .item--profile .profile-option {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     text-transform: none;
     letter-spacing: .8px;
 }
