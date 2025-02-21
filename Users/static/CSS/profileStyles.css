@@ -347,7 +347,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     list-style: none;
 }
 
-.errorlist li {
+.errorlist li, .message {
     color: #e24;
     font-size: .9rem;
 }
