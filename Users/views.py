@@ -6,6 +6,8 @@ from .models import Profile, SubprofilesGroup
 from django.contrib.auth.decorators import login_required
 from .forms import EditUserForm
 from django.views.generic import TemplateView
+from django.core.exceptions import ValidationError
+
 
 # Create your views here.
 
@@ -110,8 +112,11 @@ def profile(request,username):
                 })
         else:
             
-            form_post = EditUserForm(request.POST,initial=form.initial,user_pk = user_pk)
-            if not form_post.has_changed():
+            form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = user_pk)
+            data = form_post.data
+            print(request.POST)
+            
+            if user.email == data['email'] and user.username == data['username']:
                 return render(request, 'Users/profile.html',{
                     'profile': profile,
                     'form' : form,
@@ -121,11 +126,11 @@ def profile(request,username):
             if not form_post.is_valid():
                 return render(request, 'Users/profile.html',{
                 'profile': profile,
-                'form' : form_post,
+                'form' : form,
+                'form_post' : form_post,
                 'image_form' : SetImageForm(),
             })
-            
-            form_post.save()
+            user = User.objects.filter(pk=user_pk).update(username=data['username'],email=data['email']) 
             return redirect('main')
         
 @login_required
