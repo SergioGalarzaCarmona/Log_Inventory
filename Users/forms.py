@@ -18,6 +18,13 @@ class RegisterUser(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
         help_texts = {k:"" for k in fields}
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('El nombre de usuario ya está registrado.')
+        if len(username) < 8:
+            raise forms.ValidationError('El nombre de usuario debe tener al menos 8 caracteres.')
+        return username
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():

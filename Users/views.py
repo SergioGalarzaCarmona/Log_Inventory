@@ -42,7 +42,7 @@ def signUp(request):
                 "class_h2": class_h2,
             })
     user = form.save()
-    image = request.POST.get('image','default.jpg')
+    image = request.FILES.get('image','default.jpg')
     form.create_profile(user,image)
     login(request, user)
     return redirect('main')
