@@ -58,7 +58,7 @@
                 <li class="sidebar__item">
                     <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link">
                         <img src="../../../media/{{user.profile.image}}" alt="profile-img">
-                        <span class="profile-option">{{user.username}}</span>
+                        <span id="username"  class="profile-option">{{user.username}}</span>
                     </a>
                 </li>
                 <li class="sidebar__item">
@@ -111,19 +111,19 @@
                 </div>
                 <div>
                     <label for="id_username">Nombre de Usuario:</label>
-                    {{form.errors.username}}
+                    {{form_post.errors.username}}
                     {{form.username}}
                 </div>
                 <div>
                     <label for="id_email">Correo Electrónico:</label>
-                    {{form.errors.email}}
+                    {{form_post.errors.email}}
                     {{form.email}}
                 </div>
                 <div class="modify-password">
-                    <label for="password_id">Contraseña:</label>
+                    <label for="password_id">Contraseña</label>
+                    {{form_post.errors.password}}
                     <div>
                         <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
-                        {{form.errros.password}}
                         <a title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
             </form>
         </div>
     </main>
-    <script src="{%static '/SCRIPTS/mainScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/profileScript.js'%}"></script>
 </body>
 </html>

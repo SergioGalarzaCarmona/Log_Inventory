@@ -18,6 +18,13 @@ class RegisterUser(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
         help_texts = {k:"" for k in fields}
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('El nombre de usuario ya está registrado.')
+        if len(username) < 8:
+            raise forms.ValidationError('El nombre de usuario debe tener al menos 8 caracteres.')
+        return username
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
@@ -64,7 +71,8 @@ class EditUserForm(forms.ModelForm):
         required=True, 
         error_messages= {
             'unique' : 'El nombre de usuario ya está registrado.',
-            'is_too_short': 'El nombre de usuario debe tener al menos 8 caracteres.'
+            'is_too_short': 'El nombre de usuario debe tener al menos 8 caracteres.',
+            'invalid': 'La contraseña no coincide.'
         },
         widget=forms.TextInput(
             attrs={
@@ -110,25 +118,14 @@ class EditUserForm(forms.ModelForm):
             user_pk = kwargs.pop('user_pk')
             self.user_pk = user_pk
         super().__init__(*args, **kwargs)
-    
-    
-    def clean_password(self):
-        username = self.cleaned_data['username']
-        password = self.cleaned_data['password']
-        user = authenticate(username=username, password=password)
-        if user is None:
-            error = ValidationError(self.fields['password'].error_messages['invalid'], 
-                                    code='invalid')
-            self.add_error('password', error)
-        return password
         
     def clean_username(self):
         username = self.cleaned_data['username']
         users = User.objects.filter(username=username).exclude(pk=self.user_pk)
-        if int(len(users)) > 0:
-                error = ValidationError(self.fields['username'].error_messages['unique'],
-                                        code='unique')
-                self.add_error('username', error)
+        if len(users) > 0:
+            error = ValidationError(self.fields['username'].error_messages['unique'],
+                                    code='unique')
+            self.add_error('username', error)
         if len(username) < 8:
             error = ValidationError(self.fields['username'].error_messages['is_too_short'], 
                                     code='is_too_short')
@@ -144,6 +141,14 @@ class EditUserForm(forms.ModelForm):
             self.add_error('email', error)
         return email
     
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        user = User.objects.get(pk=self.user_pk)
+        if not user.check_password(password):
+            error = ValidationError(self.fields['password'].error_messages['invalid'], 
+                                    code='invalid')
+            self.add_error('password', error)
+        return password
     
 class SetImageForm(forms.Form):
     image = forms.ImageField(
