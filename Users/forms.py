@@ -119,6 +119,7 @@ class EditUserForm(forms.ModelForm):
             self.user_pk = user_pk
         super().__init__(*args, **kwargs)
         
+        
     def clean_username(self):
         username = self.cleaned_data['username']
         users = User.objects.filter(username=username).exclude(pk=self.user_pk)
@@ -163,11 +164,17 @@ class SetImageForm(forms.Form):
         
     
 class RegisterSubuser(forms.ModelForm):
+
     username = forms.CharField(
-        max_length=30,label='Nombre de Usuario',
+        max_length=30,
+        label='Nombre de Usuario',
         required=True,
         widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario','class' : ''}))
-    
+    group = forms.ModelChoiceField (
+        queryset=None,
+        label='Grupo',
+        required=True,
+        widget=forms.Select(attrs={'class' : ''}))
     email = forms.EmailField(
         max_length=254,
         label='Correo Electrónico',
@@ -198,29 +205,27 @@ class RegisterSubuser(forms.ModelForm):
     class Meta:
         model = Subprofile
         fields = ['username', 'email', 'password1', 'password2', 'image']
-
-    def __init__(self,request, *args, **kwargs):
-        self.request = request
+    
+    def __init__(self,*args, **kwargs):
+        user_pk = kwargs.pop('user_pk',None)
+        self.user_pk = user_pk
         super().__init__(*args, **kwargs)
-        
-    def create_subprofile(self,commit=True):
+        if user_pk:
+            self.fields['group'].queryset = SubprofilesGroup.objects.filter(user_id=user_pk) 
+
+    def create_subprofile(self):
         
         image = self.cleaned_data.get('image','default.jpg')
         username = self.cleaned_data['username']
         email = self.cleaned_data['email']
         password1 = self.cleaned_data['password1']
-        profile = Profile.objects.get(user=self.request.user)
-        
-        if commit:
-            return Subprofile.objects.create(username = username,email = email,password= make_password(password1),image=image,profile_id=profile)
-        else: 
-            profile = self.save(commit=commit)
-            return profile
+        group = self.cleaned_data['group']
+        return Subprofile.objects.create(username = username,group = group ,email = email,password= make_password(password1),image=image,user_id=self.user_pk)
         
     
     def clean_username(self):
         username = self.cleaned_data['username']
-        profile = Profile.objects.get(user = self.request.user)
+        profile = Profile.objects.get(user = self.user_pk)
         if Subprofile.objects.filter(profile_id = profile, username=username).exists():
             raise forms.ValidationError('El nombre de usuario ya está registrado.')
         if len(username) < 8:
@@ -265,8 +270,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
         model = SubprofilesGroup
         fields = ['name','image']
         
-    def __init__(self,request, *args, **kwargs):
-        self.request = request
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
     def create_subprofile_group(self):

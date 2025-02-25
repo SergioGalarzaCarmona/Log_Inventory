@@ -4,20 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static '/CSS/subusersStyles.css'%}">
+    <link rel="stylesheet" href="{% static '/CSS/subusersStyles.css' %}">
     <title>Manejo de Usuarios</title>
 </head>
 <body>
-    <form method="POST">
+    <p>crear subusuario</p>
+    <input type="checkbox" {{checked}} id="create-subuser">
+    <p>
+        crear grupo
+    </p>
+    <input type="checkbox" {{checked_group}} id="create-group">
+    <form class="create-subuser" id='form-subuser' method="POST">
         {% csrf_token %}
         {{form}}
-        <input type="submit" value="Crear Usuario">
+        <input type="submit" value="Crear Usuario" id="open-dialog" onclick="validateGroup()">
     </form>
-    <form class="create_group" method="POST">
-        <input type="checkbox" class="create_subgroup_checkbox" {{created_subgroup}}>
+    <form class="create-group" method="POST">
         {% csrf_token %}
-        {{form_group}}
-        <input type="submit" value="Crear Usuario"> 
+        {{group_form}}
+        <input type="submit" value="Crear Grupo">
     </form>
+    <dialog id="group-dialog">
+        <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
+        <button value=0 id="close-dialog">No</button>
+        <button value=1 id="create">Si</button>
+    </dialog>
+    <script src="{%static '/SCRIPTS/subusersScript.js'%}"></script>
 </body>
 </html>

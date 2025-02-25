@@ -1,12 +1,16 @@
-.create_subgroup_chekbox{
+.create-subuser{
     display: none;
 }
 
-.create_subgroup {
+.create-group {
     display: none;
 }
 
 
-.create_subgroup_chekbox:checked > .create_subgroup {
+#create-subuser:checked ~ .create-subuser {
+    display: block;
+}
+
+#create-group:checked ~ .create-group {
     display: block;
 }

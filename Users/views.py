@@ -120,7 +120,7 @@ def profile(request,username):
                 return render(request, 'Users/profile.html',{
                     'profile': profile,
                     'form' : form,
-                    'message': 'Los datos no han sido actualizados',
+                    'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
                 })
             if not form_post.is_valid():
@@ -137,18 +137,29 @@ def profile(request,username):
 def manage_subusers(request):
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
-        'form': RegisterSubuser(request),
+        'form': RegisterSubuser(user_pk = request.user.pk),
+        'group_form': RegisterSubprofileGroup(),
     })
     else:
-        create = request.POST.get('username', False)
-        if create:
-            form = RegisterSubuser(request,request.POST,request.FILES)
-            subprofile = form.create_subprofile(commit=False)
+        create_subuser = request.POST.get('username', False)
+        if create_subuser:
+            form = RegisterSubuser(request.POST,request.FILES,user_pk = request.user.pk)
+            if not form.is_valid():
+                return render(request, 'Users/subusers.html',{
+                    'form': form,
+                    'group_form': RegisterSubprofileGroup(),
+                    'checked' : 'checked',
+                })
+            form.create_subprofile()
+            return render(request, 'Users/subusers.html',{
+            'form': RegisterSubuser(user_pk = request.user.pk),
+            'group_form': RegisterSubprofileGroup(),
+            })
         else: 
             form = RegisterSubprofileGroup(request,request.POST,request.FILES)
             
             if not form.is_valid():
-                if create:
+                if create_subuser:
                     return render(request, 'Users/subusers.html',{
                     'form': form,
                     'created_subgroup' : 'checked',
@@ -159,6 +170,4 @@ def manage_subusers(request):
                     'form_group': form,
                     'created_subgroup' : 'checked',
                 })
-            subprofile.save()
-            SubprofilesGroup.objects.create(profile_id=Profile.objects.get(user=request.user),subprofile_id=subprofile,name='',image='',permissions_id=1)
             return redirect('manage_subusers')

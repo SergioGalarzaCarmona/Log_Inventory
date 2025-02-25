@@ -104,8 +104,7 @@
                 {% csrf_token %}
                 <div class="message">
                     <p>
-                        {{message}}
-                        {{form_post.errors.password}}
+                        {{message}} 
                     </p>
                 </div>
                 <div>
@@ -122,6 +121,7 @@
                 </div>
                 <div class="modify-password">
                     <label for="password_id">Contraseña:</label>
+                    {{form_post.errors.password}}
                     <div>
                         <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
                         <a title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>

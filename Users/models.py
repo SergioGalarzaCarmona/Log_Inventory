@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Permissions(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField( 
+        max_length=100
+        )
     
     def __str__(self):
         return f'{self.name} Permission'
@@ -15,10 +17,10 @@ class Permissions(models.Model):
 
 
 class PermissionsGroup(models.Model):
-    permissions_id = models.ForeignKey(Permissions, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return f'{self.name} Group Permission'
+    permissions_id = models.ForeignKey (
+        Permissions, 
+        on_delete=models.CASCADE
+        )
     
     class Meta:
         verbose_name = 'GroupPermission'
@@ -28,9 +30,15 @@ class PermissionsGroup(models.Model):
         ]
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg',upload_to='profile_images')
-    
+    user = models.OneToOneField (
+        User, 
+        on_delete=models.CASCADE
+        )
+    image = models.ImageField (
+        default='default.jpg',
+        upload_to='profile_images'
+        )
+     
     def __str__(self):
         return f'{self.user.username} Profile'
     
@@ -38,12 +46,48 @@ class Profile(models.Model):
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'
         
+class SubprofilesGroup(models.Model):
+    user_id = models.ForeignKey (
+        User, 
+        on_delete=models.CASCADE
+        )
+    name = models.CharField(
+        max_length=100)
+    image = models.ImageField(
+        default='default_group.jpg',
+        upload_to='profile_images')
+    permissions = models.ForeignKey(
+        PermissionsGroup, 
+        on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.name}'
+    
+    class Meta:
+        verbose_name = 'GroupSubprofile'
+        verbose_name_plural = 'GroupSubprofiles'
+        
 class Subprofile(models.Model):
-    profile_id = models.ForeignKey(Profile,on_delete=models.CASCADE)
-    username = models.CharField(max_length=100)
-    email = models.EmailField(max_length=254)
-    password = models.CharField(max_length=100)
-    image = models.ImageField(default='default.jpg',upload_to='profile_images')
+    profile_id = models.ForeignKey( 
+        Profile,
+        on_delete=models.CASCADE
+         )
+    username = models.CharField (
+        max_length=100
+        )
+    email = models.EmailField (
+        max_length=254
+        )
+    password = models.CharField (
+        max_length=100
+        )
+    image = models.ImageField (
+        default='default.jpg',
+        upload_to='profile_images')
+    group = models.ForeignKey (
+        SubprofilesGroup, 
+        on_delete=models.CASCADE
+        )
     
     def __str__(self):
         return f'{self.user.username} Subprofile'
@@ -55,34 +99,4 @@ class Subprofile(models.Model):
         indexes = [
             models.Index(fields=['profile_id', 'username'],name= 'profile_subprofile_idx'),
         ]
-
-
-class SubprofilesGroup(models.Model):
-    profile_id = models.ForeignKey(
-        Profile, 
-        on_delete=models.CASCADE)
-    subprofile_id = models.ForeignKey(
-        Subprofile,
-        on_delete=models.CASCADE,
-        null=True)
-    name = models.CharField(
-        max_length=100)
-    image = models.ImageField(
-        default='default_group.jpg',
-        upload_to='profile_images')
-    permissions = models.ForeignKey(
-        PermissionsGroup, 
-        on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return f'{self.name} Group'
-    
-    class Meta:
-        verbose_name = 'GroupSubprofile'
-        verbose_name_plural = 'GroupSubprofiles'
-        indexes = [
-            models.Index(fields=['id', 'subprofile_id'], name='subprofile_group_idx'),
-        ]
-        
-
     
