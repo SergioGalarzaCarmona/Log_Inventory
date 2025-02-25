@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .models import Profile, SubprofilesGroup
+from .models import Profile,Subprofile, SubprofilesGroup
 from django.contrib.auth.decorators import login_required
 from .forms import EditUserForm
 from django.views.generic import TemplateView

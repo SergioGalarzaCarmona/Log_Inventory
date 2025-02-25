@@ -9,7 +9,7 @@
 </head>
 <body>
     <p>crear subusuario</p>
-    <input type="checkbox" {{checked}} id="create-subuser">
+    <input type="checkbox" {{checked}} id="create-subuser" onclick="inputClick()">
     <p>
         crear grupo
     </p>
@@ -17,7 +17,7 @@
     <form class="create-subuser" id='form-subuser' method="POST">
         {% csrf_token %}
         {{form}}
-        <input type="submit" value="Crear Usuario" id="open-dialog" onclick="validateGroup()">
+        <input type="submit" value="Crear Usuario" id="open-dialog">
     </form>
     <form class="create-group" method="POST">
         {% csrf_token %}

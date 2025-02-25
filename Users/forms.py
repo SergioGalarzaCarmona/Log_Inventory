@@ -220,7 +220,8 @@ class RegisterSubuser(forms.ModelForm):
         email = self.cleaned_data['email']
         password1 = self.cleaned_data['password1']
         group = self.cleaned_data['group']
-        return Subprofile.objects.create(username = username,group = group ,email = email,password= make_password(password1),image=image,user_id=self.user_pk)
+        profile = Profile.objects.get(user_id = self.user_pk)
+        return Subprofile.objects.create(username = username,group = group ,email = email,password= make_password(password1),image=image,profile_id = profile)
         
     
     def clean_username(self):
@@ -234,7 +235,7 @@ class RegisterSubuser(forms.ModelForm):
     
     def clean_email(self):
         email = self.cleaned_data['email']
-        if Subprofile.objects.filter(email=email).exists():
+        if Subprofile.objects.filter(email=email).exists() and User.objects.filter(email=email).exists():
             raise forms.ValidationError('El email ya está registrado.')
         return email
     
