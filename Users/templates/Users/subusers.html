@@ -30,6 +30,14 @@
         <button value=0 id="close-dialog">No</button>
         <button value=1 id="create">Si</button>
     </dialog>
+    <section>
+        {% for subuser in subusers %}
+        <ul>
+            <li>{{subuser.username}}</li>
+            <li>{{subuser.group.name}}</li>
+        </ul>
+        {% endfor %}
+    </section>
     <script src="{%static '/SCRIPTS/subusersScript.js'%}"></script>
 </body>
 </html>

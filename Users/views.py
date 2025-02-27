@@ -135,10 +135,12 @@ def profile(request,username):
         
 @login_required
 def manage_subusers(request):
+    subusers = Subprofile.objects.filter(user=request.user)
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
         'form': RegisterSubuser(user_pk = request.user.pk),
         'group_form': RegisterSubprofileGroup(),
+        'subusers': subusers,
     })
     else:
         create_subuser = request.POST.get('username', False)
@@ -149,6 +151,7 @@ def manage_subusers(request):
                     'form': form,
                     'group_form': RegisterSubprofileGroup(),
                     'checked' : 'checked',
+                    'subusers': subusers,
                 })
             form.create_subprofile()
             return redirect('manage_subusers')
@@ -160,5 +163,7 @@ def manage_subusers(request):
                     'form': RegisterSubuser(),
                     'form_group': form,
                     'checked_group' : 'checked',
+                    'subusers': subusers,
                 })
+            form.create_subprofile_group()   
             return redirect('manage_subusers')

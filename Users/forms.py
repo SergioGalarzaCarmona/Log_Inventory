@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Profile, Subprofile, SubprofilesGroup
+from .models import Profile, Subprofile, SubprofilesGroup, PermissionsGroup
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
@@ -220,17 +220,19 @@ class RegisterSubuser(forms.ModelForm):
         email = self.cleaned_data['email']
         password1 = self.cleaned_data['password1']
         group = self.cleaned_data['group']
-        profile = Profile.objects.get(user_id = self.user_pk)
-        return Subprofile.objects.create(username = username,group = group ,email = email,password= make_password(password1),image=image,profile_id = profile)
+        user = User.objects.get(pk = self.user_pk)
+        return Subprofile.objects.create(username = username,group = group ,email = email,password= make_password(password1),image=image,user = user)
         
     
     def clean_username(self):
         username = self.cleaned_data['username']
         profile = Profile.objects.get(user = self.user_pk)
-        if Subprofile.objects.filter(profile_id = profile, username=username).exists():
+        if Subprofile.objects.filter(user = self.user_pk, username=username).exists():
             raise forms.ValidationError('El nombre de usuario ya está registrado.')
         if len(username) < 8:
             raise forms.ValidationError('El nombre de usuario debe tener al menos 8 caracteres.')
+        if username == profile.user.username:
+            raise forms.ValidationError('El nombre de usuario no puede ser igual al del perfil.')
         return username
     
     def clean_email(self):
@@ -277,7 +279,8 @@ class RegisterSubprofileGroup(forms.ModelForm):
         required=False,
         widget = forms.FileInput(
             attrs={
-                'class' : ''
+                'class' : '',
+                'id' : 'image_group'
                 }
             )
         )
@@ -296,10 +299,13 @@ class RegisterSubprofileGroup(forms.ModelForm):
     def create_subprofile_group(self):
         name = self.cleaned_data['name']
         image = self.cleaned_data.get('image','default_group.jpg')
-        SubprofilesGroup.objects.create(name=name,image=image,user=self.user_pk,permissions = 3)
+        user = User.objects.get(pk = self.user_pk)
+        permissions = PermissionsGroup.objects.get(pk=3)
+        SubprofilesGroup.objects.create(name=name,image=image,user=user,permissions = permissions)
     
     def clean_name(self):
         name = self.cleaned_data['name']
+        username = Profile.objects.get(User = self.user_pk).user.username
         if SubprofilesGroup.objects.filter(user = self.user_pk, name=name).exists():
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code = 'unique')
@@ -307,5 +313,9 @@ class RegisterSubprofileGroup(forms.ModelForm):
         if len(name) < 8:
             error = ValidationError(self.fields['name'].error_messages['is_so_short'],
                                     code = 'is_so_short')
+            self.add_error('name',error)
+        if username == name:
+            error = ValidationError(self.fields['name'].error_messages['invalid'],
+                                    code = 'invalid')
             self.add_error('name',error)
         return name
