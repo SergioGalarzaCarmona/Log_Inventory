@@ -33,8 +33,9 @@
     <section>
         {% for subuser in subusers %}
         <ul>
-            <li>{{subuser.username}}</li>
-            <li>{{subuser.group.name}}</li>
+            <li>Nombre: {{subuser.username}}</li>
+            <li>Email: {{subuser.email}}</li>
+            <li>Grupo: {{subuser.group.name}}</li>
         </ul>
         {% endfor %}
     </section>
