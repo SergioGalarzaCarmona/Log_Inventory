@@ -1,26 +1,21 @@
-const select = document.getElementById('id_group');
-const dialog = document.getElementById("group-dialog");
-const checkbox_group = document.getElementById('create-group');
-const checkbox_subuser = document.getElementById('create-subuser');
-const form = document.getElementById('form-subuser');
-document.getElementById('open-dialog').addEventListener("click", function (){
-    let value = select.value;
-    if (value === '') {
-        document.getElementById("open-dialog").addEventListener("click", () => dialog.showModal())
+function validateGroup(){
+    const select = document.getElementById('id_group');
+    const option = select.children[0]
+    option.value = 0
+    value = select.value;
+    if ( value == 0) {
+        const dialog = document.getElementById("group-dialog");
+        dialog.showModal()
         document.getElementById("close-dialog").addEventListener("click", () => dialog.close())
         document.getElementById('create').addEventListener("click", function (){
             dialog.close()
-            checkbox_group.checked = true;
-            checkbox_subuser.checked = false;
+            document.getElementById('create-group').checked = true;
+            document.getElementById('create-subuser').checked = false;
         });
-    }}
-    
-);
-let click = true;
-function inputClick() {
-    if (click) {
-        document.getElementById('open-dialog').click();
-        click = false
     }
-
+    else {
+        document.getElementById('submit').click();
+    }
 }
+const select = document.getElementById('open-dialog');
+select.addEventListener('click', validateGroup)

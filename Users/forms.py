@@ -211,7 +211,7 @@ class RegisterSubuser(forms.ModelForm):
         self.user_pk = user_pk
         super().__init__(*args, **kwargs)
         if user_pk:
-            self.fields['group'].queryset = SubprofilesGroup.objects.filter(user_id=user_pk) 
+            self.fields['group'].queryset = SubprofilesGroup.objects.filter(user=user_pk) 
 
     def create_subprofile(self):
         
@@ -258,12 +258,29 @@ class RegisterSubuser(forms.ModelForm):
     
     
 class RegisterSubprofileGroup(forms.ModelForm):
-    name = forms.CharField(max_length=24,
-                           required = True, 
-                           widget=forms.TextInput(attrs={'placeholder': 'Nombre del Grupo','class' : ''}))
+    name = forms.CharField(
+        max_length=24,
+        required = True, 
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Nombre del Grupo',
+                'class' : ''
+                }
+            ),
+        error_messages={
+            'is_so_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
+            'unique' : 'El nombre del grupo ya está registrado.',
+            'invalid' : 'El nombre del grupo no puede ser el mismo que el del perfil.'
+        }
+        )
     image = forms.ImageField(
         required=False,
-        widget = forms.FileInput(attrs={'class' : ''}))
+        widget = forms.FileInput(
+            attrs={
+                'class' : ''
+                }
+            )
+        )
 
 
     
@@ -272,11 +289,23 @@ class RegisterSubprofileGroup(forms.ModelForm):
         fields = ['name','image']
         
     def __init__(self, *args, **kwargs):
+        user_pk = kwargs.pop('user_pk',None)
+        self.user_pk = user_pk
         super().__init__(*args, **kwargs)
         
     def create_subprofile_group(self):
         name = self.cleaned_data['name']
         image = self.cleaned_data.get('image','default_group.jpg')
-        profile = Profile.objects.get(user=self.request.user)
-        SubprofilesGroup.objects.create(name=name,image=image,profile_id=profile)
+        SubprofilesGroup.objects.create(name=name,image=image,user=self.user_pk,permissions = 3)
     
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if SubprofilesGroup.objects.filter(user = self.user_pk, name=name).exists():
+            error = ValidationError(self.fields['name'].error_messages['unique'],
+                                    code = 'unique')
+            self.add_error('name',error)
+        if len(name) < 8:
+            error = ValidationError(self.fields['name'].error_messages['is_so_short'],
+                                    code = 'is_so_short')
+            self.add_error('name',error)
+        return name

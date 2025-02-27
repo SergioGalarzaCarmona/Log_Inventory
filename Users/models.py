@@ -47,7 +47,7 @@ class Profile(models.Model):
         verbose_name_plural = 'Profiles'
         
 class SubprofilesGroup(models.Model):
-    user_id = models.ForeignKey (
+    user = models.ForeignKey (
         User, 
         on_delete=models.CASCADE
         )
@@ -68,10 +68,10 @@ class SubprofilesGroup(models.Model):
         verbose_name_plural = 'GroupSubprofiles'
         
 class Subprofile(models.Model):
-    profile_id = models.ForeignKey( 
-        Profile,
+    user = models.ForeignKey( 
+        User,
         on_delete=models.CASCADE
-         )
+        )
     username = models.CharField (
         max_length=100
         )
@@ -97,6 +97,6 @@ class Subprofile(models.Model):
         verbose_name_plural = 'Subprofiles'
         
         indexes = [
-            models.Index(fields=['profile_id', 'username'],name= 'profile_subprofile_idx'),
+            models.Index(fields=['user', 'username'],name= 'profile_subprofile_idx'),
         ]
     

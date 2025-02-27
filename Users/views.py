@@ -151,23 +151,14 @@ def manage_subusers(request):
                     'checked' : 'checked',
                 })
             form.create_subprofile()
-            return render(request, 'Users/subusers.html',{
-            'form': RegisterSubuser(user_pk = request.user.pk),
-            'group_form': RegisterSubprofileGroup(),
-            })
+            return redirect('manage_subusers')
         else: 
-            form = RegisterSubprofileGroup(request,request.POST,request.FILES)
+            form = RegisterSubprofileGroup(request.POST,request.FILES,user_pk = request.user.pk)
             
             if not form.is_valid():
-                if create_subuser:
                     return render(request, 'Users/subusers.html',{
-                    'form': form,
-                    'created_subgroup' : 'checked',
-                })
-                else:
-                    return render(request, 'Users/subusers.html',{
-                    'form': RegisterSubuser(request),
+                    'form': RegisterSubuser(),
                     'form_group': form,
-                    'created_subgroup' : 'checked',
+                    'checked_group' : 'checked',
                 })
             return redirect('manage_subusers')
