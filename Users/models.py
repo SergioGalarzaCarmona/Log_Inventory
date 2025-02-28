@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password,check_password
 
 # Create your models here.
 
@@ -99,4 +100,16 @@ class Subprofile(models.Model):
         indexes = [
             models.Index(fields=['user', 'username'],name= 'profile_subprofile_idx'),
         ]
+    
+    def authenticate(username,password):
+        subuser = Subprofile.objects.filter(username=username)
+        if len(subuser) > 1:
+            raise ValueError('There are more than one user with the same username')
+        password_verified = check_password(password,subuser[0].password)
+        print(password_verified)
+        if password_verified == True:
+            return subuser
+        else:
+            return None
+        
     

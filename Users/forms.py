@@ -305,8 +305,8 @@ class RegisterSubprofileGroup(forms.ModelForm):
     
     def clean_name(self):
         name = self.cleaned_data['name']
-        username = Profile.objects.get(User = self.user_pk).user.username
-        if SubprofilesGroup.objects.filter(user = self.user_pk, name=name).exists():
+        profile = Profile.objects.get(user = self.user_pk)
+        if SubprofilesGroup.objects.filter(user = profile.user, name=name).exists():
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code = 'unique')
             self.add_error('name',error)
@@ -314,7 +314,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
             error = ValidationError(self.fields['name'].error_messages['is_so_short'],
                                     code = 'is_so_short')
             self.add_error('name',error)
-        if username == name:
+        if profile.user.username == name:
             error = ValidationError(self.fields['name'].error_messages['invalid'],
                                     code = 'invalid')
             self.add_error('name',error)
