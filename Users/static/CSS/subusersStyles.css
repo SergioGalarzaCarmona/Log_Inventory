@@ -13,4 +13,13 @@
 
 #create-group:checked ~ .create-group {
     display: block;
+}   
+
+main {
+    height: 100dvh;
+    width: clamp(calc(100dvw - 300px), 80dvw, calc(100dvw - 220px));
+    background-color: var(--bg-color);
+    position: fixed;
+    right: 0;
 }
+
