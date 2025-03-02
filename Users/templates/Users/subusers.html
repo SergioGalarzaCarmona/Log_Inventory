@@ -16,40 +16,60 @@
 <body>
     {% include 'Users/sideBar.html' %}
     <main>
-        <div>
-            <p>crear subusuario</p> 
-            <input type="checkbox" {{checked}} id="create-subuser">
-            <form class="create-subuser" id='form-subuser' method="POST">
-                {% csrf_token %}
-                {{form}}
-                <input type="button" value="Crear Usuario" id="open-dialog">
-                <input type="submit" hidden id="submit">
-            </form>
+        <div class="filter-bar"> 
+            <div class="filter-bar__filter-container">
+                <p>Usuarios</p>
+                <div class="filter-bar__logo-container">
+                    <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
+                </div>
+            </div>
         </div>
-        <div>
-            <p>crear grupo</p>
-            <input type="checkbox" {{checked_group}} id="create-group">
-            <form class="create-group" method="POST">
-                {% csrf_token %}
-                {{group_form}}
-                <input type="submit" value="Crear Grupo">
-            </form>
+        <div class="subusers-table__container">
+            <table class="subusers-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Grupo</th>
+                    <th>Correo</th>
+                </tr>
+                {% for subuser in subusers %}
+                <tr onclick="window.location.href='/manage_users/{{ subuser.id }}';">
+                    <td>{{subuser.id}}</td>
+                    <td>{{subuser.username}}</td>
+                    <td>{{subuser.group.name}}</td>
+                    <td>{{subuser.email}}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
-        <dialog id="group-dialog">
-            <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
-            <button value=0 id="close-dialog">No</button>
-            <button value=1 id="create">Si</button>
-        </dialog>
-        <div class="subusers-list">
-            {% for subuser in subusers %}
-            <ul>
-                <li>{{subuser.username}}</li>
-                <li>{{subuser.group.name}}</li>
-                <li>{{subuser.email}}</li>
-            </ul>
-            {% endfor %}
+        <div class="subusers-tools">
+            <div class="createSubuser-container">
+                <label for="create-subuser"><p>Crear subusuario</p> </label>
+                <input type="checkbox" {{checked}} id="create-subuser">
+                <form class="create-subuser" id='form-subuser' method="POST">
+                    {% csrf_token %}
+                    {{form}}
+                    <input type="button" value="Crear Usuario" id="open-dialog">
+                    <input type="submit" hidden id="submit">
+                </form>
+            </div>
+            <div class="createGroup-container">
+                <label for="create-group"><p>Crear grupo</p></label>
+                <input type="checkbox" {{checked_group}} id="create-group">
+                <form class="create-group" method="POST">
+                    {% csrf_token %}
+                    {{group_form}}
+                    <input type="submit" value="Crear Grupo">
+                </form>
+            </div>
+            <dialog id="group-dialog">
+                <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
+                <button value=0 id="close-dialog">No</button>
+                <button value=1 id="create">Si</button>
+            </dialog>
         </div>
     </main>
     <script src="{%static '/SCRIPTS/subusersScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
 </body>
 </html>

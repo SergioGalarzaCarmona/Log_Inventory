@@ -44,14 +44,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     align-items: center;
 }
 
-.filter-bar__filter-container > .filter-bar__logo-container {
-    height: 100%;
-    padding-right: .75rem;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-}
-
 .name {
     max-width: clamp(100% - 42px, 100% - calc(28dvh - 5px), 100% - 210px);
     height: 100%;
@@ -61,6 +53,14 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     color: var(--bg-color);
     font-size: 1.8rem;
     letter-spacing: 2px;
+}
+
+.filter-bar__filter-container > .filter-bar__logo-container {
+    height: 100%;
+    padding-right: .75rem;
+    display: flex;
+    justify-content: end;
+    align-items: center;
 }
 
 .logo {
@@ -239,11 +239,7 @@ dialog {
 }
 
 @media (max-width: 900px) {
-    .sidebar__form {
-        display: none;
-    }
-
-    .filter-bar__filter-container > .filter-bar__logo-container {
+    .sidebar__form, .filter-bar__filter-container > .filter-bar__logo-container {
         display: none;
     }
 
