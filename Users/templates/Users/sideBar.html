@@ -5,6 +5,7 @@
         <label class="material-symbols-outlined open-menu" for="open-menu">chevron_right</label>
     </form>
     <nav class="sidebar__nav">
+        {% if path == 'main' %}
         <ul>
             <li class="sidebar__item">
                 <a href="#" class="sidebar__item-link">
@@ -12,6 +13,9 @@
                     <p>Crear</p>
                 </a>
             </li>
+        {% elif path == 'manage_subusers' or path == 'profile' %}
+        <!-- INserte aqui el boton para acceder a objetos (lo hice asi pq en ambos casos tanto en el perfil como en el manejo de usuarios el boton de crear cambia por el de objetos) -->
+        {% endif %}
             <li class="sidebar__item">
                 <a href="#" class="sidebar__item-link">
                     <span class="material-symbols-outlined">delete</span>

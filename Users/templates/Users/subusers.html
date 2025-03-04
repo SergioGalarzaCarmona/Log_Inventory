@@ -14,7 +14,7 @@
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
-    {% include 'Users/sideBar.html' %}
+    {% include 'Users/sideBar.html' with path='manage_subusers' %}
     <main>
         <div class="filter-bar"> 
             <div class="filter-bar__filter-container">
@@ -27,14 +27,12 @@
         <div class="subusers-table__container">
             <table class="subusers-table">
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
                     <th>Grupo</th>
                     <th>Correo</th>
                 </tr>
                 {% for subuser in subusers %}
                 <tr onclick="window.location.href='/manage_users/{{ subuser.id }}';">
-                    <td>{{subuser.id}}</td>
                     <td>{{subuser.username}}</td>
                     <td>{{subuser.group.name}}</td>
                     <td>{{subuser.email}}</td>

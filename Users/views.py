@@ -169,5 +169,5 @@ def manage_subusers(request):
                     'checked_group' : 'checked',
                     'subusers': subusers,
                 })
-            form.create_subprofile_group()   
+            form.create_subprofile_group()
             return redirect('manage_subusers')

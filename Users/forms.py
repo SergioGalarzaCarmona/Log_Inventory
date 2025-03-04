@@ -270,7 +270,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
                 }
             ),
         error_messages={
-            'is_so_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
+            'is_too_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
             'unique' : 'El nombre del grupo ya está registrado.',
             'invalid' : 'El nombre del grupo no puede ser el mismo que el del perfil.'
         }
@@ -305,16 +305,16 @@ class RegisterSubprofileGroup(forms.ModelForm):
     
     def clean_name(self):
         name = self.cleaned_data['name']
-        profile = Profile.objects.get(user = self.user_pk)
-        if SubprofilesGroup.objects.filter(user = profile.user, name=name).exists():
+        user = User.objects.get(pk = self.user_pk)
+        if SubprofilesGroup.objects.filter(user = user, name=name).exists():
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code = 'unique')
             self.add_error('name',error)
         if len(name) < 8:
-            error = ValidationError(self.fields['name'].error_messages['is_so_short'],
-                                    code = 'is_so_short')
+            error = ValidationError(self.fields['name'].error_messages['is_too_short'],
+                                    code = 'is_too_short')
             self.add_error('name',error)
-        if profile.user.username == name:
+        if user.username == name:
             error = ValidationError(self.fields['name'].error_messages['invalid'],
                                     code = 'invalid')
             self.add_error('name',error)
