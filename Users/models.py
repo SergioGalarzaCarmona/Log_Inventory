@@ -48,10 +48,10 @@ class Profile(models.Model):
         verbose_name_plural = 'Profiles'
         
 class SubprofilesGroup(models.Model):
-    user = models.ForeignKey (
-        User, 
+    profile = models.ForeignKey(
+        Profile,
         on_delete=models.CASCADE
-        )
+    )
     name = models.CharField(
         max_length=100)
     image = models.ImageField(
@@ -69,18 +69,13 @@ class SubprofilesGroup(models.Model):
         verbose_name_plural = 'GroupSubprofiles'
         
 class Subprofile(models.Model):
-    user = models.ForeignKey( 
+    user = models.OneToOneField( 
         User,
         on_delete=models.CASCADE
         )
-    username = models.CharField (
-        max_length=100
-        )
-    email = models.EmailField (
-        max_length=254
-        )
-    password = models.CharField (
-        max_length=100
+    profile = models.ForeignKey (
+        Profile, 
+        on_delete=models.CASCADE
         )
     image = models.ImageField (
         default='default.jpg',
@@ -97,10 +92,6 @@ class Subprofile(models.Model):
         verbose_name = 'Subprofile'
         verbose_name_plural = 'Subprofiles'
         
-        indexes = [
-            models.Index(fields=['user', 'username'],name= 'profile_subprofile_idx'),
-        ]
-    
     def authenticate(username,password):
         subuser = Subprofile.objects.filter(username=username)
         if len(subuser) > 1:

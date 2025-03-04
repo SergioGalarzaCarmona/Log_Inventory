@@ -8,11 +8,59 @@ from django.contrib.auth import authenticate
 
 class RegisterUser(UserCreationForm):
     
-    image = forms.ImageField(label='Imagen de Perfil', required=False, widget=forms.FileInput(attrs={'class' : ''}))
-    username = forms.CharField(max_length=30,label='Nombre de Usuario', required=True, widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario','class' : ''}))
-    email = forms.EmailField(max_length=254,label='Correo Electrónico',required=True, widget=forms.EmailInput(attrs={'placeholder': 'Correo Electrónico','class' : ''}))
-    password1 = forms.CharField(max_length=30,label='Contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña','class' : ''}))
-    password2 = forms.CharField(max_length=30,label='Confirmacion de Contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Confirmar Contraseña','class' : ''}))
+    image = forms.ImageField(
+        label='Imagen de Perfil', 
+        required=False, 
+        widget=forms.FileInput(
+            attrs={
+                'class' : ''
+                }
+            )
+        )
+    username = forms.CharField(
+        max_length=30,
+        label='Nombre de Usuario',
+        required=True, 
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Nombre de Usuario',
+                'class' : ''
+                }
+            )
+        )
+    email = forms.EmailField(
+        max_length=254,
+        label='Correo Electrónico',
+        required=True, 
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Correo Electrónico',
+                'class' : ''
+                }
+            )
+        )
+    password1 = forms.CharField(
+        max_length=30,
+        label='Contraseña', 
+        required=True, 
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class' : ''
+                }
+            )
+        )
+    password2 = forms.CharField(
+        max_length=30,
+        label='Confirmacion de Contraseña',
+        required=True, 
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Confirmar Contraseña',
+                'class' : ''
+                }
+            )
+        )
     class Meta: 
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -38,15 +86,45 @@ class RegisterUser(UserCreationForm):
     
 
 class LoginUser(AuthenticationForm):
-    username = forms.CharField(max_length=30,label='Nombre de Usuario', required=True, widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario','class' : ''}))
-    password = forms.CharField(max_length=30,label='Contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña','class' : ''}))
+    username = forms.CharField(
+        max_length=30,
+        label='Nombre de Usuario', 
+        required=True, 
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Nombre de Usuario',
+                'class' : ''
+                }
+            )
+        )
+    password = forms.CharField(
+        max_length=30,
+        label='Contraseña', 
+        required=True, 
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class' : ''
+                }
+            )
+        )
     
     class Meta:
         model = User
         fields = ['username', 'password']
         
 class PasswordReset(PasswordResetForm):
-    email = forms.EmailField(max_length=254,label='Correo Electrónico', required=True, widget=forms.EmailInput(attrs={'placeholder': 'Correo Electrónico','class' : ''}))
+    email = forms.EmailField(
+        max_length=254,
+        label='Correo Electrónico', 
+        required=True, 
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Correo Electrónico',
+                'class' : ''
+                }
+            )
+        )
     
     class Meta:
         fields = ['email']
@@ -58,9 +136,28 @@ class PasswordReset(PasswordResetForm):
         return email
         
 class SetPassword(SetPasswordForm):
-    new_password1 = forms.CharField(max_length=30,label='Nueva contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña','class' : ''}))
-    new_password2 = forms.CharField(max_length=30,label='Confirmación de  nueva contraseña', required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Confirmar Contraseña','class' : ''}))
-    
+    new_password1 = forms.CharField(
+        max_length=30,
+        label='Nueva contraseña', 
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class' : ''
+                }
+            )
+        )
+    new_password2 = forms.CharField(
+        max_length=30,
+        label='Confirmación de  nueva contraseña',
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Confirmar Contraseña',
+                'class' : ''
+                }
+            )
+        )
     class Meta:
         fields = ['new_password1', 'new_password2']
 
@@ -163,7 +260,7 @@ class SetImageForm(forms.Form):
         
         
     
-class RegisterSubuser(forms.ModelForm):
+class RegisterSubuser(UserCreationForm):
 
     username = forms.CharField(
         max_length=30,
@@ -203,25 +300,24 @@ class RegisterSubuser(forms.ModelForm):
         widget=forms.FileInput(attrs={'class' : ''}))
     
     class Meta:
-        model = Subprofile
-        fields = ['username', 'email', 'password1', 'password2', 'image']
+        model = User
+        fields = ['username', 'email', 'password1', 'password2','group']
+        help_texts = {k:"" for k in fields}
     
     def __init__(self,*args, **kwargs):
         user_pk = kwargs.pop('user_pk',None)
         self.user_pk = user_pk
         super().__init__(*args, **kwargs)
         if user_pk:
-            self.fields['group'].queryset = SubprofilesGroup.objects.filter(user=user_pk) 
+            user = User.objects.get(pk=user_pk)
+            profile = Profile.objects.get(user=user)
+            self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile) 
 
-    def create_subprofile(self):
-        
-        image = self.cleaned_data.get('image','default.jpg')
-        username = self.cleaned_data['username']
-        email = self.cleaned_data['email']
-        password1 = self.cleaned_data['password1']
-        group = self.cleaned_data['group']
-        user = User.objects.get(pk = self.user_pk)
-        return Subprofile.objects.create(username = username,group = group ,email = email,password= make_password(password1),image=image,user = user)
+    def create_subprofile(self,user, group_id,image):
+        main_user = User.objects.get(pk = self.user_pk)
+        profile = Profile.objects.get(user = main_user)
+        group = SubprofilesGroup.objects.get(pk = group_id)
+        return Subprofile.objects.create(user=user,profile=profile,group=group,image=image)
         
     
     def clean_username(self):
@@ -284,9 +380,6 @@ class RegisterSubprofileGroup(forms.ModelForm):
                 }
             )
         )
-
-
-    
     class Meta:
         model = SubprofilesGroup
         fields = ['name','image']
@@ -300,8 +393,9 @@ class RegisterSubprofileGroup(forms.ModelForm):
         name = self.cleaned_data['name']
         image = self.cleaned_data.get('image','default_group.jpg')
         user = User.objects.get(pk = self.user_pk)
-        permissions = PermissionsGroup.objects.get(pk=3)
-        SubprofilesGroup.objects.create(name=name,image=image,user=user,permissions = permissions)
+        profile = Profile.objects.get(user = user)
+        permissions = PermissionsGroup.objects.get(pk=1)
+        SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions)
     
     def clean_name(self):
         name = self.cleaned_data['name']

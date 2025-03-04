@@ -32,10 +32,10 @@
                     <th>Correo</th>
                 </tr>
                 {% for subuser in subusers %}
-                <tr onclick="window.location.href='/manage_users/{{ subuser.id }}';">
-                    <td>{{subuser.username}}</td>
+                <tr onclick="window.location.href='/manage_users/{{ subuser.user.username }}';">
+                    <td>{{subuser.user.username}}</td>
                     <td>{{subuser.group.name}}</td>
-                    <td>{{subuser.email}}</td>
+                    <td>{{subuser.user.email}}</td>
                 </tr>
                 {% endfor %}
             </table>

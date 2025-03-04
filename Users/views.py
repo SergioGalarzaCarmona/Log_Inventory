@@ -71,8 +71,12 @@ def Logout(request):
 
 @login_required
 def main(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except:
+        profile = Subprofile.objects.get(user=request.user) 
     return render(request, 'Users/main.html',{
-        'user': request.user
+        'profile': profile
     })
 
 @login_required
@@ -139,7 +143,8 @@ def profile(request,username):
         
 @login_required
 def manage_subusers(request):
-    subusers = Subprofile.objects.filter(user=request.user)
+    profile = Profile.objects.get(user=request.user)
+    subusers = Subprofile.objects.filter(profile=profile)
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
         'form': RegisterSubuser(user_pk = request.user.pk),
@@ -157,7 +162,8 @@ def manage_subusers(request):
                     'checked' : 'checked',
                     'subusers': subusers,
                 })
-            form.create_subprofile()
+            subuser = form.save()
+            form.create_subprofile(user=subuser,group_id=request.POST['group'],image=request.FILES.get('image','default.jpg'))
             return redirect('manage_subusers')
         else: 
             form = RegisterSubprofileGroup(request.POST,request.FILES,user_pk = request.user.pk)
