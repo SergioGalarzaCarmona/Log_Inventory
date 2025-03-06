@@ -400,17 +400,14 @@ class RegisterSubprofileGroup(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
         user = User.objects.get(pk = self.user_pk)
-        if SubprofilesGroup.objects.filter(user = user, name=name).exists():
+        profile = Profile.objects.get(user = user)
+        if SubprofilesGroup.objects.filter(profile = profile, name=name).exists():
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code = 'unique')
             self.add_error('name',error)
         if len(name) < 8:
             error = ValidationError(self.fields['name'].error_messages['is_too_short'],
                                     code = 'is_too_short')
-            self.add_error('name',error)
-        if user.username == name:
-            error = ValidationError(self.fields['name'].error_messages['invalid'],
-                                    code = 'invalid')
             self.add_error('name',error)
         return name
 
