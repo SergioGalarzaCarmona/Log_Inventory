@@ -322,18 +322,15 @@ class RegisterSubuser(UserCreationForm):
     
     def clean_username(self):
         username = self.cleaned_data['username']
-        profile = Profile.objects.get(user = self.user_pk)
-        if Subprofile.objects.filter(user = self.user_pk, username=username).exists():
+        users = User.objects.filter(username = username ).exclude(pk = self.user_pk)
+        if len(users) != 0:
             raise forms.ValidationError('El nombre de usuario ya está registrado.')
         if len(username) < 8:
             raise forms.ValidationError('El nombre de usuario debe tener al menos 8 caracteres.')
-        if username == profile.user.username:
-            raise forms.ValidationError('El nombre de usuario no puede ser igual al del perfil.')
         return username
-    
     def clean_email(self):
         email = self.cleaned_data['email']
-        if Subprofile.objects.filter(email=email).exists() and User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             raise forms.ValidationError('El email ya está registrado.')
         return email
     
@@ -352,7 +349,7 @@ class RegisterSubuser(UserCreationForm):
             error = ValidationError(self.fields['password1'].error_messages['isnumeric'], 
                                     code='isnumeric')
             self.add_error('password1', error)
-        return password1,password2
+        return password2
     
     
 class RegisterSubprofileGroup(forms.ModelForm):

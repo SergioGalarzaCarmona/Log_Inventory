@@ -24,10 +24,6 @@ def logIn(request):
         login(request, user)
         return redirect('main')
     else:
-        subuser = Subprofile.authenticate(username = request.POST['username'],password = request.POST['password'])
-        print(subuser)
-        if subuser is not None:
-            return redirect('main')
         return render(request, 'Users/authenticate.html', {
             'form': RegisterUser,
             'form_login': LoginUser(request.POST),

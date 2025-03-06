@@ -46,6 +46,16 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def have_profile(self,user):
+        try:
+            profile = self.objects.get(user=user)
+        except:
+            return None
+        return True, profile
         
 class SubprofilesGroup(models.Model):
     profile = models.ForeignKey(
