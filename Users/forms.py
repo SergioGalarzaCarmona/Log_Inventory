@@ -413,3 +413,80 @@ class RegisterSubprofileGroup(forms.ModelForm):
                                     code = 'invalid')
             self.add_error('name',error)
         return name
+
+class EditSubprofileForm(forms.ModelForm):
+    username = forms.CharField(
+        max_length=30,
+        label='Nombre de Usuario', 
+        required=True, 
+        error_messages= {
+            'unique' : 'El nombre de usuario ya está registrado.',
+            'is_too_short': 'El nombre de usuario debe tener al menos 8 caracteres.',
+            'invalid': 'La contraseña no coincide.'
+        },
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Nombre de Usuario',
+                'class' : ''
+                }
+            )
+        )
+    email = forms.EmailField(
+        max_length=254,
+        label='Correo Electrónico',
+        required=True, 
+        error_messages= {
+            'unique' : 'El email ya está registrado.'
+        },
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Correo Electrónico',
+                'class' : ''
+                }
+            )
+        )
+    password = forms.CharField(
+        max_length=30,
+        label='Contraseña',
+        required=True, 
+        error_messages={
+            'invalid': 'La contraseña no coincide.'
+        },
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class' : ''
+                }
+            )
+        )
+    class Meta:
+        model = User
+        fields = ['username', 'email', "password"]
+    
+    def __init__(self, *args, **kwargs):
+        if 'user_pk' in kwargs:
+            user_pk = kwargs.pop('user_pk')
+            self.user_pk = user_pk
+        super().__init__(*args, **kwargs)
+        
+        
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        users = User.objects.filter(username=username).exclude(pk=self.user_pk)
+        if len(users) > 0:
+            error = ValidationError(self.fields['username'].error_messages['unique'],
+                                    code='unique')
+            self.add_error('username', error)
+        if len(username) < 8:
+            error = ValidationError(self.fields['username'].error_messages['is_too_short'], 
+                                    code='is_too_short')
+            self.add_error('username', error)
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        users = User.objects.filter(email=email).exclude(pk=self.user_pk)
+        if len(users) > 0:
+            error = ValidationError(self.fields['email'].error_messages['unique'], 
+                                    code='unique')
+            self.add_error('email', error)
