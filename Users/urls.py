@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, authenticate_user, main, Logout, profile, manage_subusers
+from .views import home, authenticate_user, main, Logout, profile, manage_subusers, subprofile
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
@@ -18,5 +18,5 @@ urlpatterns = [
     path('work_space/', main, name='main'),
     path('profile/<str:username>', profile, name='profile'),
     path('manage_users/',manage_subusers, name='manage_subusers'),
-    
+    path('subprofile/<str:username>',subprofile, name='subprofile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

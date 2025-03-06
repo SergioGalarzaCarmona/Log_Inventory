@@ -1,10 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm
+from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .models import Profile,Subprofile, SubprofilesGroup
 from django.contrib.auth.decorators import login_required
-from .forms import EditUserForm
 from django.views.generic import TemplateView
 from django.core.exceptions import ValidationError
 
@@ -121,9 +120,7 @@ def profile(request,username):
         else:
             
             form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = user_pk)
-            data = form_post.data
-            print(request.POST)
-            
+            data = form_post.data            
             if user.email == data['email'] and user.username == data['username']:
                 return render(request, 'Users/profile.html',{
                     'profile': profile,
@@ -177,3 +174,26 @@ def manage_subusers(request):
                 })
             form.create_subprofile_group()
             return redirect('manage_subusers')
+
+@login_required
+def subprofile(request,username):
+    try:
+        subuser = User.objects.get(username=username)
+        user = request.user
+        subprofile = Subprofile.objects.get(user=subuser)
+        profile = Profile.objects.get(user=user)
+        subuser_pk = subuser.pk
+    except:
+        return render(request, 'Users/error_404.html')  
+    if profile != subprofile.profile:
+        logout(request)
+        return redirect('/authenticate_user/deactivate')
+    form = EditSubprofileForm(instance=subuser,user_pk = subuser_pk)
+    if request.method == 'GET':
+        return render(request, 'Users/subprofile.html',{
+            'subprofile': subprofile,
+            'form' : form,
+            'image_form' : SetImageForm()
+        })
+    
+    
