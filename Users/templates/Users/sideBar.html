@@ -5,23 +5,51 @@
         <label class="material-symbols-outlined open-menu" for="open-menu">chevron_right</label>
     </form>
     <nav class="sidebar__nav">
-        {% if path == 'main' %}
         <ul>
-            <li class="sidebar__item">
+            {% if path == 'main' %}
+            <li>
+                <div class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">add</span>
+                        <p>Crear</p>
+                    </a>
+                </div> 
+                <div class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">delete</span>
+                        <p>Eliminar</p>
+                    </a>
+                </div>
+            </li>
+        {% elif path == 'manage_subusers' %}
+        <li>
+            <div class="sidebar__item">
                 <a href="#" class="sidebar__item-link">
-                    <span class="material-symbols-outlined">add</span>
-                    <p>Crear</p>
+                    <span class="material-symbols-outlined">person_add</span>
+                    <p>Crear Usuario</p>
+                </a>
+            </div> 
+            <div class="sidebar__item">
+                <a href="#" class="sidebar__item-link">
+                    <span class="material-symbols-outlined">Group_add</span>
+                    <p>Crear Grupo</p>
+                </a>
+            </div>
+        </li>
+        <li class="sidebar__item">
+            <a href="{% url 'main' %}" class="sidebar__item-link">
+                <span class="material-symbols-outlined">view_object_track</span>
+                <p>Objetos</p>
+            </a>
+        </li>
+        {% elif path == 'profile' %}
+            <li class="sidebar__item">
+                <a href="{% url 'main' %}" class="sidebar__item-link">
+                    <span class="material-symbols-outlined">view_object_track</span>
+                    <p>Objetos</p>
                 </a>
             </li>
-        {% elif path == 'manage_subusers' or path == 'profile' %}
-        <!-- INserte aqui el boton para acceder a objetos (lo hice asi pq en ambos casos tanto en el perfil como en el manejo de usuarios el boton de crear cambia por el de objetos) -->
         {% endif %}
-            <li class="sidebar__item">
-                <a href="#" class="sidebar__item-link">
-                    <span class="material-symbols-outlined">delete</span>
-                    <p>Eliminar</p>
-                </a>
-            </li>
             <li class="sidebar__item">
                 <a href="#" class="sidebar__item-link">
                     <span class="material-symbols-outlined">partner_exchange</span>
@@ -34,12 +62,14 @@
                     <p>Transacciones</p>
                 </a>
             </li>
+        {% if path != 'manage_subusers' %}
             <li class="sidebar__item">
                 <a href="{% url 'manage_subusers' %}" class="sidebar__item-link">
-                    <span class="material-symbols-outlined">groups</span>
+                    <span class="material-symbols-outlined">manage_accounts</span>
                     <p>Usuarios</p>
                 </a>
             </li>
+        {% endif %}
         </ul>
     </nav>
     <div class="sidebar__profile">

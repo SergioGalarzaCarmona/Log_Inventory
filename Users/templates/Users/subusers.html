@@ -24,6 +24,30 @@
                 </div>
             </div>
         </div>
+        <div class="createSubuser-container">
+            <label for="create-subuser"><p>Crear subusuario</p> </label>
+            <input type="checkbox" {{checked}} id="create-subuser">
+            <form class="create-subuser" id='form-subuser' method="POST">
+                {% csrf_token %}
+                {{form}}
+                <input type="button" value="Crear Usuario" id="open-dialog">
+                <input type="submit" hidden id="submit">
+            </form>
+        </div>
+        <div class="createGroup-container">
+            <label for="create-group"><p>Crear grupo</p></label>
+            <input type="checkbox" {{checked_group}} id="create-group">
+            <form class="create-group" method="POST">
+                {% csrf_token %}
+                {{group_form}}
+                <input type="submit" value="Crear Grupo">
+            </form>
+        </div>
+        <dialog id="group-dialog">
+            <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
+            <button value=0 id="close-dialog">No</button>
+            <button value=1 id="create">Si</button>
+        </dialog>
         <div class="subusers-table__container">
             <table class="subusers-table">
                 <tr>
@@ -39,32 +63,6 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
-        <div class="subusers-tools">
-            <div class="createSubuser-container">
-                <label for="create-subuser"><p>Crear subusuario</p> </label>
-                <input type="checkbox" {{checked}} id="create-subuser">
-                <form class="create-subuser" id='form-subuser' method="POST">
-                    {% csrf_token %}
-                    {{form}}
-                    <input type="button" value="Crear Usuario" id="open-dialog">
-                    <input type="submit" hidden id="submit">
-                </form>
-            </div>
-            <div class="createGroup-container">
-                <label for="create-group"><p>Crear grupo</p></label>
-                <input type="checkbox" {{checked_group}} id="create-group">
-                <form class="create-group" method="POST">
-                    {% csrf_token %}
-                    {{group_form}}
-                    <input type="submit" value="Crear Grupo">
-                </form>
-            </div>
-            <dialog id="group-dialog">
-                <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
-                <button value=0 id="close-dialog">No</button>
-                <button value=1 id="create">Si</button>
-            </dialog>
         </div>
     </main>
     <script src="{%static '/SCRIPTS/subusersScript.js'%}"></script>
