@@ -68,10 +68,13 @@ def Logout(request):
 def main(request):
     try:
         profile = Profile.objects.get(user=request.user)
+        type = 'profile'
     except:
         profile = Subprofile.objects.get(user=request.user) 
+        type = 'subprofile'
     return render(request, 'Users/main.html',{
-        'profile': profile
+        'profile': profile,
+        'type' : type
     })
 
 @login_required
@@ -173,14 +176,11 @@ def manage_subusers(request):
 
 @login_required
 def subprofile(request,username):
-    try:
-        subuser = User.objects.get(username=username)
-        user = request.user
-        subprofile = Subprofile.objects.get(user=subuser)
-        profile = Profile.objects.get(user=user)
-        subuser_pk = subuser.pk
-    except:
-        return render(request, 'Users/error_404.html')  
+    subuser = User.objects.get(username=username)
+    user = request.user
+    subprofile = Subprofile.objects.get(user=subuser)
+    profile = Profile.objects.get(user=user)
+    subuser_pk = subuser.pk
     if profile != subprofile.profile:
         logout(request)
         return redirect('/authenticate_user/deactivate')
