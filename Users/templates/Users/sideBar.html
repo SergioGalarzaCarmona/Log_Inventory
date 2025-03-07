@@ -76,18 +76,19 @@
         <ul>
             <li class="sidebar__item">
                 {% if type == 'profile' %}
-                <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link"></a>
+                <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link">
                 {% else %}	
-                <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link"></a>
+                <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link">
                 {% endif %}
                     <img src="../../../media/{{profile.image}}" alt="profile-img">
                     <span id="username" class="profile-option">{{user.username}}</span>
+                </a>
             </li>
             <li class="sidebar__item">
                 <a href="{% url 'logout' %}" class="sidebar__item-link">
                     <span class="material-symbols-outlined">Logout</span>
                     <p>Cerrar Sesión</p>
-                </a>   
+                </a>    
             </li>
         </ul>
     </div>

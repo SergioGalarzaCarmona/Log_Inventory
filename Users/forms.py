@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 
+#Forms to register users and subusers
 class RegisterUser(UserCreationForm):
     
     image = forms.ImageField(
@@ -83,183 +84,61 @@ class RegisterUser(UserCreationForm):
         if image == None:
             image = 'default.jpg'
         Profile.objects.create(user=user,image=image)
-    
-
-class LoginUser(AuthenticationForm):
-    username = forms.CharField(
-        max_length=30,
-        label='Nombre de Usuario', 
-        required=True, 
+class RegisterSubprofileGroup(forms.ModelForm):
+    name = forms.CharField(
+        max_length=24,
+        required = True, 
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Nombre de Usuario',
+                'placeholder': 'Nombre del Grupo',
                 'class' : ''
                 }
-            )
-        )
-    password = forms.CharField(
-        max_length=30,
-        label='Contraseña', 
-        required=True, 
-        widget=forms.PasswordInput(
-            attrs={
-                'placeholder': 'Contraseña',
-                'class' : ''
-                }
-            )
-        )
-    
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-        
-class PasswordReset(PasswordResetForm):
-    email = forms.EmailField(
-        max_length=254,
-        label='Correo Electrónico', 
-        required=True, 
-        widget=forms.EmailInput(
-            attrs={
-                'placeholder': 'Correo Electrónico',
-                'class' : ''
-                }
-            )
-        )
-    
-    class Meta:
-        fields = ['email']
-        
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if not User.objects.filter(email=email).exists():
-            raise forms.ValidationError('El email no está registrado.')
-        return email
-        
-class SetPassword(SetPasswordForm):
-    new_password1 = forms.CharField(
-        max_length=30,
-        label='Nueva contraseña', 
-        required=True,
-        widget=forms.PasswordInput(
-            attrs={
-                'placeholder': 'Contraseña',
-                'class' : ''
-                }
-            )
-        )
-    new_password2 = forms.CharField(
-        max_length=30,
-        label='Confirmación de  nueva contraseña',
-        required=True,
-        widget=forms.PasswordInput(
-            attrs={
-                'placeholder': 'Confirmar Contraseña',
-                'class' : ''
-                }
-            )
-        )
-    class Meta:
-        fields = ['new_password1', 'new_password2']
-
-class EditUserForm(forms.ModelForm):
-    username = forms.CharField(
-        max_length=30,
-        label='Nombre de Usuario', 
-        required=True, 
-        error_messages= {
-            'unique' : 'El nombre de usuario ya está registrado.',
-            'is_too_short': 'El nombre de usuario debe tener al menos 8 caracteres.',
-            'invalid': 'La contraseña no coincide.'
-        },
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Nombre de Usuario',
-                'class' : ''
-                }
-            )
-        )
-    email = forms.EmailField(
-        max_length=254,
-        label='Correo Electrónico',
-        required=True, 
-        error_messages= {
-            'unique' : 'El email ya está registrado.'
-        },
-        widget=forms.EmailInput(
-            attrs={
-                'placeholder': 'Correo Electrónico',
-                'class' : ''
-                }
-            )
-        )
-    password = forms.CharField(
-        max_length=30,
-        label='Contraseña',
-        required=True, 
+            ),
         error_messages={
-            'invalid': 'La contraseña no coincide.'
-        },
-        widget=forms.PasswordInput(
+            'is_too_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
+            'unique' : 'El nombre del grupo ya está registrado.',
+            'invalid' : 'El nombre del grupo no puede ser el mismo que el del perfil.'
+        }
+        )
+    image = forms.ImageField(
+        required=False,
+        widget = forms.FileInput(
             attrs={
-                'placeholder': 'Contraseña',
-                'class' : ''
+                'class' : '',
+                'id' : 'image_group'
                 }
             )
         )
     class Meta:
-        model = User
-        fields = ['username', 'email', "password"]
-    
+        model = SubprofilesGroup
+        fields = ['name','image']
+        
     def __init__(self, *args, **kwargs):
-        if 'user_pk' in kwargs:
-            user_pk = kwargs.pop('user_pk')
-            self.user_pk = user_pk
+        user_pk = kwargs.pop('user_pk',None)
+        self.user_pk = user_pk
         super().__init__(*args, **kwargs)
         
-        
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        users = User.objects.filter(username=username).exclude(pk=self.user_pk)
-        if len(users) > 0:
-            error = ValidationError(self.fields['username'].error_messages['unique'],
-                                    code='unique')
-            self.add_error('username', error)
-        if len(username) < 8:
-            error = ValidationError(self.fields['username'].error_messages['is_too_short'], 
-                                    code='is_too_short')
-            self.add_error('username', error)
-        return username
+    def create_subprofile_group(self):
+        name = self.cleaned_data['name']
+        image = self.cleaned_data.get('image','default_group.jpg')
+        user = User.objects.get(pk = self.user_pk)
+        profile = Profile.objects.get(user = user)
+        permissions = PermissionsGroup.objects.get(pk=1)
+        SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions)
     
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        users = User.objects.filter(email=email).exclude(pk=self.user_pk)
-        if len(users) > 0:
-            error = ValidationError(self.fields['email'].error_messages['unique'], 
-                                    code='unique')
-            self.add_error('email', error)
-        return email
-    
-    def clean_password(self):
-        password = self.cleaned_data['password']
-        user = User.objects.get(pk=self.user_pk)
-        if not user.check_password(password):
-            error = ValidationError(self.fields['password'].error_messages['invalid'], 
-                                    code='invalid')
-            self.add_error('password', error)
-        return password
-    
-class SetImageForm(forms.Form):
-    image = forms.ImageField(
-        label='Imagen de Perfil',
-        required=True, 
-        widget=forms.FileInput(attrs={'class' : ''})
-        )
-    class Meta:
-        fields = ['image']
-        
-        
-        
-    
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        user = User.objects.get(pk = self.user_pk)
+        profile = Profile.objects.get(user = user)
+        if SubprofilesGroup.objects.filter(profile = profile, name=name).exists():
+            error = ValidationError(self.fields['name'].error_messages['unique'],
+                                    code = 'unique')
+            self.add_error('name',error)
+        if len(name) < 8:
+            error = ValidationError(self.fields['name'].error_messages['is_too_short'],
+                                    code = 'is_too_short')
+            self.add_error('name',error)
+        return name
 class RegisterSubuser(UserCreationForm):
 
     username = forms.CharField(
@@ -349,66 +228,87 @@ class RegisterSubuser(UserCreationForm):
             error = ValidationError(self.fields['password1'].error_messages['isnumeric'], 
                                     code='isnumeric')
             self.add_error('password1', error)
-        return password2
-    
-    
-class RegisterSubprofileGroup(forms.ModelForm):
-    name = forms.CharField(
-        max_length=24,
-        required = True, 
+        return password2 
+
+#Form to login
+class LoginUser(AuthenticationForm):
+    username = forms.CharField(
+        max_length=30,
+        label='Nombre de Usuario', 
+        required=True, 
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Nombre del Grupo',
+                'placeholder': 'Nombre de Usuario',
                 'class' : ''
                 }
-            ),
-        error_messages={
-            'is_too_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
-            'unique' : 'El nombre del grupo ya está registrado.',
-            'invalid' : 'El nombre del grupo no puede ser el mismo que el del perfil.'
-        }
+            )
         )
-    image = forms.ImageField(
-        required=False,
-        widget = forms.FileInput(
+    password = forms.CharField(
+        max_length=30,
+        label='Contraseña', 
+        required=True, 
+        widget=forms.PasswordInput(
             attrs={
-                'class' : '',
-                'id' : 'image_group'
+                'placeholder': 'Contraseña',
+                'class' : ''
+                }
+            )
+        )
+    
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+       
+#Forms to reset and set password 
+class PasswordReset(PasswordResetForm):
+    email = forms.EmailField(
+        max_length=254,
+        label='Correo Electrónico', 
+        required=True, 
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Correo Electrónico',
+                'class' : ''
+                }
+            )
+        )
+    
+    class Meta:
+        fields = ['email']
+        
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError('El email no está registrado.')
+        return email   
+class SetPassword(SetPasswordForm):
+    new_password1 = forms.CharField(
+        max_length=30,
+        label='Nueva contraseña', 
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class' : ''
+                }
+            )
+        )
+    new_password2 = forms.CharField(
+        max_length=30,
+        label='Confirmación de  nueva contraseña',
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Confirmar Contraseña',
+                'class' : ''
                 }
             )
         )
     class Meta:
-        model = SubprofilesGroup
-        fields = ['name','image']
-        
-    def __init__(self, *args, **kwargs):
-        user_pk = kwargs.pop('user_pk',None)
-        self.user_pk = user_pk
-        super().__init__(*args, **kwargs)
-        
-    def create_subprofile_group(self):
-        name = self.cleaned_data['name']
-        image = self.cleaned_data.get('image','default_group.jpg')
-        user = User.objects.get(pk = self.user_pk)
-        profile = Profile.objects.get(user = user)
-        permissions = PermissionsGroup.objects.get(pk=1)
-        SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions)
-    
-    def clean_name(self):
-        name = self.cleaned_data['name']
-        user = User.objects.get(pk = self.user_pk)
-        profile = Profile.objects.get(user = user)
-        if SubprofilesGroup.objects.filter(profile = profile, name=name).exists():
-            error = ValidationError(self.fields['name'].error_messages['unique'],
-                                    code = 'unique')
-            self.add_error('name',error)
-        if len(name) < 8:
-            error = ValidationError(self.fields['name'].error_messages['is_too_short'],
-                                    code = 'is_too_short')
-            self.add_error('name',error)
-        return name
+        fields = ['new_password1', 'new_password2']
 
-class EditSubprofileForm(forms.ModelForm):
+#Forms to edit the user's or subuser's profile
+class EditUserForm(forms.ModelForm):
     username = forms.CharField(
         max_length=30,
         label='Nombre de Usuario', 
@@ -484,3 +384,121 @@ class EditSubprofileForm(forms.ModelForm):
             error = ValidationError(self.fields['email'].error_messages['unique'], 
                                     code='unique')
             self.add_error('email', error)
+        return email
+    
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        user = User.objects.get(pk=self.user_pk)
+        if not user.check_password(password):
+            error = ValidationError(self.fields['password'].error_messages['invalid'], 
+                                    code='invalid')
+            self.add_error('password', error)
+        return password
+class EditSubprofileForm(forms.ModelForm):
+    username = forms.CharField(
+        max_length=30,
+        label='Nombre de Usuario', 
+        required=True, 
+        error_messages= {
+            'unique' : 'El nombre de usuario ya está registrado.',
+            'is_too_short': 'El nombre de usuario debe tener al menos 8 caracteres.',
+            'invalid': 'La contraseña no coincide.'
+        },
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Nombre de Usuario',
+                'class' : ''
+                }
+            )
+        )
+    email = forms.EmailField(
+        max_length=254,
+        label='Correo Electrónico',
+        required=True, 
+        error_messages= {
+            'unique' : 'El email ya está registrado.'
+        },
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Correo Electrónico',
+                'class' : ''
+                }
+            )
+        )
+    group = forms.ModelChoiceField(
+        queryset=None,
+        label='Grupo',
+        required=True,
+        widget=forms.Select(
+            attrs={
+                'class' : ''
+                }
+            )
+        )
+    password = forms.CharField(
+        max_length=30,
+        label='Contraseña',
+        required=True, 
+        error_messages={
+            'invalid': 'La contraseña no coincide.'
+        },
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class' : ''
+                }
+            )
+        )
+    
+    class Meta:
+        model = User
+        fields = ['username', 'email', "password"]
+    
+    def __init__(self, *args, **kwargs):
+        user_pk = kwargs.pop('user_pk')
+        self.user_pk = user_pk
+        super().__init__(*args, **kwargs)
+        if user_pk:
+            user = User.objects.get(pk=user_pk)
+            subprofile = Subprofile.objects.get(user=user)
+            profile = Profile.objects.get(user=subprofile.profile.user)
+            self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile) 
+        
+        
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        users = User.objects.filter(username=username).exclude(pk=self.user_pk)
+        if len(users) > 0:
+            error = ValidationError(self.fields['username'].error_messages['unique'],
+                                    code='unique')
+            self.add_error('username', error)
+        if len(username) < 8:
+            error = ValidationError(self.fields['username'].error_messages['is_too_short'], 
+                                    code='is_too_short')
+            self.add_error('username', error)
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        users = User.objects.filter(email=email).exclude(pk=self.user_pk)
+        if len(users) > 0:
+            error = ValidationError(self.fields['email'].error_messages['unique'], 
+                                    code='unique')
+            self.add_error('email', error)
+            
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        user = User.objects.get(pk=self.user_pk)
+        if not user.check_password(password):
+            error = ValidationError(self.fields['password'].error_messages['invalid'], 
+                                    code='invalid')
+            self.add_error('password', error)
+        return password
+class SetImageForm(forms.Form):
+    image = forms.ImageField(
+        label='Imagen de Perfil',
+        required=True, 
+        widget=forms.FileInput(attrs={'class' : ''})
+        )
+    class Meta:
+        fields = ['image']

@@ -93,7 +93,8 @@ def profile(request,username):
         return render(request, 'Users/profile.html',{
             'profile': profile,
             'form' : form,
-            'image_form' : SetImageForm()
+            'image_form' : SetImageForm(),
+            'type' : 'profile',
         })
     else:
         image = request.FILES.get('image',False)
@@ -106,15 +107,17 @@ def profile(request,username):
                     'profile': profile,
                     'form' : form,
                     'image_form' : SetImageForm(),
+                    'type' : 'profile',
                 })
         elif delete_image:
-            profile = profile = Profile.objects.get(user=request.user)
+            profile = Profile.objects.get(user=request.user)
             profile.image = 'default.jpg'
             profile.save()
             return render(request, 'Users/profile.html',{
                     'profile': profile,
                     'form' : form,
                     'image_form' : SetImageForm(),
+                    'type' : 'profile',
                 })
         else:
             
@@ -146,6 +149,8 @@ def manage_subusers(request):
         'form': RegisterSubuser(user_pk = request.user.pk),
         'group_form': RegisterSubprofileGroup(),
         'subusers': subusers,
+        'profile' : profile,
+        'type' : 'profile'
     })
     else:
         create_subuser = request.POST.get('username', False)
@@ -157,6 +162,8 @@ def manage_subusers(request):
                     'group_form': RegisterSubprofileGroup(),
                     'checked' : 'checked',
                     'subusers': subusers,
+                    'profile' : profile,
+                    'type' : 'profile'
                 })
             subuser = form.save()
             form.create_subprofile(user=subuser,group_id=request.POST['group'],image=request.FILES.get('image','default.jpg'))
@@ -166,30 +173,85 @@ def manage_subusers(request):
             
             if not form.is_valid():
                     return render(request, 'Users/subusers.html',{
-                    'form': RegisterSubuser(),
-                    'form_group': form,
+                    'form': RegisterSubuser(user_pk = request.user.pk),
+                    'group_form': form,
                     'checked_group' : 'checked',
                     'subusers': subusers,
+                    'profile' : profile,
+                    'type' : 'profile'
                 })
             form.create_subprofile_group()
             return redirect('manage_subusers')
 
 @login_required
 def subprofile(request,username):
-    subuser = User.objects.get(username=username)
-    user = request.user
-    subprofile = Subprofile.objects.get(user=subuser)
-    profile = Profile.objects.get(user=user)
-    subuser_pk = subuser.pk
-    if profile != subprofile.profile:
+    try:
+        profile = None
+        subuser = User.objects.get(username=username)
+        user = request.user
+        subprofile = Subprofile.objects.get(user=subuser)
+        subuser_pk = subuser.pk
+        type = 'subprofile'
+        if user != subuser:
+            profile = Profile.objects.get(user=user)
+            type = 'profile'
+    except:
+        return render(request, 'Users/error_404.html')
+    if profile and profile != subprofile.profile:
         logout(request)
         return redirect('/authenticate_user/deactivate')
     form = EditSubprofileForm(instance=subuser,user_pk = subuser_pk)
     if request.method == 'GET':
         return render(request, 'Users/subprofile.html',{
+            'profile' : profile,
             'subprofile': subprofile,
             'form' : form,
-            'image_form' : SetImageForm()
+            'image_form' : SetImageForm(),
+            'type' : type
         })
+    else:
+        image = request.FILES.get('image',False)
+        delete_image = request.POST.get('delete_image',False)
+        if image:
+            subprofile.image = image
+            subprofile.save()
+            return render(request, 'Users/subprofile.html',{
+                    'profile': profile,
+                    'subprofile': subprofile,
+                    'form' : form,
+                    'image_form' : SetImageForm(),
+                    'type' : type
+            })
+        elif delete_image:
+            subprofile.image = 'default.jpg'
+            subprofile.save()
+            return render(request, 'Users/subprofile.html',{
+                    'profile': profile,
+                    'subprofile': subprofile,
+                    'form' : form,
+                    'image_form' : SetImageForm(),
+                    'type' : 'profile',
+                })
+        else:
+            form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = subuser_pk)
+            data = form_post.data            
+            if user.email == data['email'] and user.username == data['username']:
+                return render(request, 'Users/subprofile.html',{
+                    'profile': profile,
+                    'subprofile': subprofile,
+                    'form' : form,
+                    'message': 'Los datos no han sido actualizados.',
+                    'image_form' : SetImageForm(),
+                })
+            if not form_post.is_valid():
+                return render(request, 'Users/subprofile.html',{
+                'profile': profile,
+                'subprofile': subprofile,
+                'form' : form,
+                'form_post' : form_post,
+                'image_form' : SetImageForm(),
+            })
+            user = User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
+            return redirect('main')
     
     

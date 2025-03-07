@@ -14,7 +14,7 @@
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
-    {% include 'Users/sideBar.html' with path='manage_subusers' %}
+    {% include 'Users/sideBar.html' with path='manage_subusers' profile=profile type=type %}
     <main>
         <div class="filter-bar"> 
             <div class="filter-bar__filter-container">
@@ -56,7 +56,7 @@
                     <th>Correo</th>
                 </tr>
                 {% for subuser in subusers %}
-                <tr onclick="window.location.href='/manage_users/{{ subuser.user.username }}';">
+                <tr onclick="window.location.href='/subprofile/{{ subuser.user.username }}';">
                     <td>{{subuser.user.username}}</td>
                     <td>{{subuser.group.name}}</td>
                     <td>{{subuser.user.email}}</td>
