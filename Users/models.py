@@ -18,17 +18,17 @@ class Permissions(models.Model):
 
 
 class PermissionsGroup(models.Model):
-    permissions_id = models.ForeignKey (
+    permissions_id = models.ManyToManyField (
         Permissions, 
-        on_delete=models.CASCADE
+        related_name='permissions'
         )
+    name = models.CharField (
+        max_length=50,
+    )
     
     class Meta:
         verbose_name = 'GroupPermission'
         verbose_name_plural = 'GroupPermissions'
-        indexes = [
-            models.Index(fields=['id', 'permissions_id'], name='permissions_group_idx'),
-        ]
 
 class Profile(models.Model):
     user = models.OneToOneField (
