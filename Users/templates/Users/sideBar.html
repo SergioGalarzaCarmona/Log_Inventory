@@ -5,9 +5,10 @@
         <label class="material-symbols-outlined open-menu" for="open-menu">chevron_right</label>
     </form>
     <nav class="sidebar__nav">
-        <ul>
+        <ul> 
             {% if path == 'main' %}
-            <li>
+            <li class="sidebar__tools">
+                <p>Herramientas<span class="material-symbols-outlined">build</span></p>
                 <div class="sidebar__item">
                     <a href="#" class="sidebar__item-link">
                         <span class="material-symbols-outlined">add</span>
@@ -22,7 +23,8 @@
                 </div>
             </li>
         {% elif path == 'manage_subusers' %}
-        <li>
+        <li class="sidebar__tools">
+            <p>Herramientas<span class="material-symbols-outlined">build</span></p>
             <div class="sidebar__item">
                 <a href="#" class="sidebar__item-link">
                     <span class="material-symbols-outlined">person_add</span>
