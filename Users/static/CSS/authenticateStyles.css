@@ -279,12 +279,9 @@ form > h2 {
 }
 
 @media (max-width: 768px) {
-    nav {
-        display: none;
-    }
-
     .container {
         height: 710px;
+        border-radius: 50px;
     }
     .toogle-container {
         display: none;

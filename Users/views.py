@@ -172,7 +172,6 @@ def manage_subusers(request):
             return redirect('manage_subusers')
         else: 
             form = RegisterSubprofileGroup(request.POST,request.FILES,user_pk = request.user.pk)
-            
             if not form.is_valid():
                     return render(request, 'Users/subusers.html',{
                     'form': RegisterSubuser(user_pk = request.user.pk),

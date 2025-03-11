@@ -437,7 +437,6 @@ class EditSubprofileForm(forms.ModelForm):
     group = forms.ModelChoiceField(
         queryset=None,
         label='Grupo',
-        required=True,
         widget=forms.Select(
             attrs={
                 'class' : ''
