@@ -27,7 +27,7 @@
         <div class="createSubuser-container">
             <label for="create-subuser"><p>Crear subusuario</p> </label>
             <input type="checkbox" {{checked}} id="create-subuser">
-            <form class="create-subuser" id='form-subuser' method="POST">
+            <form class="create-subuser" id='form-subuser' enctype="multipart/form-data" method="POST">
                 {% csrf_token %}
                 {{form}}
                 <input type="button" value="Crear Usuario" id="open-dialog">

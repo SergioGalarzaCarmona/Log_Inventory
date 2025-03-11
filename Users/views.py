@@ -1,20 +1,21 @@
-from django.shortcuts import render,redirect,get_object_or_404
-from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm
+from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .models import Profile,Subprofile, SubprofilesGroup
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
-from django.core.exceptions import ValidationError
-
+from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm
+from .models import Profile, Subprofile
+from .functions import create_parameterized_tables
 
 # Create your views here.
+
+
 
 
 class Error404View(TemplateView):
     template_name = 'Users/error_404.html'
 
-
+@create_parameterized_tables
 def home(request):
     return render(request, 'Users/home.html')
 
@@ -29,7 +30,7 @@ def logIn(request):
             'form_login': LoginUser(request.POST),
             'error': 'Usuario o contraseña incorrectos'
         })
-        
+
 def signUp(request):
     class_h2 = "no-margin"
     form = RegisterUser(request.POST)
@@ -46,6 +47,7 @@ def signUp(request):
     login(request, user)
     return redirect('main')
 
+@create_parameterized_tables
 def authenticate_user(request,type):
     if request.method == 'GET':
         return render(request, 'Users/authenticate.html',{
