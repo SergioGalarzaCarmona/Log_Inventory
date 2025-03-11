@@ -30,6 +30,8 @@ class PermissionsGroup(models.Model):
         verbose_name = 'GroupPermission'
         verbose_name_plural = 'GroupPermissions'
 
+    def __str__(self):
+        return f'{self.name}'
 class Profile(models.Model):
     user = models.OneToOneField (
         User, 
