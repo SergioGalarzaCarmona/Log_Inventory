@@ -100,6 +100,15 @@ class RegisterSubprofileGroup(forms.ModelForm):
             'invalid' : 'El nombre del grupo no puede ser el mismo que el del perfil.'
         }
         )
+    permissions = forms.ModelChoiceField(
+        queryset = PermissionsGroup.objects.all(),
+        required = True,
+        widget = forms.Select(
+            attrs={
+                'class' : ''
+                }
+            )
+    )
     image = forms.ImageField(
         required=False,
         widget = forms.FileInput(
@@ -121,10 +130,10 @@ class RegisterSubprofileGroup(forms.ModelForm):
     def create_subprofile_group(self):
         name = self.cleaned_data['name']
         image = self.cleaned_data.get('image','default_group.jpg')
+        permissions_group = self.cleaned_data['permissions']
         user = User.objects.get(pk = self.user_pk)
         profile = Profile.objects.get(user = user)
-        permissions = PermissionsGroup.objects.get(pk=1)
-        SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions)
+        SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions_group)
     
     def clean_name(self):
         name = self.cleaned_data['name']
