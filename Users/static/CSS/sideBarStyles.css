@@ -45,7 +45,11 @@
     background-color: var(--sidebar-color);
 }
 
-.sidebar__tools  span {
+.sidebar__tools label {
+    cursor: pointer;
+}
+
+.sidebar__tools span {
     position: relative;
     top: 5px;
 }
@@ -140,7 +144,7 @@ input[type="checkbox"], .open-menu {
     display: none;
 }
 
-.sidebar label {
+.sidebar label.open-menu, .sidebar label.close-menu {
     position: relative;
     background-color: var(--fb-color);
     color: var(--sidebar-color);
@@ -149,7 +153,7 @@ input[type="checkbox"], .open-menu {
     padding: .4rem;
 }
 
-.sidebar label::before, .sidebar label::after {
+.sidebar label.open-menu::before, .sidebar label.open-menu::after, .sidebar label.close-menu::before, .sidebar label.close-menu::after {
     content: "";
     background-color: var(--bg-color);
     position: absolute;
@@ -158,14 +162,14 @@ input[type="checkbox"], .open-menu {
     background-color: transparent;
 }
 
-.sidebar label::before {
+.sidebar label.open-menu::before, .sidebar label.close-menu::before {
     top: -25px;
     left: 19px;
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 0 4px var(--fb-color);
 }
 
-.sidebar label::after {
+.sidebar label.open-menu::after, .sidebar label.close-menu::after {
     bottom: -25px;
     left: 19px;
     border-top-right-radius: 25px;
