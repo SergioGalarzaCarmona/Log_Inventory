@@ -27,7 +27,7 @@
         <div class="forms-container">
             <input type="checkbox" {{checked}} id="create-subuser">
             <form class="create-subuser" id='form-subuser' enctype="multipart/form-data" method="POST">
-                {% csrf_token %}
+                {% csrf_token %}    
                 {{form}}
                 <input type="button" value="Crear Usuario" id="open-dialog">
                 <input type="submit" hidden id="submit">
