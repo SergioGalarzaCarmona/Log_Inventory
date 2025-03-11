@@ -63,11 +63,22 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     align-items: center;
 }
 
-.create-subuser{
+.create-subuser, .create-group{
     display: none;
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
 }
 
-.create-group {
+#create-subuser:checked ~ .create-subuser, #create-group:checked ~ .create-group {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    
+}
+
+#create-subuser:checked ~ .create-subuser ~ .create-group, #create-group:checked ~ .create-group ~ .create-subuser {
     display: none;
 }
 
@@ -118,10 +129,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     color: #fff;
     font-size: 1.8rem;
     cursor: pointer;
-}
-
-#create-subuser:checked ~ .create-subuser, #create-group:checked ~ .create-group {
-    display: block;
 }
 
 @media (max-width: 768px) {
