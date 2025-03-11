@@ -78,10 +78,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     
 }
 
-#create-subuser:checked ~ .create-subuser ~ .create-group, #create-group:checked ~ .create-group ~ .create-subuser {
-    display: none;
-}
-
 .logo {
     height: clamp(15px, calc(10dvh - 5px), 75px);
     width: clamp(42px, calc(28dvh - 5px), 210px);

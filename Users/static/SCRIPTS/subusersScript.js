@@ -19,3 +19,11 @@ function validateGroup(){
 }
 const select = document.getElementById('open-dialog');
 select.addEventListener('click', validateGroup)
+const label_group = document.getElementById('create-group-label');
+const label_subuser = document.getElementById('create-subuser-label');
+label_group.addEventListener('click', function (){
+    document.getElementById('create-subuser').checked = false;
+});
+label_subuser.addEventListener('click', function (){
+    document.getElementById('create-group').checked = false;
+});
