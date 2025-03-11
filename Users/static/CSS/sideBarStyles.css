@@ -10,7 +10,7 @@
     padding: 0px 0px 30px 0px;
 }
 
-.sidebar__nav {
+.sidebar__nav { 
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -23,6 +23,35 @@
     justify-content: space-evenly;
     height: 60dvh;
     width: 100%;
+}
+
+.sidebar__tools {
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-top: 3px solid #fff;
+    border-bottom: 2px solid #fff;
+    border-radius: 10px;
+}
+
+.sidebar__tools > p {
+    position: absolute;
+    padding: 0 5px;
+    top: -20px;
+    left: 40px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: var(--sidebar-color);
+}
+
+.sidebar__tools label {
+    cursor: pointer;
+}
+
+.sidebar__tools span {
+    position: relative;
+    top: 5px;
 }
 
 .sidebar__item-link {
@@ -115,7 +144,7 @@ input[type="checkbox"], .open-menu {
     display: none;
 }
 
-.sidebar label {
+.sidebar label.open-menu, .sidebar label.close-menu {
     position: relative;
     background-color: var(--fb-color);
     color: var(--sidebar-color);
@@ -124,7 +153,7 @@ input[type="checkbox"], .open-menu {
     padding: .4rem;
 }
 
-.sidebar label::before, .sidebar label::after {
+.sidebar label.open-menu::before, .sidebar label.open-menu::after, .sidebar label.close-menu::before, .sidebar label.close-menu::after {
     content: "";
     background-color: var(--bg-color);
     position: absolute;
@@ -133,14 +162,14 @@ input[type="checkbox"], .open-menu {
     background-color: transparent;
 }
 
-.sidebar label::before {
+.sidebar label.open-menu::before, .sidebar label.close-menu::before {
     top: -25px;
     left: 19px;
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 0 4px var(--fb-color);
 }
 
-.sidebar label::after {
+.sidebar label.open-menu::after, .sidebar label.close-menu::after {
     bottom: -25px;
     left: 19px;
     border-top-right-radius: 25px;
@@ -172,6 +201,10 @@ input[type="checkbox"]:checked ~ label::before, input[type="checkbox"]:checked ~
     width: fit-content;
 }
 
+
+.sidebar:has(input[type="checkbox"]:checked) .sidebar__tools > p {
+    display: none;
+}
 
 .sidebar:has(input[type="checkbox"]:checked) :is(.sidebar__item-link > p, .profile-option) {
     display: none;

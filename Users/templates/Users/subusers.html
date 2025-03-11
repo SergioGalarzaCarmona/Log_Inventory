@@ -12,7 +12,7 @@
     <meta name="description" content="Subusers Log Inventory">
     <meta name="author" content="Log Inventory">
     <meta name="robots" content="noindex, nofollow">
-</head>
+</head> 
 <body>
     {% include 'Users/sideBar.html' with path='manage_subusers' profile=profile type=type %}
     <main>
@@ -24,8 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="createSubuser-container">
-            <label for="create-subuser"><p>Crear subusuario</p> </label>
+        <div class="forms-container">
             <input type="checkbox" {{checked}} id="create-subuser">
             <form class="create-subuser" id='form-subuser' enctype="multipart/form-data" method="POST">
                 {% csrf_token %}
@@ -33,9 +32,6 @@
                 <input type="button" value="Crear Usuario" id="open-dialog">
                 <input type="submit" hidden id="submit">
             </form>
-        </div>
-        <div class="createGroup-container">
-            <label for="create-group"><p>Crear grupo</p></label>
             <input type="checkbox" {{checked_group}} id="create-group">
             <form class="create-group" method="POST">
                 {% csrf_token %}
