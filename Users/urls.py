@@ -17,6 +17,6 @@ urlpatterns = [
     path('change_password_done/', PasswordChangeDoneView.as_view(template_name = 'Users/change_password_done.html'), name='change_password_done'),
     path('work_space/', main, name='main'),
     path('profile/<str:username>', profile, name='profile'),
-    path('manage_users/<profile>',manage_subusers, name='manage_subusers'),
+    path('manage_users/<str:profile>',manage_subusers, name='manage_subusers'),
     path('subprofile/<str:username>',subprofile, name='subprofile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
