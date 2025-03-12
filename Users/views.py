@@ -41,6 +41,7 @@ def signUp(request):
                 'class' : 'active',
                 "class_h2": class_h2,
             })
+    
     user = form.save()
     image = request.FILES.get('image','default.jpg')
     form.create_profile(user,image)
@@ -143,8 +144,8 @@ def profile(request,username):
             return redirect('main')
         
 @login_required
-def manage_subusers(request):
-    profile = Profile.objects.get(user=request.user)
+def manage_subusers(request,profile):
+    profile = Profile.objects.get(user=profile.profile.user)
     subusers = Subprofile.objects.filter(profile=profile)
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
@@ -204,8 +205,7 @@ def subprofile(request,username):
     form = EditSubprofileForm(instance=subuser,user_pk = subuser_pk)
     if request.method == 'GET':
         return render(request, 'Users/subprofile.html',{
-            'profile' : profile,
-            'subprofile': subprofile,
+            'profile': subprofile,
             'form' : form,
             'image_form' : SetImageForm(),
             'type' : type
