@@ -77,7 +77,10 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     display: block;
     position: absolute;
     z-index: 1;
-    
+}
+
+.forms-container:has(input[type="checkbox"]:checked) ∼ .subusers-table__container {
+    display: none;
 }
 
 .logo {
@@ -110,7 +113,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 .subusers-table tr:hover {
-    filter: brightness(1);
+    background-color: #ccc;
     cursor: pointer;
 }
 
