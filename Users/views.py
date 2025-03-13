@@ -67,19 +67,24 @@ def Logout(request):
     logout(request)
     return redirect('home')
 
+@create_parameterized_tables
 @login_required
 def main(request):
     try:
         profile = Profile.objects.get(user=request.user)
         type = 'profile'
+        permissions = 'admin'
     except:
         profile = Subprofile.objects.get(user=request.user) 
         type = 'subprofile'
+        permissions = profile.group.permissions
     return render(request, 'Users/main.html',{
         'profile': profile,
-        'type' : type
+        'type' : type,
+        'permissions' : permissions
     })
 
+@create_parameterized_tables
 @login_required
 def profile(request,username):
     try:
@@ -91,6 +96,7 @@ def profile(request,username):
         logout(request)
         return redirect('/authenticate_user/deactivate')
     profile = Profile.objects.get(user=request.user)
+    permissions = 'admin'
     form = EditUserForm(user_pk = user_pk,instance=user)
     if request.method == 'GET':
         return render(request, 'Users/profile.html',{
@@ -98,6 +104,7 @@ def profile(request,username):
             'form' : form,
             'image_form' : SetImageForm(),
             'type' : 'profile',
+            'permissions' : permissions
         })
     else:
         image = request.FILES.get('image',False)
@@ -111,6 +118,7 @@ def profile(request,username):
                     'form' : form,
                     'image_form' : SetImageForm(),
                     'type' : 'profile',
+                    'permissions' : permissions
                 })
         elif delete_image:
             profile = Profile.objects.get(user=request.user)
@@ -121,6 +129,7 @@ def profile(request,username):
                     'form' : form,
                     'image_form' : SetImageForm(),
                     'type' : 'profile',
+                    'permissions' : permissions
                 })
         else:
             
@@ -132,6 +141,7 @@ def profile(request,username):
                     'form' : form,
                     'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
+                    'permissions' : permissions
                 })
             if not form_post.is_valid():
                 return render(request, 'Users/profile.html',{
@@ -139,13 +149,23 @@ def profile(request,username):
                 'form' : form,
                 'form_post' : form_post,
                 'image_form' : SetImageForm(),
+                'permissions' : permissions
             })
             user = User.objects.filter(pk=user_pk).update(username=data['username'],email=data['email']) 
             return redirect('main')
-        
+     
+@create_parameterized_tables   
 @login_required
-def manage_subusers(request,profile):
-    profile = Profile.objects.get(user=profile.profile.user)
+def manage_subusers(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+        permissions = 'admin'
+    except:
+        subprofile = Subprofile.objects.get(user=request.user)
+        profile = subprofile.profile
+        permissions = subprofile.group.permissions
+        if permissions.name == 'Estudiante':
+            return render(request,'Users/error_403.html')
     subusers = Subprofile.objects.filter(profile=profile)
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
@@ -153,7 +173,8 @@ def manage_subusers(request,profile):
         'group_form': RegisterSubprofileGroup(),
         'subusers': subusers,
         'profile' : profile,
-        'type' : 'profile'
+        'type' : 'profile',
+        'permissions' : permissions
     })
     else:
         create_subuser = request.POST.get('username', False)
@@ -166,7 +187,8 @@ def manage_subusers(request,profile):
                     'checked' : 'checked',
                     'subusers': subusers,
                     'profile' : profile,
-                    'type' : 'profile'
+                    'type' : 'profile',
+                    'permissions' : permissions
                 })
             subuser = form.save()
             form.create_subprofile(user=subuser,group_id=request.POST['group'],image=request.FILES.get('image','default.jpg'))
@@ -180,11 +202,13 @@ def manage_subusers(request,profile):
                     'checked_group' : 'checked',
                     'subusers': subusers,
                     'profile' : profile,
-                    'type' : 'profile'
+                    'type' : 'profile',
+                    'permissions' : permissions
                 })
             form.create_subprofile_group()
             return redirect('manage_subusers')
 
+@create_parameterized_tables
 @login_required
 def subprofile(request,username):
     try:
@@ -192,23 +216,26 @@ def subprofile(request,username):
         subuser = User.objects.get(username=username)
         user = request.user
         subprofile = Subprofile.objects.get(user=subuser)
+        permissions = subprofile.group.permissions
         subuser_pk = subuser.pk
         type = 'subprofile'
         if user != subuser:
             profile = Profile.objects.get(user=user)
+            permissions = 'admin'
             type = 'profile'
     except:
         return render(request, 'Users/error_404.html')
     if profile and profile != subprofile.profile:
         logout(request)
         return redirect('/authenticate_user/deactivate')
-    form = EditSubprofileForm(instance=subuser,user_pk = subuser_pk)
+    form = EditSubprofileForm(instance=subuser,user_pk = subuser_pk,permissions = permissions)
     if request.method == 'GET':
         return render(request, 'Users/subprofile.html',{
             'profile': subprofile,
             'form' : form,
             'image_form' : SetImageForm(),
-            'type' : type
+            'type' : type,
+            'permissions' : permissions
         })
     else:
         image = request.FILES.get('image',False)
@@ -217,40 +244,40 @@ def subprofile(request,username):
             subprofile.image = image
             subprofile.save()
             return render(request, 'Users/subprofile.html',{
-                    'profile': profile,
-                    'subprofile': subprofile,
+                    'profile': subprofile,
                     'form' : form,
                     'image_form' : SetImageForm(),
-                    'type' : type
+                    'type' : type,            
+                    'permissions' : permissions
             })
         elif delete_image:
             subprofile.image = 'default.jpg'
             subprofile.save()
             return render(request, 'Users/subprofile.html',{
-                    'profile': profile,
-                    'subprofile': subprofile,
+                    'profile': subprofile,
                     'form' : form,
                     'image_form' : SetImageForm(),
                     'type' : 'profile',
+                    'permissions' : permissions
                 })
         else:
             form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = subuser_pk)
             data = form_post.data            
             if user.email == data['email'] and user.username == data['username']:
                 return render(request, 'Users/subprofile.html',{
-                    'profile': profile,
-                    'subprofile': subprofile,
+                    'profile': subprofile,
                     'form' : form,
                     'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
+                    'permissions' : permissions
                 })
             if not form_post.is_valid():
                 return render(request, 'Users/subprofile.html',{
-                'profile': profile,
-                'subprofile': subprofile,
+                'profile': subprofile,
                 'form' : form,
                 'form_post' : form_post,
                 'image_form' : SetImageForm(),
+                'permissions' : permissions
             })
             user = User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
             return redirect('main')

@@ -23,7 +23,7 @@ def create_parameterized_tables(function):
             Permissions.objects.create(name="View_Log")
         if (PermissionsGroup.objects.all().count()) != 2:
             PermissionsGroup.objects.all().delete()
-            teacher = PermissionsGroup.objects.create(name="Teacher")
+            teacher = PermissionsGroup.objects.create(name="Profesor")
             teacher.permissions_id.add(
                 Permissions.objects.get(name="Create_Objects"),
                 Permissions.objects.get(name="Delete_Objects"),
@@ -32,7 +32,7 @@ def create_parameterized_tables(function):
                 Permissions.objects.get(name="Update_Log"),
                 Permissions.objects.get(name="View_Log")
                 )
-            student = PermissionsGroup.objects.create(name="Student")
+            student = PermissionsGroup.objects.create(name="Estudiante")
             student.permissions_id.add(
                 Permissions.objects.get(name='View_Objects'),
                 Permissions.objects.get(name="View_Log") 

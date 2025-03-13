@@ -14,11 +14,11 @@
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
-    {% include 'Users/sideBar.html' with path='profile' profile=profile type=type %}
+    {% include 'Users/sideBar.html' with path='profile' profile=profile type=type permissions=permisisons %}
     <main>
         <div class="filter-bar"> 
             <div class="filter-bar__filter-container">
-                <div class="name">{{subprofile.user.username}}</div>
+                <div class="name">{{profile.user.username}}</div>
                 <div class="filter-bar__logo-container">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
@@ -37,7 +37,7 @@
                             <input type="submit" id="delete_image" value="submit" hidden>
                         </form>
                     </div>
-                    <img src="../../../media/{{subprofile.image}}" alt="profile-img" class="profile-img">
+                    <img src="../../../media/{{profile.image}}" alt="profile-img" class="profile-img">
                 </label>
                 <form method="POST" enctype="multipart/form-data" class="image_form">
                     {% csrf_token %}

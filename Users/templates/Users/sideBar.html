@@ -7,6 +7,7 @@
     <nav class="sidebar__nav">
         <ul> 
             {% if path == 'main' %}
+            {% if permissions == 'admin' or permissions.name == "Profesor"  %}
             <li class="sidebar__tools">
                 <p>Herramientas<span class="material-symbols-outlined">build</span></p>
                 <div class="sidebar__item">
@@ -22,36 +23,39 @@
                     </a>
                 </div>
             </li>
-        {% elif path == 'manage_subusers' %}
-        <li class="sidebar__tools">
-            <p>Herramientas<span class="material-symbols-outlined">build</span></p>
-            <div class="sidebar__item">
-                <label for="create-subuser" class="sidebar__item-link" id="create-subuser-label">
-                    <span class="material-symbols-outlined">person_add</span>
-                    <p>Crear Usuario</p>
-                </label>
-            </div> 
-            <div class="sidebar__item">
-                <label for="create-group" class="sidebar__item-link" id="create-group-label">
-                    <span class="material-symbols-outlined">Group_add</span>
-                    <p>Crear Grupo</p>
-                </label>
-            </div>
-        </li>
-        <li class="sidebar__item">
-            <a href="{% url 'main' %}" class="sidebar__item-link">
-                <span class="material-symbols-outlined">view_object_track</span>
-                <p>Objetos</p>
-            </a>
-        </li>
-        {% elif path == 'profile' %}
+            {%endif%}
+            {% elif path == 'manage_subusers' %}
+            {% if permissions == 'admin' %}
+            <li class="sidebar__tools">
+                <p>Herramientas<span class="material-symbols-outlined">build</span></p>
+                <div class="sidebar__item">
+                    <label for="create-subuser" class="sidebar__item-link" id="create-subuser-label">
+                        <span class="material-symbols-outlined">person_add</span>
+                        <p>Crear Usuario</p>
+                    </label>
+                </div> 
+                <div class="sidebar__item">
+                    <label for="create-group" class="sidebar__item-link" id="create-group-label">
+                        <span class="material-symbols-outlined">Group_add</span>
+                        <p>Crear Grupo</p>
+                    </label>
+                </div>
+            </li>
+            {% endif %}
             <li class="sidebar__item">
                 <a href="{% url 'main' %}" class="sidebar__item-link">
                     <span class="material-symbols-outlined">view_object_track</span>
                     <p>Objetos</p>
                 </a>
             </li>
-        {% endif %}
+            {% elif path == 'profile' %}
+            <li class="sidebar__item">
+                <a href="{% url 'main' %}" class="sidebar__item-link">
+                    <span class="material-symbols-outlined">view_object_track</span>
+                    <p>Objetos</p>
+                </a>
+            </li>
+            {% endif %}
             <li class="sidebar__item">
                 <a href="#" class="sidebar__item-link">
                     <span class="material-symbols-outlined">partner_exchange</span>
@@ -64,14 +68,16 @@
                     <p>Transacciones</p>
                 </a>
             </li>
-        {% if path != 'manage_subusers' %}
+            {% if path != 'manage_subusers' %}
+            {% if permissions == 'admin' or permissions.name == "Profesor"  %}
             <li class="sidebar__item">
                 <a href="{% url 'manage_subusers' %}" class="sidebar__item-link">
                     <span class="material-symbols-outlined">manage_accounts</span>
                     <p>Usuarios</p>
                 </a>
             </li>
-        {% endif %}
+            {% endif %}
+            {% endif %}
         </ul>
     </nav>
     <div class="sidebar__profile">
