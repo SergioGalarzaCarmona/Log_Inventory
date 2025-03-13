@@ -220,18 +220,25 @@ def subprofile(request,username):
         subuser_pk = subuser.pk
         type = 'subprofile'
         if user != subuser:
-            profile = Profile.objects.get(user=user)
-            permissions = 'admin'
-            type = 'profile'
+            try:
+                profile = Profile.objects.get(user=user)
+                type = 'profile'
+                permissions = 'admin'
+            except:
+                profile = Subprofile.objects.get(user=user)
+                type = 'subprofile'
+                permissions = profile.group.permissions
     except:
         return render(request, 'Users/error_404.html')
     if profile and profile != subprofile.profile:
-        logout(request)
-        return redirect('/authenticate_user/deactivate')
+        if profile.profile != subprofile.profile:
+            logout(request)
+            return redirect('/authenticate_user/deactivate')
     form = EditSubprofileForm(instance=subuser,user_pk = subuser_pk,permissions = permissions)
     if request.method == 'GET':
         return render(request, 'Users/subprofile.html',{
             'profile': subprofile,
+            'profile_admin' : profile,
             'form' : form,
             'image_form' : SetImageForm(),
             'type' : type,
@@ -245,6 +252,7 @@ def subprofile(request,username):
             subprofile.save()
             return render(request, 'Users/subprofile.html',{
                     'profile': subprofile,
+                    'profile_admin' : profile,
                     'form' : form,
                     'image_form' : SetImageForm(),
                     'type' : type,            
@@ -255,6 +263,7 @@ def subprofile(request,username):
             subprofile.save()
             return render(request, 'Users/subprofile.html',{
                     'profile': subprofile,
+                    'profile_admin' : profile,
                     'form' : form,
                     'image_form' : SetImageForm(),
                     'type' : 'profile',
@@ -266,6 +275,7 @@ def subprofile(request,username):
             if user.email == data['email'] and user.username == data['username']:
                 return render(request, 'Users/subprofile.html',{
                     'profile': subprofile,
+                    'profile_admin' : profile,
                     'form' : form,
                     'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
@@ -274,6 +284,7 @@ def subprofile(request,username):
             if not form_post.is_valid():
                 return render(request, 'Users/subprofile.html',{
                 'profile': subprofile,
+                'profile_admin' : profile,
                 'form' : form,
                 'form_post' : form_post,
                 'image_form' : SetImageForm(),

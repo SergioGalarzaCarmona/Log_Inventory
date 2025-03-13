@@ -83,12 +83,16 @@
     <div class="sidebar__profile">
         <ul>
             <li class="sidebar__item">
+                
                 {% if type == 'profile' %}
                 <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link">
                 {% else %}	
                 <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link">
                 {% endif %}
+                    <img src="../../../media/{{profile_admin.image}}" alt="profile-img">
+                    {% else %}
                     <img src="../../../media/{{profile.image}}" alt="profile-img">
+                    {% endif %}
                     <span id="username" class="profile-option">{{user.username}}</span>
                 </a>
             </li>
