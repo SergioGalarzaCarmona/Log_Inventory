@@ -13,8 +13,29 @@ body {
     --dark-color: #222;
     --fb-color: #003366;
     --wood: #8B5E3C; 
-    background-color: var(--bg-color);
+    background-color: var(--bg-color); 
     font-family: Montserrat;
+}
+
+nav { 
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.home-link__container  a {
+    color: inherit;
+}
+
+.material-symbols-outlined {
+    font-size: 2.5rem;
+    font-weight: bolder;
+    margin: 10px 15px;
+    transition: filter .3s;
+}
+
+a .material-symbols-outlined:hover {
+    filter: drop-shadow(0 0 5px #fff);
 }
 
 main {

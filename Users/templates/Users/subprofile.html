@@ -23,8 +23,15 @@
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
             </div>
-        </div>
+        </div> 
         <div class="profile-container">
+            <nav>
+                <div class="subusers-link__container"> 
+                    <a title="Volver a Usuarios" class="home-link" href="{% url 'manage_subusers' %}">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </a>
+                </div>
+            </nav>
             <div class="profile-img-container">
                 <label for="id_image">
                     <div class="img-overlay">

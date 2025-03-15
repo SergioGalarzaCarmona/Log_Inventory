@@ -25,6 +25,13 @@
             </div>
         </div>
         <div class="forms-container">
+            <nav>
+                <div class="subusers-link__container"> 
+                    <a title="Volver a Usuarios" class="home-link" href="{% url 'manage_subusers' %}">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </a>
+                </div>
+            </nav>
             <input type="checkbox" {{checked}} id="create-subuser">
             <form class="create-subuser" id='form-subuser' enctype="multipart/form-data" method="POST">
                 {% csrf_token %}    
@@ -38,12 +45,12 @@
                 {{group_form}}
                 <input type="submit" value="Crear Grupo">
             </form>
+            <dialog id="group-dialog">
+                <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
+                <button value=0 id="close-dialog">No</button>
+                <button value=1 id="create">Si</button>
+            </dialog>
         </div>
-        <dialog id="group-dialog">
-            <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
-            <button value=0 id="close-dialog">No</button>
-            <button value=1 id="create">Si</button>
-        </dialog>
         <div class="subusers-table__container">
             <table class="subusers-table">
                 <tr>

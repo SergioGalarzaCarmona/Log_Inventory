@@ -21,9 +21,28 @@ const select = document.getElementById('open-dialog');
 select.addEventListener('click', validateGroup)
 const label_group = document.getElementById('create-group-label');
 const label_subuser = document.getElementById('create-subuser-label');
+const create_group = document.getElementById('create-group');
+const create_subuser = document.getElementById('create-subuser');
 label_group.addEventListener('click', function (){
-    document.getElementById('create-subuser').checked = false;
+    create_subuser.checked = false; 
 });
 label_subuser.addEventListener('click', function (){
-    document.getElementById('create-group').checked = false;
+    create_group.checked = false;
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const subusersTable = document.querySelector('.subusers-table__container');
+
+    function toggleTableVisibility() {
+        if (create_subuser.checked || create_group.checked) {
+            subusersTable.classList.add("hidden");
+        } else {
+            subusersTable.classList.remove("hidden");
+        }
+    }
+
+    create_subuser.addEventListener("change", toggleTableVisibility);
+    create_group.addEventListener("change", toggleTableVisibility);
+    
+    toggleTableVisibility();
 });
