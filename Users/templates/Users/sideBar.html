@@ -7,7 +7,7 @@
     <nav class="sidebar__nav">
         <ul> 
             {% if path == 'main' %}
-            {% if permissions == 'admin' or permissions.name == "Profesor"  %}
+            {% if permissions == 'admin' or permissions == "Profesor"  %}
             <li class="sidebar__tools">
                 <p>Herramientas<span class="material-symbols-outlined">build</span></p>
                 <div class="sidebar__item">
@@ -69,7 +69,7 @@
                 </a>
             </li>
             {% if path != 'manage_subusers' %}
-            {% if permissions == 'admin' or permissions.name == "Profesor"  %}
+            {% if permissions == 'admin' or permissions == "Profesor"  %}
             <li class="sidebar__item">
                 <a href="{% url 'manage_subusers' %}" class="sidebar__item-link">
                     <span class="material-symbols-outlined">manage_accounts</span>
@@ -89,10 +89,7 @@
                 {% else %}	
                 <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link">
                 {% endif %}
-                    <img src="../../../media/{{profile_admin.image}}" alt="profile-img">
-                    {% else %}
                     <img src="../../../media/{{profile.image}}" alt="profile-img">
-                    {% endif %}
                     <span id="username" class="profile-option">{{user.username}}</span>
                 </a>
             </li>

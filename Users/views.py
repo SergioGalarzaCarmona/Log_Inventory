@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm
 from .models import Profile, Subprofile
 from .functions import create_parameterized_tables
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -19,11 +20,15 @@ class Error404View(TemplateView):
 def home(request):
     return render(request, 'Users/home.html')
 
+#Function used in other view
 def logIn(request):
+    #authenticate user
     user = authenticate(username=request.POST['username'], password=request.POST['password'], is_active=True)
+    #If find user and two values are corrects, log in.
     if user is not None:
         login(request, user)
         return redirect('main')
+    #if not find user, return a error message 
     else:
         return render(request, 'Users/authenticate.html', {
             'form': RegisterUser,
@@ -32,8 +37,11 @@ def logIn(request):
         })
 
 def signUp(request):
+    #str with one css class
     class_h2 = "no-margin"
+    #create form to register user
     form = RegisterUser(request.POST)
+    #if only one value of form is invalid, return the error message, and css class for fix error of margin
     if not form.is_valid():
             return render(request, 'Users/authenticate.html', {
                 'form': RegisterUser(request.POST,request.FILES),
@@ -41,10 +49,13 @@ def signUp(request):
                 'class' : 'active',
                 "class_h2": class_h2,
             })
-    
+    #if all form is valid, save it to create an user.
     user = form.save()
+    #If the user uploads an image, the image will have that value, otherwise, it will have a default value.
     image = request.FILES.get('image','default.jpg')
+    #with user and image create a profile
     form.create_profile(user,image)
+    #login the user
     login(request, user)
     return redirect('main')
 
@@ -70,6 +81,8 @@ def Logout(request):
 @create_parameterized_tables
 @login_required
 def main(request):
+    
+    #verifie if the request.user is a profile or a subprofile
     try:
         profile = Profile.objects.get(user=request.user)
         type = 'profile'
@@ -77,7 +90,7 @@ def main(request):
     except:
         profile = Subprofile.objects.get(user=request.user) 
         type = 'subprofile'
-        permissions = profile.group.permissions
+        permissions = profile.group.permissions.name
     return render(request, 'Users/main.html',{
         'profile': profile,
         'type' : type,
@@ -161,12 +174,12 @@ def manage_subusers(request):
         profile = Profile.objects.get(user=request.user)
         permissions = 'admin'
     except:
-        subprofile = Subprofile.objects.get(user=request.user)
-        profile = subprofile.profile
-        permissions = subprofile.group.permissions
-        if permissions.name == 'Estudiante':
+        profile = Subprofile.objects.get(user=request.user)
+        profile_admin = profile.profile
+        permissions = profile.group.permissions.name
+        if permissions == 'Estudiante':
             return render(request,'Users/error_403.html')
-    subusers = Subprofile.objects.filter(profile=profile)
+    subusers = Subprofile.objects.filter(profile=profile_admin)
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
         'form': RegisterSubuser(user_pk = request.user.pk),
@@ -211,34 +224,47 @@ def manage_subusers(request):
 @create_parameterized_tables
 @login_required
 def subprofile(request,username):
+    #verifie that exist one user with this name
     try:
-        profile = None
         subuser = User.objects.get(username=username)
-        user = request.user
-        subprofile = Subprofile.objects.get(user=subuser)
-        permissions = subprofile.group.permissions
-        subuser_pk = subuser.pk
-        type = 'subprofile'
-        if user != subuser:
-            try:
-                profile = Profile.objects.get(user=user)
-                type = 'profile'
-                permissions = 'admin'
-            except:
-                profile = Subprofile.objects.get(user=user)
-                type = 'subprofile'
-                permissions = profile.group.permissions
     except:
         return render(request, 'Users/error_404.html')
-    if profile and profile != subprofile.profile:
-        if profile.profile != subprofile.profile:
-            logout(request)
-            return redirect('/authenticate_user/deactivate')
+    #Get user 
+    user = request.user
+    if subuser != user:
+        #get subprofile from the subuser
+        subprofile = Subprofile.objects.get(user=subuser)
+        subuser_pk = subuser.pk
+        #try get profile from the user, if raise a exception in the next try 
+        try:
+            profile = user.profile
+            type = 'profile'
+            permissions = 'admin'
+            if subprofile.profile != profile:
+                logout(request)
+                return redirect('/authenticate_user/deactivate')
+        except ObjectDoesNotExist:
+            profile = Subprofile.objects.get(user=user)
+            type = 'subprofile'
+            permissions = profile.group.permissions.name
+            if subprofile.profile != profile.profile:
+                logout(request)
+                return redirect('/authenticate_user/deactivate')
+            if permissions == 'Estudiante':
+                return render(request, 'Users/error_403.html')
+        except:
+            return render(request, 'Users/error_404.html')
+    else:
+        subprofile = Subprofile.objects.get(user=subuser)
+        subuser_pk = subuser.pk
+        permissions = subprofile.group.permissions.name
+        type = 'subprofile'
+        profile = user.subprofile
     form = EditSubprofileForm(instance=subuser,user_pk = subuser_pk,permissions = permissions)
     if request.method == 'GET':
         return render(request, 'Users/subprofile.html',{
-            'profile': subprofile,
-            'profile_admin' : profile,
+            'subprofile': subprofile,
+            'profile' : profile,
             'form' : form,
             'image_form' : SetImageForm(),
             'type' : type,
