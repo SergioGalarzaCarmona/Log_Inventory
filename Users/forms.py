@@ -88,6 +88,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
     name = forms.CharField(
         max_length=24,
         required = True, 
+        label= 'Nombre del grupo',
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Nombre del Grupo',
@@ -103,6 +104,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
     permissions = forms.ModelChoiceField(
         queryset = PermissionsGroup.objects.all(),
         required = True,
+        label= 'Tipo de usuario',
         widget = forms.Select(
             attrs={
                 'class' : ''
@@ -111,6 +113,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
     )
     image = forms.ImageField(
         required=False,
+        label='imagen',
         widget = forms.FileInput(
             attrs={
                 'class' : '',
@@ -198,7 +201,10 @@ class RegisterSubuser(UserCreationForm):
         super().__init__(*args, **kwargs)
         if user_pk:
             user = User.objects.get(pk=user_pk)
-            profile = Profile.objects.get(user=user)
+            try:
+                profile = Profile.objects.get(user=user)
+            except Profile.DoesNotExist:
+                profile = None
             self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile) 
 
     def create_subprofile(self,user, group_id,image):
@@ -465,12 +471,16 @@ class EditSubprofileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user_pk = kwargs.pop('user_pk')
         self.user_pk = user_pk
+        permissions = kwargs.pop('permissions')
+        self.permissions = permissions
         super().__init__(*args, **kwargs)
         if user_pk:
             user = User.objects.get(pk=user_pk)
             subprofile = Subprofile.objects.get(user=user)
             profile = Profile.objects.get(user=subprofile.profile.user)
-            self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile) 
+            self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile)
+        if permissions != 'admin':
+            self.fields['group'].disabled = True
         
         
     def clean_username(self):

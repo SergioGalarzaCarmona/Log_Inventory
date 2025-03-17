@@ -14,7 +14,7 @@
     <meta name="robots" content="noindex, nofollow">
 </head> 
 <body>
-    {% include 'Users/sideBar.html' with path='manage_subusers' profile=profile type=type %}
+    {% include 'Users/sideBar.html' with path='manage_subusers' profile=profile type=type permissions=permissions%}
     <main>
         <div class="filter-bar"> 
             <div class="filter-bar__filter-container">
@@ -39,7 +39,7 @@
                 <input type="button" value="Crear Usuario" id="open-dialog">
                 <input type="submit" hidden id="submit">
             </form>
-            <input type="checkbox" {{checked_group}} id="create-group">
+            <input type="checkbox" {{checked_group}} id="create-group" enctype="multipart/form-data">
             <form class="create-group" method="POST">
                 {% csrf_token %}
                 {{group_form}}
