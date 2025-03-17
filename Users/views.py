@@ -172,6 +172,7 @@ def profile(request,username):
 def manage_subusers(request):
     try:
         profile = Profile.objects.get(user=request.user)
+        profile_admin = profile        
         permissions = 'admin'
     except:
         profile = Subprofile.objects.get(user=request.user)
