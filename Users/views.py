@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
-from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm
-from .models import Profile, Subprofile
+from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm
+from .models import Profile, Subprofile, SubprofilesGroup
 from .functions import create_parameterized_tables
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -320,4 +320,92 @@ def subprofile(request,username):
             user = User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
             return redirect('main')
     
-    
+@create_parameterized_tables
+@login_required
+def subusers_group(request):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+        profile_admin = profile
+        user_pk = user.pk
+        type = 'profile'
+        permissions = 'admin'
+    except ObjectDoesNotExist:
+        profile = Subprofile.objects.get(user=user)
+        profile_admin = profile.profile
+        user_pk = profile.profile.user.pk
+        type = 'subprofile'
+        permissions = profile.group.permissions.name
+        if permissions == 'Estudiante':
+            return render(request,'Users/error_403.html')
+    except:
+        return render(request,'Users/error_404.html')
+    query_subgroups = SubprofilesGroup.objects.filter(profile=profile_admin)
+    forms = []
+    for group in query_subgroups:
+        form = EditSubprofileGroupForm(instance=group,user_pk=user_pk)
+        forms.append(form)
+    if request.method == 'GET':
+        return render(request,'Users/subprofiles_group.html',{
+            'type' : type,
+            'profile' : profile,
+            'permissions' : permissions,
+            'forms' : forms,
+            'image_form' : SetImageForm(),
+            'groups' : query_subgroups
+        })
+    else:
+        image = request.FILES.get('image',False)
+        delete_image = request.POST.get('delete_image',False)
+        if image:
+            subprofile.image = image
+            subprofile.save()
+            return render(request,'Users/subprofiles_group.html',{
+                'type' : type,
+                'profile' : profile,
+                'permissions' : permissions,
+                'forms' : forms,
+                'image_form' : SetImageForm(),
+                'groups' : query_subgroups
+            })
+        elif delete_image:
+            subprofile.image = 'default.jpg'
+            subprofile.save()
+            return render(request,'Users/subprofiles_group.html',{
+                'type' : type,
+                'profile' : profile,
+                'permissions' : permissions,
+                'forms' : forms,
+                'image_form' : SetImageForm(),
+                'groups' : query_subgroups
+            })
+        else:
+            print(request.POST)
+            group = SubprofilesGroup.objects.get(pk = request.POST['id'])
+            form = EditSubprofileForm(instance=group,user_pk=user_pk)
+            initial = {
+                'name' : group.name,
+                'permissions' : group.permissions
+            }
+            form_post = EditSubprofileGroupForm(request.POST,initial=initial,instance=group,user_pk=user_pk)
+            if not form_post.changed_data():
+                return render(request,'Users/subprofiles_group.html',{
+                    'type' : type,
+                    'profile' : profile,
+                    'permissions' : permissions,
+                    'forms' : forms,
+                    'image_form' : SetImageForm(),
+                    'groups' : query_subgroups,
+                    'message' : 'Los datos no hay sido actualizados'
+                })
+            if not form_post.is_valid():
+                return render(request,'Users/subprofiles_group.html',{
+                    'type' : type,
+                    'profile' : profile,
+                    'permissions' : permissions,
+                    'forms' : forms,
+                    'image_form' : SetImageForm(),
+                    'groups' : query_subgroups
+                })
+
+

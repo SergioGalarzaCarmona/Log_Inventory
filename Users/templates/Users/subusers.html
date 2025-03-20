@@ -54,12 +54,14 @@
         <div class="subusers-table__container">
             <table class="subusers-table">
                 <tr>
+                    <th>#</th>
                     <th>Nombre</th>
                     <th>Grupo</th>
                     <th>Correo</th>
                 </tr>
                 {% for subuser in subusers %}
                 <tr onclick="window.location.href='/subprofile/{{ subuser.user.username }}';">
+                    <td>{{forloop.counter}}</td>
                     <td>{{subuser.user.username}}</td>
                     <td>{{subuser.group.name}}</td>
                     <td>{{subuser.user.email}}</td>

@@ -474,11 +474,7 @@ class EditSubprofileForm(forms.ModelForm):
         permissions = kwargs.pop('permissions')
         self.permissions = permissions
         super().__init__(*args, **kwargs)
-        if user_pk:
-            user = User.objects.get(pk=user_pk)
-            subprofile = Subprofile.objects.get(user=user)
-            profile = Profile.objects.get(user=subprofile.profile.user)
-            self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile)
+        self.fields['group'].initial = self.instance.subprofile.group
         if permissions != 'admin':
             self.fields['group'].disabled = True
         
@@ -512,6 +508,60 @@ class EditSubprofileForm(forms.ModelForm):
                                     code='invalid')
             self.add_error('password', error)
         return password
+class EditSubprofileGroupForm(forms.ModelForm):
+    name = forms.CharField(
+        max_length=24,
+        required = True, 
+        label= 'Nombre del grupo:',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Nombre del Grupo',
+                'class' : ''
+                }
+            ),
+        error_messages={
+            'is_too_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
+            'unique' : 'El nombre del grupo ya está registrado.',
+            'invalid' : 'El nombre del grupo no puede ser el mismo que el del perfil.'
+        }
+        )
+
+    permissions = forms.ModelChoiceField(
+        queryset=PermissionsGroup.objects.all(),
+        required=True,
+        label='Tipo de grupo:',
+        widget=forms.Select(
+            attrs={
+                'class' : ''
+            }
+        )
+    )
+    def __init__(self, *args, **kwargs):
+        user_pk = kwargs.pop('user_pk', None)
+        self.user_pk = user_pk
+        super().__init__(*args,**kwargs)
+        self.fields['permissions'].initial = self.instance.permissions
+        
+    def clean_name(self):
+        name = self.cleaned_data('name')
+        profile = Profile.objects.get(user_id = self.user_pk)
+        if SubprofilesGroup.objects.filter(name = name, profile = profile).exists():
+            error = ValidationError(self.field['name'].error_messages['unique'],
+                                    code='Unique')
+            self.add_error('name', error)
+        if len(name) < 8:
+            error = ValidationError(self.field['name'].error_messages['is_too_short'],
+                                    code='is_too_short')
+            self.add_error('name',error)
+        if name == profile.user.username:
+            error = ValidationError(self.field['name'].error_messages['invalid'],
+                                    code='invalid')
+            self.add_error('name', error)
+        return name
+
+    class Meta:
+        model = SubprofilesGroup
+        fields = ['id','name','permissions']
 class SetImageForm(forms.Form):
     image = forms.ImageField(
         label='Imagen de Perfil',

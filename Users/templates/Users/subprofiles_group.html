@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static '/CSS/subUsersStyles.css' %}">
+    <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
+    <title>Grupos</title>
+</head>
+<body>
+    {% for form in forms %}
+    <form method="POST">
+        {%csrf_token%}
+        <input type="number" value="{{form.instance.id}}" hidden name="id">
+        <div>
+            {{form.name.label}}
+            {{form.name}}
+            {{form.errors.name}}
+        </div>
+        <div>
+            {{form.permissions.label}}
+            {{form.permissions}}
+            {{form.errors.permissions}}
+        </div>
+        <input type="submit" value="Guardar">
+    </form>
+    <form method="POST">
+        {%csrf_token%}
+        {{image_form}}
+    </form>
+    {% endfor %}
+</body>
+</html>
