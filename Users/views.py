@@ -380,20 +380,17 @@ def subusers_group(request):
                 'groups' : query_subgroups
             })
         else:
-            print(request.POST)
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
-            form = EditSubprofileForm(instance=group,user_pk=user_pk)
-            initial = {
-                'name' : group.name,
-                'permissions' : group.permissions
-            }
-            form_post = EditSubprofileGroupForm(request.POST,initial=initial,instance=group,user_pk=user_pk)
-            if not form_post.changed_data():
+            form = EditSubprofileGroupForm(instance=group,user_pk=user_pk)
+            form_post = EditSubprofileGroupForm(request.POST,instance=group,user_pk=user_pk)
+            if request.POST['name'] == group.name and request.POST['permissions'] == str(group.permissions.pk):
                 return render(request,'Users/subprofiles_group.html',{
                     'type' : type,
                     'profile' : profile,
                     'permissions' : permissions,
                     'forms' : forms,
+                    'form_post' : form_post,
+                    'group' : group,
                     'image_form' : SetImageForm(),
                     'groups' : query_subgroups,
                     'message' : 'Los datos no hay sido actualizados'
@@ -404,8 +401,12 @@ def subusers_group(request):
                     'profile' : profile,
                     'permissions' : permissions,
                     'forms' : forms,
+                    'form_post' : form_post,
+                    'group' : group,
                     'image_form' : SetImageForm(),
                     'groups' : query_subgroups
                 })
+            form_post.save()
+            return redirect('subusers_group')
 
 

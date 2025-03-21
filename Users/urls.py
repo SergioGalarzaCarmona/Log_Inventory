@@ -19,5 +19,5 @@ urlpatterns = [
     path('profile/<str:username>', profile, name='profile'),
     path('manage_users/',manage_subusers, name='manage_subusers'),
     path('subprofile/<str:username>',subprofile, name='subprofile'),
-    path('subusers_group/',subusers_group,name='subuser_groups')
+    path('subusers_group/',subusers_group,name='subusers_group')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

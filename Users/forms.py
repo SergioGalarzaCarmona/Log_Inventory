@@ -543,18 +543,19 @@ class EditSubprofileGroupForm(forms.ModelForm):
         self.fields['permissions'].initial = self.instance.permissions
         
     def clean_name(self):
-        name = self.cleaned_data('name')
+        name = self.cleaned_data['name']
         profile = Profile.objects.get(user_id = self.user_pk)
-        if SubprofilesGroup.objects.filter(name = name, profile = profile).exists():
-            error = ValidationError(self.field['name'].error_messages['unique'],
+        subgroup = SubprofilesGroup.objects.filter(name = name, profile = profile).exclude(pk = self.instance.pk)
+        if subgroup.exists():
+            error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code='Unique')
             self.add_error('name', error)
         if len(name) < 8:
-            error = ValidationError(self.field['name'].error_messages['is_too_short'],
+            error = ValidationError(self.fields['name'].error_messages['is_too_short'],
                                     code='is_too_short')
             self.add_error('name',error)
         if name == profile.user.username:
-            error = ValidationError(self.field['name'].error_messages['invalid'],
+            error = ValidationError(self.fields['name'].error_messages['invalid'],
                                     code='invalid')
             self.add_error('name', error)
         return name
