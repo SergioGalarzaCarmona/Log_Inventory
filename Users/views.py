@@ -358,8 +358,9 @@ def subusers_group(request):
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
         if image:
-            subprofile.image = image
-            subprofile.save()
+            group = SubprofilesGroup.objects.get(pk = request.POST['id'])
+            group.image = image
+            group.save()
             return render(request,'Users/subprofiles_group.html',{
                 'type' : type,
                 'profile' : profile,
@@ -369,8 +370,9 @@ def subusers_group(request):
                 'groups' : query_subgroups
             })
         elif delete_image:
-            subprofile.image = 'default.jpg'
-            subprofile.save()
+            group = SubprofilesGroup.objects.get(pk = request.POST['id'])
+            group.image = 'default.jpg'
+            group.save()
             return render(request,'Users/subprofiles_group.html',{
                 'type' : type,
                 'profile' : profile,
