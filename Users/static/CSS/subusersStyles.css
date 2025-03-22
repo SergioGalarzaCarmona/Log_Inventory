@@ -277,4 +277,69 @@ td:first-child {
     .sidebar__form, .filter-bar__filter-container > .filter-bar__logo-container {
         display: none;
     }
+    
+    td:last-child, th:last-child {
+        display: none;
+    }
+
+    .forms-container form {
+        width: 90%;
+        margin-left: 5%;
+        padding: 0 20px;
+    }
+
+    .forms-container form.create-group {
+        height: 35dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 35dvh) / 2);
+    }
+
+    .forms-container form.create-subuser {
+        height: 65dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 65dvh) / 2);
+    } 
+
+    .forms-container form input, form select {
+        margin: 3% 0;
+    }
+
+    .forms-container form div {
+        margin: 1% 0;
+    }
+
+    .close-formSubuser, .close-formGroup {
+        position: absolute;
+        top: calc(calc(2rem + 44.78px) + 10px);
+        margin-left: 5%;
+        font-size: 2rem;
+    }
+}
+
+@media (max-height: 840px) and (max-width: 1025px) {
+    .forms-container form.create-group {
+        height: 45dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 45dvh) / 2);
+    }
+
+    .forms-container form.create-subuser {
+        height: 80dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 75dvh) / 2);
+    } 
+}
+
+@media (min-height: 1025px) and (max-width: 1025px) {
+    .forms-container form{
+        width: 70%;
+        margin-left: 15%;
+    }
+    
+    .forms-container form.create-group {
+        height: 30dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 30dvh) / 2);
+    }
+
+    .forms-container form.create-subuser {
+        height: 50dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 50dvh) / 2);
+    } 
+    
 }
