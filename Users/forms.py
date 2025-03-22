@@ -474,6 +474,7 @@ class EditSubprofileForm(forms.ModelForm):
         permissions = kwargs.pop('permissions')
         self.permissions = permissions
         super().__init__(*args, **kwargs)
+        self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile = self.instance.subprofile.profile)
         self.fields['group'].initial = self.instance.subprofile.group
         if permissions != 'admin':
             self.fields['group'].disabled = True
