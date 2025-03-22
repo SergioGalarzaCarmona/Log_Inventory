@@ -71,6 +71,21 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     margin: 2.5px 0px;
 }
 
+.close-formSubuser, .close-formGroup {
+    position: absolute;
+    top: calc(calc(2rem + 44.78px) + 10px);
+    margin-left: 15px;
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: filter .3s;
+}
+
+.close-formSubuser:hover, .close-formGroup:hover {
+    filter: drop-shadow(0 0 5px #fff);
+}
+
 .create-subuser, .create-group{
     display: none;
 }
@@ -167,8 +182,51 @@ form select {
 dialog {
     border: none;
     border-radius: 20px;
-    padding: 20px 40px;
+    padding: 25px 40px;
+}
 
+dialog label.material-symbols-outlined {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    color: var(--fb-color);
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem; 
+    cursor: pointer;
+}
+
+dialog p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+dialog div {
+    display: flex;
+    gap: 15px;
+}
+
+dialog button {
+    background-color: var(--fb-color);
+    color: #fff;
+    width: 50px;
+    padding-top: 3.5px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    font-family: inherit;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .2s, color .2s, font-weight .2s, outline .2s; 
+}
+
+dialog button:hover {
+    outline: var(--wood) 1px solid;
+    color: var(--fb-color);
+    background-color: var(--bg-color);
+    font-weight: 600;
+    box-shadow: var(--wood) 0 0 5px;
 }
 
 
@@ -205,6 +263,10 @@ dialog {
 .subusers-table tr:first-child:hover {
     background-color: #fff;
     cursor: default;
+}
+
+td:first-child {
+    text-align: center;
 }
 
 .hidden {

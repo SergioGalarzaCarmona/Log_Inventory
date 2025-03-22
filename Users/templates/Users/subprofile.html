@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/profileStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/subprofileStyles.css'%}">
     <title>Usuario</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Visualización subusuario Log Inventory">
@@ -24,14 +25,14 @@
                 </div>
             </div>
         </div> 
+        <nav>
+            <div class="subusers-link__container"> 
+                <a title="Volver a Usuarios" class="subusers-link" href="{% url 'manage_subusers' %}">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </a>
+            </div>
+        </nav>
         <div class="profile-container">
-            <nav>
-                <div class="subusers-link__container"> 
-                    <a title="Volver a Usuarios" class="home-link" href="{% url 'manage_subusers' %}">
-                        <span class="material-symbols-outlined">arrow_back</span>
-                    </a>
-                </div>
-            </nav>
             <div class="profile-img-container">
                 <label for="id_image">
                     <div class="img-overlay">

@@ -69,6 +69,21 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     margin: 2.5px 0px;
 }
 
+a.subusers-link span.material-symbols-outlined {
+    position: absolute;
+    top: calc(calc(2rem + 44.78px) + 10px);
+    margin-left: 15px;
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: filter .3s;
+}
+
+a.subusers-link span.material-symbols-outlined:hover {
+    filter: drop-shadow(0 0 5px #fff);
+}
+
 .profile-container {
     height: 100%;
     width: 100%;
@@ -79,7 +94,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     background-size: cover;
     padding-top: calc(2rem + 44.78px);
 }
- 
+
 .profile-img-container {
     display: flex;
     place-content: center;
@@ -238,7 +253,7 @@ dialog {
     right: 10px;
     background-color: transparent;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.5rem; 
     cursor: pointer;
 }
 

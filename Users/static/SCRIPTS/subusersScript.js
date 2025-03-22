@@ -19,8 +19,8 @@ function validateGroup(){
 }
 const select = document.getElementById('open-dialog');
 select.addEventListener('click', validateGroup)
-const label_group = document.getElementById('create-group-label');
-const label_subuser = document.getElementById('create-subuser-label');
+const label_group = document.querySelector('.create-group-label');
+const label_subuser = document.querySelector('.create-subuser-label');
 const create_group = document.getElementById('create-group');
 const create_subuser = document.getElementById('create-subuser');
 label_group.addEventListener('click', function (){
@@ -32,12 +32,24 @@ label_subuser.addEventListener('click', function (){
 
 document.addEventListener("DOMContentLoaded", () => {
     const subusersTable = document.querySelector('.subusers-table__container');
+    const closeFormGroup = document.querySelector(".close-formGroup");
+    const closeFormSubuser = document.querySelector(".close-formSubuser");
 
     function toggleTableVisibility() {
-        if (create_subuser.checked || create_group.checked) {
+        if (create_subuser.checked) {
             subusersTable.classList.add("hidden");
-        } else {
+            closeFormGroup.classList.add("hidden");
+            closeFormSubuser.classList.remove("hidden");
+        } 
+        else if (create_group.checked) {
+            subusersTable.classList.add("hidden");
+            closeFormSubuser.classList.add("hidden");
+            closeFormGroup.classList.remove("hidden");
+        }
+        else {
             subusersTable.classList.remove("hidden");
+            closeFormGroup.classList.add("hidden");
+            closeFormSubuser.classList.add("hidden");
         }
     }
 
