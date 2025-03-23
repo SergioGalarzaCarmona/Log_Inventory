@@ -4,6 +4,19 @@ from django.contrib.auth.hashers import make_password,check_password
 
 # Create your models here.
 
+class BaseAuditModel(models.Model):
+    created = models.DateTimeField(
+        auto_now_add = True
+    )
+    last_updated = models.DateTimeField(
+        auto_now = True
+    )
+    is_active = models.BooleanField(
+        default=True
+    )
+    class Meta:
+        abstract = True
+
 class Permissions(models.Model):
     name = models.CharField( 
         max_length=100
@@ -32,7 +45,7 @@ class PermissionsGroup(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-class Profile(models.Model):
+class Profile(BaseAuditModel):
     user = models.OneToOneField (
         User, 
         on_delete=models.CASCADE
@@ -59,7 +72,7 @@ class Profile(models.Model):
             return None
         return True, profile
         
-class SubprofilesGroup(models.Model):
+class SubprofilesGroup(BaseAuditModel):
     profile = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE
@@ -80,7 +93,7 @@ class SubprofilesGroup(models.Model):
         verbose_name = 'GroupSubprofile'
         verbose_name_plural = 'GroupSubprofiles'
         
-class Subprofile(models.Model):
+class Subprofile(BaseAuditModel):
     user = models.OneToOneField( 
         User,
         on_delete=models.CASCADE
