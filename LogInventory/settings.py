@@ -80,10 +80,10 @@ DATABASES = {
     "default":
        {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": 'log_inventory_ingq',
+            "NAME": 'log_inventory_e7ix',
             "USER": 'log_inventory',
-            "PASSWORD": 'u0TZjktYhaeqVIoBL1T0cNLReuRcYkye',
-            "HOST": 'dpg-cv760clds78s738qjf1g-a.oregon-postgres.render.com',
+            "PASSWORD": 'MpVx6XefjN7WTAE1vhF3Y35VdZHyTtZ4',
+            "HOST": 'dpg-cvg4d3drie7s73bm9q60-a.oregon-postgres.render.com',
             "PORT": 5432,
             'OPTIONS': {
             'client_encoding': 'UTF8',
