@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password,check_password
 
 # Create your models here.
 
@@ -116,16 +115,73 @@ class Subprofile(BaseAuditModel):
     class Meta:
         verbose_name = 'Subprofile'
         verbose_name_plural = 'Subprofiles'
+
+class TypeChanges(models.Model):
+    value = models.CharField(
         
-    def authenticate(username,password):
-        subuser = Subprofile.objects.filter(username=username)
-        if len(subuser) > 1:
-            raise ValueError('There are more than one user with the same username')
-        password_verified = check_password(password,subuser[0].password)
-        print(password_verified)
-        if password_verified == True:
-            return subuser
-        else:
-            return None
-        
+    )
+
+class UserChanges(models.Model):
+    main_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='main_user'
+    )
+    user_changed = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name = 'user_changed'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name = 'user'
+    )
+    type_change = models.ForeignKey(
+        TypeChanges,
+        on_delete=models.CASCADE
+    )
+    description = models.CharField(
+    )
+    date = models.DateTimeField(
+        auto_now_add = True
+    )
     
+    def __str__(self):
+        return f'{self.description}'
+
+    class Meta:
+        verbose_name = 'UserChange'
+        verbose_name_plural = 'UserChanges'
+class GroupChanges(models.Model):
+    main_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='main_user_group'
+    )
+    group_changed = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name = 'user_changed_group'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name = 'user_group'
+    )
+    type_change = models.ForeignKey(
+        TypeChanges,
+        on_delete=models.CASCADE
+    )
+    description = models.CharField(
+    )
+    date = models.DateTimeField(
+        auto_now_add = True
+    )
+    
+    def __str__(self):
+        return f'{self.description}'
+    
+    class Meta:
+        verbose_name = 'GroupChange'
+        verbose_name_plural = 'GroupChanges'

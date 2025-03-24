@@ -90,7 +90,7 @@
                 <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link">
                 {% endif %}
                     <img src="../../../media/{{profile.image}}" alt="profile-img">
-                    <span id="username" class="profile-option">{{user.username}}</span>
+                    <span id="username" class="profile-option">{{profile.user.username}}</span>
                 </a>
             </li>
             <li class="sidebar__item">

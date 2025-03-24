@@ -136,7 +136,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
         permissions_group = self.cleaned_data['permissions']
         user = User.objects.get(pk = self.user_pk)
         profile = Profile.objects.get(user = user)
-        SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions_group)
+        return SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions_group)
     
     def clean_name(self):
         name = self.cleaned_data['name']
@@ -482,8 +482,8 @@ class EditSubprofileForm(forms.ModelForm):
         
     def clean_username(self):
         username = self.cleaned_data['username']
-        users = User.objects.filter(username=username).exclude(pk=self.user_pk)
-        if len(users) > 0:
+        users = User.objects.filter(username=username).exclude(pk=self.instance.pk)
+        if users.exists():
             error = ValidationError(self.fields['username'].error_messages['unique'],
                                     code='unique')
             self.add_error('username', error)
