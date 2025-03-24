@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm
-from .models import Profile, Subprofile, SubprofilesGroup
-from .functions import create_parameterized_tables
+from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
+from .functions import create_parameterized_tables, create_description
 from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
@@ -206,6 +206,13 @@ def manage_subusers(request):
                 })
             subuser = form.save()
             form.create_subprofile(user=subuser,group_id=request.POST['group'],image=request.FILES.get('image','default.jpg'))
+            log = TypeChanges.objects.get(value='Create')
+            UserChanges.objects.create(
+                main_user=profile_admin.user,
+                user_changed = subuser,
+                user = request.user,
+                description=f'Creating subuser {subuser.username} with group {subuser.subprofile.group.name}',
+                type_change=log)
             return redirect('manage_subusers')
         else: 
             form = RegisterSubprofileGroup(request.POST,request.FILES,user_pk = request.user.pk)
@@ -219,7 +226,14 @@ def manage_subusers(request):
                     'type' : 'profile',
                     'permissions' : permissions
                 })
-            form.create_subprofile_group()
+            group = form.create_subprofile_group()
+            log = TypeChanges.objects.get(value='Create')
+            GroupChanges.objects.create(
+                main_user=profile_admin.user,
+                group_changed = group,
+                user = request.user,
+                description=f'Creating group {group.name} with permissions {group.permissions.name}',
+                type_change=log)
             return redirect('manage_subusers')
 
 @create_parameterized_tables
@@ -275,25 +289,45 @@ def subprofile(request,username):
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
         if image:
+            image_before = subprofile.image.name.split('/')[-1]
+            if image_before == 'default.jpg':
+                image_before = '""'
             subprofile.image = image
             subprofile.save()
+            log = TypeChanges.objects.get(value='Update')
+            UserChanges.objects.create(
+                main_user = subprofile.profile.user,
+                user_changed = subprofile.user,
+                user = request.user,
+                description=f'Change in image, before: {image_before}, after: {image}',
+                type_change = log
+            )
             return render(request, 'Users/subprofile.html',{
-                    'profile': subprofile,
-                    'profile_admin' : profile,
+                    'subprofile': subprofile,
+                    'profile' : profile,
                     'form' : form,
                     'image_form' : SetImageForm(),
-                    'type' : type,            
+                    'type' : type,
                     'permissions' : permissions
             })
         elif delete_image:
+            image_before = subprofile.image.name.split('/')[-1]
             subprofile.image = 'default.jpg'
             subprofile.save()
+            log = TypeChanges.objects.get(value='Update')
+            UserChanges.objects.create(
+                main_user = subprofile.profile.user,
+                user_changed = subprofile.user,
+                user = request.user,
+                description=f'Change in image, before: "{image_before}", after: ""',
+                type_change = log
+            )
             return render(request, 'Users/subprofile.html',{
-                    'profile': subprofile,
-                    'profile_admin' : profile,
+                    'subprofile': subprofile,
+                    'profile' : profile,
                     'form' : form,
                     'image_form' : SetImageForm(),
-                    'type' : 'profile',
+                    'type' : type,
                     'permissions' : permissions
                 })
         else:
@@ -301,8 +335,8 @@ def subprofile(request,username):
             data = form_post.data            
             if user.email == data['email'] and user.username == data['username']:
                 return render(request, 'Users/subprofile.html',{
-                    'profile': subprofile,
-                    'profile_admin' : profile,
+                    'subprofile': subprofile,
+                    'profile' : profile,
                     'form' : form,
                     'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
@@ -310,15 +344,31 @@ def subprofile(request,username):
                 })
             if not form_post.is_valid():
                 return render(request, 'Users/subprofile.html',{
-                'profile': subprofile,
-                'profile_admin' : profile,
-                'form' : form,
-                'form_post' : form_post,
-                'image_form' : SetImageForm(),
-                'permissions' : permissions
+                    'subprofile': subprofile,
+                    'profile' : profile,
+                    'form' : form,
+                    'form_post' : form_post,
+                    'image_form' : SetImageForm(),
+                    'type' : type,
+                    'permissions' : permissions
             })
-            user = User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
-            return redirect('main')
+            user = User.objects.get(pk=subuser_pk)
+            User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
+            log = TypeChanges.objects.get(value='Update')
+            UserChanges.objects.create(
+                main_user = user.subprofile.profile.user,
+                user_changed = user,
+                user = request.user,
+                description=create_description(
+                    object=user,
+                    type = 'Subuser',
+                    username = data['username'],
+                    email = data['email'],
+                    group = user.subprofile.group.name
+                    ),
+                type_change = log
+            )
+            return redirect('manage_subusers')
     
 @create_parameterized_tables
 @login_required
@@ -359,8 +409,19 @@ def subusers_group(request):
         delete_image = request.POST.get('delete_image',False)
         if image:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
+            image_before = group.image.name.split('/')[-1]
+            if image_before == 'default.jpg':
+                image_before = '""'
             group.image = image
             group.save()
+            log = TypeChanges.objects.get(value='Update')
+            UserChanges.objects.create(
+                main_user = group.profile.user,
+                group_changed = group,
+                user = request.user,
+                description=f'Change in image, before: {image_before}, after: {image}',
+                type_change = log
+            )
             return render(request,'Users/subprofiles_group.html',{
                 'type' : type,
                 'profile' : profile,
@@ -371,8 +432,17 @@ def subusers_group(request):
             })
         elif delete_image:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
+            image_before = group.image.name.split('/')[-1]
             group.image = 'default.jpg'
             group.save()
+            log = TypeChanges.objects.get(value='Update')
+            UserChanges.objects.create(
+                    main_user = group.profile.user,
+                    group_changed = group,
+                    user = request.user,
+                    description=f'Change in image, before: "{image_before}", after: ""',
+                    type_change = log
+            )
             return render(request,'Users/subprofiles_group.html',{
                 'type' : type,
                 'profile' : profile,
@@ -409,6 +479,18 @@ def subusers_group(request):
                     'groups' : query_subgroups
                 })
             form_post.save()
+            log = TypeChanges.objects.get(value='Update')
+            UserChanges.objects.create(
+                main_user=profile_admin.user,
+                group_changed = group,
+                user = request.user,
+                description=create_description(
+                    object=group,
+                    type = 'SubuserGroup',
+                    name = request.POST['name'],
+                    permissions = request.POST['permissions']
+                    ),
+                type_change=log)
             return redirect('subusers_group')
 
 
