@@ -160,7 +160,7 @@ class GroupChanges(models.Model):
         related_name='main_user_group'
     )
     group_changed = models.ForeignKey(
-        User,
+        SubprofilesGroup,
         on_delete=models.CASCADE,
         related_name = 'user_changed_group'
     )
