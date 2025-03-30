@@ -36,8 +36,8 @@
                 <input type="button" value="Crear Usuario" id="open-dialog">
                 <input type="submit" hidden id="submit">
             </form>
-            <input type="checkbox" {{checked_group}} id="create-group" enctype="multipart/form-data">
-            <form class="create-group" method="POST">
+            <input type="checkbox" {{checked_group}} id="create-group">
+            <form class="create-group" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{group_form}}
                 <input type="submit" value="Crear Grupo">
