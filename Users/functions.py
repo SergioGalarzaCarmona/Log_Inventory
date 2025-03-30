@@ -1,5 +1,6 @@
 from .models import Permissions,PermissionsGroup, TypeChanges
-from Objects.models import TypeTransaction 
+from Objects.models import TypeTransaction
+from django.utils.translation import gettext as _
 
 def create_parameterized_tables(function):
     def wrapper(*args, **kwargs):
@@ -60,3 +61,5 @@ def create_description(object : object,type : str,**kwargs):
             'permissions' : str(object.permissions.pk)
         }
     return '\n'.join([f'Change in {key}, before: {initial[key]}, after: {kwargs[key]}' for key in kwargs.keys() if initial[key] != kwargs[key]])
+
+    
