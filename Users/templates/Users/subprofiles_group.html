@@ -25,43 +25,54 @@
             </div>
         </div>
         {% for form in forms %}
-        <form method="POST"> 
-            {%csrf_token%}
-            <input type="number" value="{{form.instance.id}}" hidden name="id">
-            <div>
-                {%if form.instance.pk == group.pk %}
-                <ul class="errorlist">
-                    <li>{{message}}</li>
-                </ul>
-                {%endif%}
+        <div class="group-container">
+            <form method="POST" class="group-image">
+                <label for="id_image">
+                    <img src="../../../media/profile_images/dalto.jpg" alt="Group Image">
+                    <div class="image-overlay">
+                        <label class="delete-image material-symbols-outlined" for="delete_image">delete</label>
+                    </div>
+                </label>
+                {% csrf_token %}
+                <input type="number" value="{{form.instance.id}}" hidden name="id">
+                {{image_form}}
+            </form>
+            <form method="POST" class="group-info"> 
+                {%csrf_token%}
+                <input type="number" value="{{form.instance.id}}" hidden name="id">
+                <div>
+                    {%if form.instance.pk == group.pk %}
+                    <ul class="errorlist">
+                        <li>{{message}}</li>
+                    </ul>
+                    {%endif%}
+                </div>
+                <div class="group-name__container">
+                    {{form.name.label}}
+                    {{form.name}}
+                    {%if form.instance.pk == group.pk %}
+                    {{form_post.errors.name}}
+                    {%endif%}
+                </div>
+                <div class="group-permissions__container">
+                    {{form.permissions.label}}
+                    {{form.permissions}}
+                    {%if form.instance.pk == group.pk %}
+                    {{form_post.errors.permissions}}
+                    {%endif%}
+                </div>
+                <input type="submit" value="Guardar" class="save-button">
+            </form>
+            <div class="group-description__container">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita, rem vitae aperiam at a quasi quisquam, minima quod cumque exercitationem ea impedit culpa, ipsam tempore perferendis dignissimos delectus laudantium neque.</p>
             </div>
-            <div>
-                {{form.name.label}}
-                {{form.name}}
-                {%if form.instance.pk == group.pk %}
-                {{form_post.errors.name}}
-                {%endif%}
-            </div>
-            <div>
-                {{form.permissions.label}}
-                {{form.permissions}}
-                {%if form.instance.pk == group.pk %}
-                {{form_post.errors.permissions}}
-                {%endif%}
-            </div>
-            <input type="submit" value="Guardar">
-        </form>
-        <form method="POST">
-            {%csrf_token%}
-            <input type="number" value="{{form.instance.id}}" hidden name="id">
-            {{image_form}}
-        </form>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="number" value="{{form.instance.id}}" hidden name="id">
-            <input type="checkbox" name="delete_image" id="id_delete_checkbox" hidden>
-            <input type="submit" id="delete_image" value="submit" hidden>
-        </form>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="number" value="{{form.instance.id}}" hidden name="id">
+                <input type="checkbox" name="delete_image" checked id="id_delete_checkbox" hidden>
+                <input type="submit" id="delete_image" value="submit" hidden>
+            </form>
+        </div>
         {% endfor %}
     </main>
 </body>
