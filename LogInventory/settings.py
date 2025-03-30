@@ -114,13 +114,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'es-mx'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
+
+
 
 LOGIN_URL = '/authenticate_user/deactive'
 # Static files (CSS, JavaScript, Images)
@@ -143,3 +147,10 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'log.inventory2406@gmail.com'
 EMAIL_HOST_PASSWORD = 'gqsy kzga ycqj cpeq'
+
+
+  
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',  # Directory for translation files
+]

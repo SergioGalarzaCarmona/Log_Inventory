@@ -1,0 +1,20 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de usuarios</title>
+</head>
+<body>
+    <div>
+        {% for log in log_users%}
+        <div>
+            <p>Usuario afectado: {{log.user_changed.username}}</p>
+            <p>Tipo de cambio: </p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

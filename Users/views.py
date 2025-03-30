@@ -312,6 +312,8 @@ def subprofile(request,username):
             })
         elif delete_image:
             image_before = subprofile.image.name.split('/')[-1]
+            if image_before == 'default.jpg':
+                image_before = '""'
             subprofile.image = 'default.jpg'
             subprofile.save()
             log = TypeChanges.objects.get(value='Update')
@@ -433,6 +435,8 @@ def subusers_group(request):
         elif delete_image:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
             image_before = group.image.name.split('/')[-1]
+            if image_before == 'default.jpg':
+                image_before = '""'
             group.image = 'default.jpg'
             group.save()
             log = TypeChanges.objects.get(value='Update')
@@ -493,4 +497,40 @@ def subusers_group(request):
                 type_change=log)
             return redirect('subusers_group')
 
+@create_parameterized_tables
+@login_required
+def log_users(request):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+        profile_admin = profile
+        type = 'profile'
+        permissions = 'admin'
+    except ObjectDoesNotExist:
+        profile = Subprofile.objects.get(user=user)
+        profile_admin = profile.profile
+        type = 'subprofile'
+        permissions = profile.group.permissions.name
+        if permissions == 'Estudiante':
+            return render(request,'Users/error_403.html')
+    except:
+        return render(request,'Users/error_404.html')
+    query_users = UserChanges.objects.filter(main_user=profile_admin.user)
+    query_groups = GroupChanges.objects.filter(main_user=profile_admin.user)
 
+        
+    if request.method == 'GET':
+        return render(request,'Users/log_users.html',{
+            'type' : type,
+            'profile' : profile,
+            'permissions' : permissions,
+            'log_users' : query_users,
+            'log_groups' : query_groups
+        })
+    else:
+        return render(request,'Users/log_users.html',{
+            'type' : type,
+            'profile' : profile,
+            'permissions' : permissions,
+            'log_users' : query_users
+        })
