@@ -24,7 +24,7 @@
                 </div>
             </li>
             {%endif%}
-            {% elif path == 'manage_subusers' %}
+            {% elif path == 'manage_subusers' or path == "subprofile" %}
             {% if permissions == 'admin' %}
             <li class="sidebar__tools">
                 <p>Herramientas<span class="material-symbols-outlined">build</span></p>
@@ -68,13 +68,22 @@
                     <p>Transacciones</p>
                 </a>
             </li>
-            {% if path != 'manage_subusers' %}
+            {% if path != 'manage_subusers' and path != 'subprofile' %}
             {% if permissions == 'admin' or permissions == "Profesor"  %}
-            <li class="sidebar__item">
-                <a href="{% url 'manage_subusers' %}" class="sidebar__item-link">
-                    <span class="material-symbols-outlined">manage_accounts</span>
-                    <p>Usuarios</p>
-                </a>
+            <li>
+                <p>Manejo Usuarios<span class="material-symbols-outlined">build</span></p>
+                <div class="sidebar__item">
+                    <a href="{% url 'manage_subusers' %}" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">manage_accounts</span>
+                        <p>Usuarios</p>
+                    </a>
+                </div>
+                <div class="sidebar__item">
+                    <a href="{% url 'subusers_group' %}" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">groups</span>
+                        <p>Groups</p>
+                    </a>
+                </div>
             </li>
             {% endif %}
             {% endif %}

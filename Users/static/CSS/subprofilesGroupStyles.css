@@ -1,0 +1,73 @@
+* {
+    box-sizing: border-box;
+}
+
+body, div, ul, li, a, h1, h2, h3, h4, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    --bg-color: #fff;
+    --sidebar-color: color-mix(in srgb, #000 25%, #fff);
+    --dark-color: #222;
+    --fb-color: #003366;
+    --wood: #8B5E3C; 
+    background-color: var(--bg-color);
+    font-family: Montserrat;
+}
+
+main {
+    height: 100dvh;
+    width: clamp(calc(100dvw - 300px), 80dvw, calc(100dvw - 220px));
+    background-color: var(--bg-color);
+    position: fixed;
+    right: 0;
+    background-image: url(../IMAGES/Escritorio.webp);
+    background-size: cover;
+}
+
+aside:has(input[type="checkbox"]:checked) ~ main {
+    width: calc(100dvw - 62px);
+}
+
+.filter-bar {
+    width: 100%;
+    height: calc(2rem + 44.78px);
+    background-color: var(--fb-color);
+    container-name: filter-bar;
+}
+
+.filter-bar__filter-container {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-bar__filter-container > p {
+    max-width: clamp(100% - 42px, 100% - calc(28dvh - 5px), 100% - 210px);
+    height: 100%;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    color: var(--bg-color);
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+}
+
+.filter-bar__filter-container > .filter-bar__logo-container {
+    height: 100%;
+    padding-right: .75rem;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.logo {
+    height: clamp(15px, calc(10dvh - 5px), 75px);
+    width: clamp(42px, calc(28dvh - 5px), 210px);
+    margin: 2.5px 0px;
+}
+
