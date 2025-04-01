@@ -17,6 +17,3 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: .\Users\templates\Users\home.html:30
-msgid "Inicio"
-msgstr "Ingles"
