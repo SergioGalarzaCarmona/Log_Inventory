@@ -26,9 +26,9 @@
         </div>
         {% for form in forms %}
         <div class="group-container">
-            <form method="POST" class="group-image">
+            <form method="POST" class="group-image" enctype="multipart/form-data">
                 <label for="id_image">
-                    <img src="../../../media/profile_images/dalto.jpg" alt="Group Image">
+                    <img src="../../../media/{{form.instance.image}}" alt="Group Image">
                     <div class="image-overlay">
                         <label class="delete-image material-symbols-outlined" for="delete_image">delete</label>
                     </div>
@@ -36,6 +36,7 @@
                 {% csrf_token %}
                 <input type="number" value="{{form.instance.id}}" hidden name="id">
                 {{image_form}}
+                <input type="submit" id="id_submit" hidden>
             </form>
             <form method="POST" class="group-info"> 
                 {%csrf_token%}
@@ -61,10 +62,16 @@
                     {{form_post.errors.permissions}}
                     {%endif%}
                 </div>
+                <div class="group-description__container">
+                    {{form.description.label}}
+                    {{form.description}}
+                    {%if form.instance.pk == group.pk %}
+                    {{form_post.errors.description}}
+                    {%endif%}
+                </div>
                 <input type="submit" value="Guardar" class="save-button">
             </form>
             <div class="group-description__container">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita, rem vitae aperiam at a quasi quisquam, minima quod cumque exercitationem ea impedit culpa, ipsam tempore perferendis dignissimos delectus laudantium neque.</p>
             </div>
             <form method="POST">
                 {% csrf_token %}
@@ -75,5 +82,6 @@
         </div>
         {% endfor %}
     </main>
+    <script src="{%static '/SCRIPTS/profileScript.js'%}"></script>
 </body>
 </html>

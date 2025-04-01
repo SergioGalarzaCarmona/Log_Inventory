@@ -1,4 +1,9 @@
 {% load i18n %}
+{% with log_types= {
+    "create": _("Create"),
+    "update": _("Update"),
+    "delete": _("Delete")
+} %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +17,7 @@
         {% for log in log_users%}
         <div>
             <p>Usuario afectado: {{log.user_changed.username}}</p>
-            <p>Tipo de cambio: </p>
+            <p>Tipo de cambio:{% translate log_types|default:log.type_change.value %} </p>
         </div>
         {% endfor %}
     </div>

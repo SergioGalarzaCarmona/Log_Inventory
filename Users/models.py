@@ -80,7 +80,11 @@ class SubprofilesGroup(BaseAuditModel):
         max_length=100)
     image = models.ImageField(
         default='default_group.jpg',
-        upload_to='profile_images')
+        upload_to='subprofiles_groups_images')
+    description = models.CharField(
+        max_length=1000,
+        default=''
+    )
     permissions = models.ForeignKey(
         PermissionsGroup, 
         on_delete=models.CASCADE)
@@ -142,6 +146,8 @@ class UserChanges(models.Model):
         on_delete=models.CASCADE
     )
     description = models.CharField(
+        max_length=1000,
+        default=''
     )
     date = models.DateTimeField(
         auto_now_add = True
@@ -174,6 +180,8 @@ class GroupChanges(models.Model):
         on_delete=models.CASCADE
     )
     description = models.CharField(
+        max_length=1000,
+        default=''
     )
     date = models.DateTimeField(
         auto_now_add = True

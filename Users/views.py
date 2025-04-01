@@ -226,7 +226,7 @@ def manage_subusers(request):
                     'type' : 'profile',
                     'permissions' : permissions
                 })
-            group = form.create_subprofile_group()
+            group = form.create_subprofile_group(image=request.FILES.get('image','default_group.jpg'))
             log = TypeChanges.objects.get(value='Create')
             GroupChanges.objects.create(
                 main_user=profile_admin.user,
@@ -417,7 +417,7 @@ def subusers_group(request):
             group.image = image
             group.save()
             log = TypeChanges.objects.get(value='Update')
-            UserChanges.objects.create(
+            GroupChanges.objects.create(
                 main_user = group.profile.user,
                 group_changed = group,
                 user = request.user,
@@ -440,7 +440,7 @@ def subusers_group(request):
             group.image = 'default.jpg'
             group.save()
             log = TypeChanges.objects.get(value='Update')
-            UserChanges.objects.create(
+            GroupChanges.objects.create(
                     main_user = group.profile.user,
                     group_changed = group,
                     user = request.user,
@@ -484,7 +484,7 @@ def subusers_group(request):
                 })
             form_post.save()
             log = TypeChanges.objects.get(value='Update')
-            UserChanges.objects.create(
+            GroupChanges.objects.create(
                 main_user=profile_admin.user,
                 group_changed = group,
                 user = request.user,

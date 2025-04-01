@@ -121,6 +121,18 @@ class RegisterSubprofileGroup(forms.ModelForm):
                 }
             )
         )
+    
+    description = forms.CharField(
+        max_length=1000,
+        label='Descripción',
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                'placeholder':'Descripcion del grupo',
+                'class' : ''
+            }
+        )
+    )
     class Meta:
         model = SubprofilesGroup
         fields = ['name','image']
@@ -130,9 +142,8 @@ class RegisterSubprofileGroup(forms.ModelForm):
         self.user_pk = user_pk
         super().__init__(*args, **kwargs)
         
-    def create_subprofile_group(self):
+    def create_subprofile_group(self,image='default_group.jpg'):
         name = self.cleaned_data['name']
-        image = self.cleaned_data.get('image','default_group.jpg')
         permissions_group = self.cleaned_data['permissions']
         user = User.objects.get(pk = self.user_pk)
         profile = Profile.objects.get(user = user)
@@ -533,6 +544,18 @@ class EditSubprofileGroupForm(forms.ModelForm):
         label='Tipo de grupo:',
         widget=forms.Select(
             attrs={
+                'class' : ''
+            }
+        )
+    )
+    
+    description = forms.CharField(
+        max_length=1000,
+        label='Descripción',
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                'placeholder':'Descripcion del grupo',
                 'class' : ''
             }
         )
