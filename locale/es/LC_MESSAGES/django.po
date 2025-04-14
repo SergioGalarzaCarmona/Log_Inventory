@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-30 12:54-0500\n"
+"POT-Creation-Date: 2025-04-09 19:38-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,3 +19,26 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
+#: .\Users\functions.py:44
+msgid "Create"
+msgstr "Creación"
+
+#: .\Users\functions.py:45
+msgid "Update"
+msgstr "Actualización"
+
+#: .\Users\functions.py:46
+msgid "Delete"
+msgstr "Eliminación"
+
+#: .\Users\functions.py:63
+msgid "Change in"
+msgstr "Cambio en"
+
+#: .\Users\functions.py:63
+msgid "before"
+msgstr "antes"
+
+#: .\Users\functions.py:63
+msgid "after"
+msgstr "despues"

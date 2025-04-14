@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
-from .functions import create_parameterized_tables, create_description
+from .functions import create_parameterized_tables, create_description, get_description
 from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
@@ -515,10 +515,9 @@ def log_users(request):
             return render(request,'Users/error_403.html')
     except:
         return render(request,'Users/error_404.html')
-    query_users = UserChanges.objects.filter(main_user=profile_admin.user)
-    query_groups = GroupChanges.objects.filter(main_user=profile_admin.user)
-
-        
+    query_users = UserChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
+    query_groups = GroupChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
+    print(get_description('Change in username, before: Prueba_de_Descripcion, after: Prueba_de_Descripcion2'))
     if request.method == 'GET':
         return render(request,'Users/log_users.html',{
             'type' : type,

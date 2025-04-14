@@ -41,9 +41,9 @@ def create_parameterized_tables(function):
                 )
         if (TypeChanges.objects.all().count()) != 3:
             TypeChanges.objects.all().delete()
-            TypeChanges.objects.create(value="Create")
-            TypeChanges.objects.create(value="Update")
-            TypeChanges.objects.create(value="Delete")
+            TypeChanges.objects.create(value=_("Create"))
+            TypeChanges.objects.create(value=_("Update"))
+            TypeChanges.objects.create(value=_("Delete"))
         return function(*args, **kwargs)
     return wrapper
 
@@ -62,4 +62,11 @@ def create_description(object : object,type : str,**kwargs):
         }
     return '\n'.join([f'Change in {key}, before: {initial[key]}, after: {kwargs[key]}' for key in kwargs.keys() if initial[key] != kwargs[key]])
 
-    
+def get_description(description : str):
+    description = description.split('\n')
+    description = [i.split(' ') for i in description]
+    for i in description:
+        subdescription = [t.replace(',','') for t in i]
+        description.append(subdescription)
+    return description
+

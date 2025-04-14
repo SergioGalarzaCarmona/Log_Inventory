@@ -1,9 +1,4 @@
 {% load i18n %}
-{% with log_types= {
-    "create": _("Create"),
-    "update": _("Update"),
-    "delete": _("Delete")
-} %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,10 +9,18 @@
 </head>
 <body>
     <div>
-        {% for log in log_users%}
+        {% for log in log_users %}
         <div>
             <p>Usuario afectado: {{log.user_changed.username}}</p>
-            <p>Tipo de cambio:{% translate log_types|default:log.type_change.value %} </p>
+            <p>Tipo de cambio:{% trans log.type_change.value %} </p>
+            <p>Descripción: {% trans log.description %}</p>
+            <p>Fecha: {{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}} </p>
+            <form method="POST">
+                <input type="submit" value="Retroceder cambio">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{ log.user_changed.id }}">
+                <input type="hidden" name="log_id" value="{{ log.id }}">
+            </form>
         </div>
         {% endfor %}
     </div>
