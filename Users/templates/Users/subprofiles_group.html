@@ -33,7 +33,7 @@
                         <label class="delete-image material-symbols-outlined" for="delete_image">delete</label>
                     </div>
                 </label>
-                {% csrf_token %}
+                {% csrf_token %} 
                 <input type="number" value="{{form.instance.id}}" hidden name="id">
                 {{image_form}}
                 <input type="submit" id="id_submit" hidden>
@@ -62,16 +62,14 @@
                     {{form_post.errors.permissions}}
                     {%endif%}
                 </div>
-                <div class="group-description__container">
-                    {{form.description.label}}
-                    {{form.description}}
-                    {%if form.instance.pk == group.pk %}
-                    {{form_post.errors.description}}
-                    {%endif%}
-                </div>
                 <input type="submit" value="Guardar" class="save-button">
             </form>
             <div class="group-description__container">
+                {{form.description.label}}
+                {{form.description}}
+                {%if form.instance.pk == group.pk %}
+                {{form_post.errors.description}}
+                {%endif%}
             </div>
             <form method="POST">
                 {% csrf_token %}

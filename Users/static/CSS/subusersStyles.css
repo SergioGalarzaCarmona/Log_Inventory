@@ -102,17 +102,13 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 50dvh;
+    height: 82.5dvh;
     width: 50%;
     padding: 0 40px;
     border-radius: 20px;
     margin: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 50dvh) / 2) 25%;
-    background-color: var(--sidebar-color);
-}
-
-.forms-container form.create-subuser {
-    height: 82.5dvh;
     margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 82.5dvh) / 2);
+    background-color: var(--sidebar-color);
 }
 
 .forms-container input[type="submit"], .forms-container input[type="button"] {
@@ -135,7 +131,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
                 -7px -7px 0px #335a94;
 }
 
-.forms-container form input, form select {
+.forms-container form input, form select, textarea {
     background-color: #eee;
     border: none;
     margin: 8px 0;
@@ -151,7 +147,12 @@ form select {
     cursor: pointer;
 }
 
-.forms-container form input:focus {
+textarea {
+    height: 30dvh;
+    resize: none;
+}
+
+.forms-container form input:focus, form select:focus, textarea:focus {
     outline: var(--wood) 1px solid;
 }
 
@@ -288,12 +289,7 @@ td:first-child {
         padding: 0 20px;
     }
 
-    .forms-container form.create-group {
-        height: 35dvh;
-        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 35dvh) / 2);
-    }
-
-    .forms-container form.create-subuser {
+    .forms-container form {
         height: 65dvh;
         margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 65dvh) / 2);
     } 
@@ -312,34 +308,29 @@ td:first-child {
         margin-left: 5%;
         font-size: 2rem;
     }
+
+    textarea {
+        height: 25dvh;
+    }
 }
 
-@media (max-height: 840px) and (max-width: 1025px) {
-    .forms-container form.create-group {
-        height: 45dvh;
-        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 45dvh) / 2);
-    }
+@media (max-height: 840px) and (max-width: 1024px) {
 
-    .forms-container form.create-subuser {
+    .forms-container form {
         height: 80dvh;
         margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 75dvh) / 2);
     } 
 }
 
-@media (min-height: 1025px) and (max-width: 1025px) {
+@media (min-height: 1024px) and (max-width: 1024px) {
     .forms-container form{
         width: 70%;
         margin-left: 15%;
-    }
-    
-    .forms-container form.create-group {
-        height: 30dvh;
-        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 30dvh) / 2);
+        height: 60dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 60dvh) / 2);
     }
 
-    .forms-container form.create-subuser {
-        height: 50dvh;
-        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 50dvh) / 2);
-    } 
-    
+    textarea {
+        height: 20dvh;
+    }
 }
