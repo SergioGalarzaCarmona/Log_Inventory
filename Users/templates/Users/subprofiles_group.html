@@ -39,8 +39,38 @@
                 <input type="submit" id="id_submit" hidden>
             </form>
             <form method="POST" class="group-info"> 
-                {%csrf_token%}
+        {%csrf_token%}
                 <input type="number" value="{{form.instance.id}}" hidden name="id">
+                <div class="group-name__container">
+                    <label for="id_name">Nombre:</label>
+                    {{form.name}}
+                </div>
+                <div class="group-permissions__container">
+                    <label for="id_permissions">Tipo de grupo:</label>
+                    {{form.permissions}}
+                </div>
+                
+                <input type="submit" value="delete" class="delete-button material-symbols-outlined">
+                <input type="submit" value="Guardar" class="save-button">
+            </form>
+            <div class="group-description__container">
+                <label for="id_description">Descripción:</label>
+                {{form.description}}
+                <div>
+                    {%if form.instance.pk == group.pk %}
+                    {{form_post.errors.name}}
+                    {%endif%}
+                </div>
+                <div>
+                    {%if form.instance.pk == group.pk %}
+                    {{form_post.errors.permissions}}
+                    {%endif%}
+                </div>
+                <div>
+                    {%if form.instance.pk == group.pk %}
+                    {{form_post.errors.description}}
+                    {%endif%}
+                </div>
                 <div>
                     {%if form.instance.pk == group.pk %}
                     <ul class="errorlist">
@@ -48,28 +78,6 @@
                     </ul>
                     {%endif%}
                 </div>
-                <div class="group-name__container">
-                    {{form.name.label}}
-                    {{form.name}}
-                    {%if form.instance.pk == group.pk %}
-                    {{form_post.errors.name}}
-                    {%endif%}
-                </div>
-                <div class="group-permissions__container">
-                    {{form.permissions.label}}
-                    {{form.permissions}}
-                    {%if form.instance.pk == group.pk %}
-                    {{form_post.errors.permissions}}
-                    {%endif%}
-                </div>
-                <input type="submit" value="Guardar" class="save-button">
-            </form>
-            <div class="group-description__container">
-                {{form.description.label}}
-                {{form.description}}
-                {%if form.instance.pk == group.pk %}
-                {{form_post.errors.description}}
-                {%endif%}
             </div>
             <form method="POST">
                 {% csrf_token %}

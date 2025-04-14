@@ -77,7 +77,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 
 .group-container {
     width: 90%;
-    height: 22.5dvh;
+    height: 30dvh;
     margin: 2.5% 5%;
     display: grid;
     grid-template-columns: repeat(9, 1fr);
@@ -88,6 +88,26 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     background-color: var(--bg-color);
     border: #335a94 2px solid;
     border-radius: 8px;
+    background-color: #b8bec9;
+    position: absolute;
+}
+
+form input, form select, textarea {
+    background-color: #eee;
+    border: none;
+    padding: 7px 10.5px;
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 8px;
+    outline: none;
+}
+
+form select {
+    cursor: pointer;
+}
+
+form input:focus, form select:focus, textarea:focus {
+    outline: var(--wood) 1px solid;
 }
 
 .group-image {
@@ -150,27 +170,91 @@ label.material-symbols-outlined:hover {
     grid-column-start: 4;
     align-items: center;
     padding: 10px;
+    padding-bottom: 7.5px;
+    position: relative;
 }
 
 .group-name__container {
-    margin-right: 10px;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 2.5%;
+}
+
+.group-name__container input {
+    width: 80%;
+}
+
+.group-permissions__container {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.group-permissions__container select {
+    width: 50%;
 }
 
 .group-description__container {
-    grid-area: 2 / 4 / 4 / 9;
+    grid-area: 2 / 4 / 4 / 10;
     height: 100%;
     width: 100%;
     padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.group-description__container label {
+    margin-bottom: 2.5px;
 }
 
 .group-description__container > textarea {
-    width: 100%;
-    height: 70%;
+    width: calc(100% - 10px);
+    height: 55%;
+    resize: none;
+}
+
+.material-symbols-outlined.delete-button {
+    position: absolute;
+    right: 20px;
+    background-color: transparent;
+    color: crimson;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.material-symbols-outlined.delete-button:hover, .material-symbols-outlined.delete-button:focus {
+    filter: drop-shadow(0 0 5px #fff);
+    outline: none;
 }
 
 .save-button {
     position: relative;
-    top: 15dvh;
+    top: 22.5dvh;
+    right: 10px;
+    background-color: var(--fb-color);
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: background-color .3s, color .3s, outline .3s;
+}
+
+.save-button:hover {
+    background-color: var(--bg-color);
+    color: var(--fb-color);
+    outline: var(--wood) 1px solid;
+}
+
+.errorlist li {
+    color: #e24;
+    font-size: .9rem;
+    position: absolute;
+    list-style: none;
+    bottom: 10px;
 }
 
 
