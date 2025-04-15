@@ -89,10 +89,10 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     border: #335a94 2px solid;
     border-radius: 8px;
     background-color: #b8bec9;
-    position: absolute;
+    position: relative;
 }
 
-form input, form select, textarea {
+form input, .group-permissions__container > select, textarea {
     background-color: #eee;
     border: none;
     padding: 7px 10.5px;
@@ -100,6 +100,7 @@ form input, form select, textarea {
     font-family: inherit;
     border-radius: 8px;
     outline: none;
+    margin: 0;
 }
 
 form select {
@@ -214,6 +215,7 @@ label.material-symbols-outlined:hover {
     width: calc(100% - 10px);
     height: 55%;
     resize: none;
+    margin: 0;
 }
 
 .material-symbols-outlined.delete-button {
@@ -258,3 +260,70 @@ label.material-symbols-outlined:hover {
 }
 
 
+@media (max-width: 900px) {
+    .group-container {
+        width: 90%;
+        height: 35dvh;
+        margin: 2.5% 5%;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        overflow-y: auto;
+    }
+
+    .group-image {
+        width: 100%;
+        height: 30%;
+        padding: 0;
+        border-bottom: #335a94 2px solid;
+    }
+
+    .group-image img {
+        border: none;
+    }
+
+    .group-info {
+        width: 100%;
+        height: 20%;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .group-name__container, .group-permissions__container {
+        width: 70%;
+    }
+
+    .group-description__container {
+        width: 100%;
+        height: 40%;
+        padding: 0;
+        padding-left: 10px;
+        margin-top: 3vh;
+    }
+
+    .save-button {
+        top: 11dvh;
+        align-self: center;
+    }
+}
+
+@media (max-height: 840px) and (max-width: 900px) {
+    .group-container {
+        height: 50dvh;
+    }
+
+    .group-description__container {
+        margin-top: 5dvh;
+    }
+
+    .save-button {
+        top: 16dvh;
+    }
+}
+
+@media (min-height: 950px) and (max-width: 900px) {
+    .save-button {
+        top: 13dvh;
+    }
+}

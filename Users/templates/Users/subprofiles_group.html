@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/subprofilesGroupStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/subusersStyles.css'%}">
     <title>Manejo de Grupos</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Subusers Groups Log Inventory">
@@ -24,6 +25,33 @@
                 </div>
             </div>
         </div>
+        <div class="forms-container">
+            <nav>
+                <label for="create-subuser" class="material-symbols-outlined close-formSubuser hidden">arrow_back</label>
+                <label for="create-group" class="material-symbols-outlined close-formGroup hidden">arrow_back</label>
+            </nav>
+            <input type="checkbox" {{checked}} id="create-subuser">
+            <form class="create-subuser" id='form-subuser' enctype="multipart/form-data" method="POST">
+                {% csrf_token %}    
+                {{form}}
+                <input type="button" value="Crear Usuario" id="open-dialog">
+                <input type="submit" hidden id="submit">
+            </form>
+            <input type="checkbox" {{checked_group}} id="create-group">
+            <form class="create-group" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{group_form}}
+                <input type="submit" value="Crear Grupo">
+            </form>
+            <dialog id="group-dialog">
+                <label for="close-dialog" class="material-symbols-outlined">Close</label>
+                <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
+                <div>
+                    <button value=0 id="close-dialog">No</button>
+                    <button value=1 id="create">Si</button>
+                </div>
+            </dialog>
+        </div> 
         {% for form in forms %}
         <div class="group-container">
             <form method="POST" class="group-image" enctype="multipart/form-data">
@@ -89,5 +117,7 @@
         {% endfor %}
     </main>
     <script src="{%static '/SCRIPTS/profileScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/subusersScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
 </body>
 </html>
