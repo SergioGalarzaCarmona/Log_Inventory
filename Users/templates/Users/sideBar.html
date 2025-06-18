@@ -13,31 +13,49 @@
                 <div class="sidebar__item">
                     <a href="#" class="sidebar__item-link">
                         <span class="material-symbols-outlined">add</span>
-                        <p>Crear</p>
+                        <p>Crear Objeto</p>
                     </a>
                 </div> 
                 <div class="sidebar__item">
                     <a href="#" class="sidebar__item-link">
                         <span class="material-symbols-outlined">delete</span>
-                        <p>Eliminar</p>
+                        <p>Eliminar Objeto</p>
+                    </a>
+                </div>
+            </li>
+            {% endif %}
+            {% elif path == "group_object" or path == "subprofiles_group" %}
+            {% if permissions == 'admin' %}
+            <li class="sidebar__tools">
+                <p>Herramientas<span class="material-symbols-outlined">build</span></p>
+                <div class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">add</span>
+                        <p>Crear Grupo</p>
+                    </a>
+                </div> 
+                <div class="sidebar__item">
+                    <a href="#" class="sidebar__item-link">
+                        <span class="material-symbols-outlined">delete</span>
+                        <p>Eliminar Grupos</p>
                     </a>
                 </div>
             </li>
             {%endif%}
-            {% elif path == 'manage_subusers' or path == "subprofile" %}
+            {% elif path == "subprofiles_group" %}
             {% if permissions == 'admin' %}
             <li class="sidebar__tools">
                 <p>Herramientas<span class="material-symbols-outlined">build</span></p>
                 <div class="sidebar__item">
                     <label for="create-subuser" class="sidebar__item-link create-subuser-label">
                         <span class="material-symbols-outlined">person_add</span>
-                        <p>Crear Usuario</p>
+                        <p>Crear Grupo</p>
                     </label>
                 </div> 
                 <div class="sidebar__item">
                     <label for="create-group" class="sidebar__item-link create-group-label">
                         <span class="material-symbols-outlined">Group_add</span>
-                        <p>Crear Grupo</p>
+                        <p>Eliminar Grupos</p>
                     </label>
                 </div>
             </li>

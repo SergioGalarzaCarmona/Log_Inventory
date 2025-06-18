@@ -41,9 +41,9 @@ def create_parameterized_tables(function):
                 )
         if (TypeChanges.objects.all().count()) != 3:
             TypeChanges.objects.all().delete()
-            TypeChanges.objects.create(value=_("Create"))
-            TypeChanges.objects.create(value=_("Update"))
-            TypeChanges.objects.create(value=_("Delete"))
+            TypeChanges.objects.create(value="Create")
+            TypeChanges.objects.create(value="Update")
+            TypeChanges.objects.create(value="Delete")
         return function(*args, **kwargs)
     return wrapper
 
