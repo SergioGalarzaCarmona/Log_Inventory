@@ -37,42 +37,65 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     height: calc(2rem + 44.78px);
     background-color: var(--fb-color);
     container-name: filter-bar;
-    position: sticky;
-    top: 0;
-    z-index: 1;
 }
 
 .filter-bar__filter-container {
     height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    align-content: center;
+}
+
+.filter-bar__filter-container  > div, .filter-bar__filter-container > input  {
+    color: var(--bg-color);
+    display: grid;
+    place-content: center;
+}
+
+.filter-bar__filter-container > input {
+    background-color: transparent;
+    border: none;
+}
+
+.filter-bar__filter-container > input:hover {
+    color: #D2B48C;
+}
+
+.filter-bar__z-a {
+    transform: rotate(180deg);
+}
+
+.filter-bar__filter-container > .filter-bar__name {
+    display: flex;
+    flex-direction: row;
     align-items: center;
 }
 
-.filter-bar__filter-container > p {
-    max-width: clamp(100% - 42px, 100% - calc(28dvh - 5px), 100% - 210px);
-    height: 100%;
-    padding-left: 20px;
-    display: flex;
-    align-items: center;
-    color: var(--bg-color);
-    font-size: 1.8rem;
-    letter-spacing: 2px;
+.filter-bar__name > input {
+    height: auto;
+}
+
+.filter-bar__name > input[type="text"] {
+    width: 80%;
+    outline: none;
+}
+
+.filter-bar__name > input[type="submit"] {
+    width: 20%;
 }
 
 .filter-bar__filter-container > .filter-bar__logo-container {
     height: 100%;
-    padding-right: .75rem;
     display: flex;
     justify-content: end;
     align-items: center;
+    padding-right: .75rem;
 }
 
 .logo {
     height: clamp(15px, calc(10dvh - 5px), 75px);
     width: clamp(42px, calc(28dvh - 5px), 210px);
-    margin: 2.5px 0px;
+    margin: 2.5px 0;
 }
 
 .group-container {
