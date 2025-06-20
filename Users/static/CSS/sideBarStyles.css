@@ -139,7 +139,7 @@
 .close-menu {
     transition: font-weight .2s, color .2s;
 }
-
+ 
 input[type="checkbox"], .open-menu {
     display: none;
 }

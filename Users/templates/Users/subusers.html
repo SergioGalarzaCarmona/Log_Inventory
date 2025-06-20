@@ -12,14 +12,20 @@
     <meta name="description" content="Subusers Log Inventory">
     <meta name="author" content="Log Inventory">
     <meta name="robots" content="noindex, nofollow">
-</head> 
+</head>  
 <body>
     {% include 'Users/sideBar.html' with path='manage_subusers' profile=profile type=type permissions=permissions%}
     <main>
-        <div class="filter-bar"> 
-            <div class="filter-bar__filter-container">
-                <p>Usuarios</p>
-                <div class="filter-bar__logo-container">
+        <div class="filter-bar container"> 
+            <div class="filter-bar__filter-container row">
+                <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0">
+                <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0">
+                <input type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-md-1 col-3">
+                <div class="filter-bar__name col-md-4 col-8">
+                    <input type="text">
+                    <input value="search" type="submit" class="material-symbols-outlined">
+                </div>
+                <div class="filter-bar__logo-container col-md-5 col-0">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
             </div>

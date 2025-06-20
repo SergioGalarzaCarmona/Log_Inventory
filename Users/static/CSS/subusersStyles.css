@@ -36,6 +36,9 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     height: calc(2rem + 44.78px);
     background-color: var(--fb-color);
     container-name: filter-bar;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .filter-bar__filter-container {
@@ -70,6 +73,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     width: clamp(42px, calc(28dvh - 5px), 210px);
     margin: 2.5px 0px;
 }
+
 
 .close-formSubuser, .close-formGroup {
     position: absolute;
@@ -333,4 +337,4 @@ td:first-child {
     textarea {
         height: 20dvh;
     }
-}
+} 
