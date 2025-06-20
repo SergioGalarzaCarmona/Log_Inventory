@@ -8,10 +8,9 @@ from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChan
 from .functions import create_parameterized_tables, create_description, get_description
 from django.core.exceptions import ObjectDoesNotExist
 
-# Create your views here.
-
-
-
+###################################
+### ALL VIEWS HAVE DECORATOR @create_parameterized_tables TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
+###################################
 
 class Error404View(TemplateView):
     template_name = 'Users/error_404.html'
@@ -20,7 +19,7 @@ class Error404View(TemplateView):
 def home(request):
     return render(request, 'Users/home.html')
 
-#Function used in other view
+#Function to log in user on app
 def logIn(request):
     #authenticate user
     user = authenticate(username=request.POST['username'], password=request.POST['password'], is_active=True)
@@ -36,6 +35,7 @@ def logIn(request):
             'error': 'Usuario o contraseña incorrectos'
         })
 
+#Function to register users on app
 def signUp(request):
     #str with one css class
     class_h2 = "no-margin"
@@ -60,6 +60,7 @@ def signUp(request):
     return redirect('main')
 
 @create_parameterized_tables
+#View to manage log in ang register of users
 def authenticate_user(request,type):
     if request.method == 'GET':
         return render(request, 'Users/authenticate.html',{
@@ -80,6 +81,7 @@ def Logout(request):
 
 @create_parameterized_tables
 @login_required
+#View to show the main page of the app, with the profile of the user
 def main(request):
     
     #verifie if the request.user is a profile or a subprofile
@@ -99,16 +101,21 @@ def main(request):
 
 @create_parameterized_tables
 @login_required
+#View to show the profile of the user, with the form to edit the user
 def profile(request,username):
+    #verifie that exist one user with this name
     try:
         user = User.objects.get(username=username)
         user_pk = user.pk
     except:
         return render(request, 'Users/error_404.html')  
+    #Get user from request to validate if the user is the same that the username in the url
     if request.user != user:
         logout(request)
         return redirect('/authenticate_user/deactivate')
+    #Get profile from the user
     profile = Profile.objects.get(user=request.user)
+    #Always the user permissions is admin, because the profile is main account
     permissions = 'admin'
     form = EditUserForm(user_pk = user_pk,instance=user)
     if request.method == 'GET':
@@ -120,6 +127,7 @@ def profile(request,username):
             'permissions' : permissions
         })
     else:
+        #Verifie what type of request is, if is a image(to update image) or delete image, or update user data
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
         if image:
@@ -145,9 +153,10 @@ def profile(request,username):
                     'permissions' : permissions
                 })
         else:
-            
+            #Create a new form with the data of the request.POST, and the initial data of the form
             form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = user_pk)
-            data = form_post.data            
+            data = form_post.data         
+            #if the user email and username are the same that the data of the form, return a message that the data has not been updated   
             if user.email == data['email'] and user.username == data['username']:
                 return render(request, 'Users/profile.html',{
                     'profile': profile,
@@ -156,6 +165,7 @@ def profile(request,username):
                     'image_form' : SetImageForm(),
                     'permissions' : permissions
                 })
+            #if the form is not valid, return the form with the errors
             if not form_post.is_valid():
                 return render(request, 'Users/profile.html',{
                 'profile': profile,
@@ -164,12 +174,15 @@ def profile(request,username):
                 'image_form' : SetImageForm(),
                 'permissions' : permissions
             })
+            #if the form is valid, update the user with the data of the form
             user = User.objects.filter(pk=user_pk).update(username=data['username'],email=data['email']) 
             return redirect('main')
      
 @create_parameterized_tables   
 @login_required
+#view to manage subusers 
 def manage_subusers(request):
+    #verifie if the request.user is a profile or a subprofile
     try:
         profile = Profile.objects.get(user=request.user)
         profile_admin = profile        
@@ -178,8 +191,10 @@ def manage_subusers(request):
         profile = Subprofile.objects.get(user=request.user)
         profile_admin = profile.profile
         permissions = profile.group.permissions.name
+        #if the permissions of the subprofile is 'Estudiante', return a 403 error
         if permissions == 'Estudiante':
             return render(request,'Users/error_403.html')
+    #Get all subusers of the profile(main account)
     subusers = Subprofile.objects.filter(profile=profile_admin)
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
@@ -191,6 +206,7 @@ def manage_subusers(request):
         'permissions' : permissions
     })
     else:
+        #Get the username from the request.POST, if exist, is to create a subuser, if not, is to create a subprofile group
         create_subuser = request.POST.get('username', False)
         if create_subuser:
             form = RegisterSubuser(request.POST,request.FILES,user_pk = request.user.pk)
