@@ -22,7 +22,7 @@
             <div class="filter-bar__filter-container row">
                 <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0">
                 <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0">
-                <input onclick="window.location.href='/manage_users';" type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-md-1 col-3">
+                <input onclick="window.location.href='/manage_subusers';" type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-md-1 col-3">
                 <div class="filter-bar__name col-md-4 col-8">
                     <input type="text">
                     <input value="search" type="submit" class="material-symbols-outlined">
@@ -38,14 +38,14 @@
                 <label for="create-group" class="material-symbols-outlined close-formGroup hidden">arrow_back</label>
             </nav>
             <input type="checkbox" {{checked}} id="create-subuser">
-            <form class="create-subuser" id='form-subuser' enctype="multipart/form-data" method="POST">
+            <form class="create-subuser" id='form-subuser' action="{% url 'manage_subusers' %}" enctype="multipart/form-data" method="POST">
                 {% csrf_token %}    
-                {{form}}
+                {{subuser_form}}
                 <input type="button" value="Crear Usuario" id="open-dialog">
                 <input type="submit" hidden id="submit">
             </form>
             <input type="checkbox" {{checked_group}} id="create-group">
-            <form class="create-group" method="POST" enctype="multipart/form-data">
+            <form class="create-group" method="POST" action="{% url 'manage_subusers' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{group_form}}
                 <input type="submit" value="Crear Grupo">
@@ -62,19 +62,22 @@
         {% for form in forms %}
         <div class="group-container">
             <form method="POST" class="group-image" enctype="multipart/form-data">
-                <label for="id_image">
+                <label for="id_image_{{form.instance.id}}">
                     <img src="../../../media/{{form.instance.image}}" alt="Group Image">
                     <div class="image-overlay">
-                        <label class="delete-image material-symbols-outlined" for="delete_image">delete</label>
+                        <label class="delete-image material-symbols-outlined" for="delete_image_{{form.instance.id}}">delete</label>
                     </div>
                 </label>
                 {% csrf_token %} 
                 <input type="number" value="{{form.instance.id}}" hidden name="id">
-                {{image_form}}
-                <input type="submit" id="id_submit" hidden>
+                <div>
+                    <label for="id_image_{{form.instance.id}}" >Imagen de Perfil:</label>
+                    <input type="file" name="image" class="" accept="image/*" required="" id="id_image_{{form.instance.id}}" >
+                </div>
+                <input type="submit" id="id_submit_{{form.instance.id}}" hidden>
             </form>
-            <form method="POST" class="group-info"> 
-        {%csrf_token%}
+            <form method="POST" id="{{form.instance.id}}_form" class="group-info"> 
+                {%csrf_token%}
                 <input type="number" value="{{form.instance.id}}" hidden name="id">
                 <div class="group-name__container">
                     <label for="id_name">Nombre:</label>
@@ -89,8 +92,8 @@
                 <input type="submit" value="Guardar" class="save-button">
             </form>
             <div class="group-description__container">
-                <label for="id_description">Descripción:</label>
-                {{form.description}}
+                <label for="id_description_{{form.instance.id}}">Descripción:</label>
+                <textarea form="{{form.instance.id}}_form"  name="description" cols="40" rows="10" maxlength="1000" id="id_description_{{form.instance.id}}" placeholder="Descripción del grupo">{{form.description.value}}</textarea>
                 <div>
                     {%if form.instance.pk == group.pk %}
                     {{form_post.errors.name}}
@@ -117,8 +120,8 @@
             <form method="POST">
                 {% csrf_token %}
                 <input type="number" value="{{form.instance.id}}" hidden name="id">
-                <input type="checkbox" name="delete_image" checked id="id_delete_checkbox" hidden>
-                <input type="submit" id="delete_image" value="submit" hidden>
+                <input type="checkbox" name="delete_image" checked id="id_delete_checkbox_{{form.instance.id}}" hidden>
+                <input type="submit" id="delete_image_{{form.instance.id}}" value="submit" on_click="" hidden>
             </form>
         </div>
         {% endfor %}

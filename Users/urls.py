@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, authenticate_user, main, Logout, profile, manage_subusers, subprofile, subusers_group, log_users
+from .views import home, authenticate_user, main, Logout, profile, manage_subusers, subprofile, manage_subusers_group, log_users
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
@@ -17,8 +17,8 @@ urlpatterns = [
     path('change_password_done/', PasswordChangeDoneView.as_view(template_name = 'Users/password_reset_complete.html'), name='change_password_done'),
     path('work_space/', main, name='main'),
     path('profile/<str:username>', profile, name='profile'),
-    path('manage_users/',manage_subusers, name='manage_subusers'),
+    path('manage_subusers/',manage_subusers, name='manage_subusers'),
     path('subprofile/<str:username>',subprofile, name='subprofile'),
-    path('subusers_group/',subusers_group,name='subusers_group'),
+    path('subusers_group/',manage_subusers_group,name='subusers_group'),
     path('user_log/',log_users, name='user_log'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

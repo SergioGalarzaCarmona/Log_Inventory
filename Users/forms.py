@@ -14,8 +14,7 @@ class RegisterUser(UserCreationForm):
         required=False, 
         widget=forms.FileInput(
             attrs={
-                'class' : ''
-                }
+                'class' : ''                }
             )
         )
     username = forms.CharField(
@@ -145,9 +144,11 @@ class RegisterSubprofileGroup(forms.ModelForm):
     def create_subprofile_group(self,image='default_group.jpg'):
         name = self.cleaned_data['name']
         permissions_group = self.cleaned_data['permissions']
+        description = self.cleaned_data['description']
         user = User.objects.get(pk = self.user_pk)
         profile = Profile.objects.get(user = user)
-        return SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions_group)
+        
+        return SubprofilesGroup.objects.create(profile=profile,name=name,image=image,permissions=permissions_group, description=description)
     
     def clean_name(self):
         name = self.cleaned_data['name']
@@ -526,10 +527,6 @@ class EditSubprofileGroupForm(forms.ModelForm):
         required = True, 
         label= 'Nombre del grupo:',
         widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Nombre del Grupo',
-                'class' : ''
-                }
             ),
         error_messages={
             'is_too_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
@@ -543,9 +540,6 @@ class EditSubprofileGroupForm(forms.ModelForm):
         required=True,
         label='Tipo de grupo:',
         widget=forms.Select(
-            attrs={
-                'class' : ''
-            }
         )
     )
     
@@ -554,10 +548,6 @@ class EditSubprofileGroupForm(forms.ModelForm):
         label='Descripción',
         required=False,
         widget=forms.Textarea(
-            attrs={
-                'placeholder':'Descripcion del grupo',
-                'class' : ''
-            }
         )
     )
     def __init__(self, *args, **kwargs):
@@ -565,6 +555,14 @@ class EditSubprofileGroupForm(forms.ModelForm):
         self.user_pk = user_pk
         super().__init__(*args,**kwargs)
         self.fields['permissions'].initial = self.instance.permissions
+        self.fields['name'].widget.attrs = {
+            'id' : f'id_name_{self.instance.pk}',
+            'placeholder': 'Nombre del Grupo',
+        }
+        self.fields['permissions'].widget.attrs = {
+            'id' : f'id_permissions_{self.instance.pk}',
+            
+        }
         
     def clean_name(self):
         name = self.cleaned_data['name']
@@ -586,7 +584,7 @@ class EditSubprofileGroupForm(forms.ModelForm):
 
     class Meta:
         model = SubprofilesGroup
-        fields = ['id','name','permissions']
+        fields = ['name','permissions','description']
 class SetImageForm(forms.Form):
     image = forms.ImageField(
         label='Imagen de Perfil',
