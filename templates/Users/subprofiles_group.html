@@ -53,12 +53,13 @@
             <dialog id="group-dialog">
                 <label for="close-dialog" class="material-symbols-outlined">Close</label>
                 <p>Para poder crear un usuario necesita un grupo primero, ¿Desea crear un grupo?</p>
-                <div>
+                <div> 
                     <button value=0 id="close-dialog">No</button>
                     <button value=1 id="create">Si</button>
                 </div>
             </dialog>
-        </div> 
+        </div>
+        <div class="groups">
         {% for form in forms %}
         <div class="group-container">
             <form method="POST" class="group-image" enctype="multipart/form-data">
@@ -122,9 +123,10 @@
             </form>
         </div>
         {% endfor %}
+        </div>
     </main>
     <script src="{%static '/SCRIPTS/profileScript.js'%}"></script>
-    <script src="{%static '/SCRIPTS/subusersScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/subusersgroupScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
 </body>
 </html>
