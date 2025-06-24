@@ -7,6 +7,20 @@ body, div, ul, li, a, h1, h2, h3, h4, p {
     padding: 0;
 }
 
+
+label, .sidebar__nav {
+    user-select: none;
+}
+
+.container {
+    margin: 0;
+    padding: 0; 
+}
+
+.row {
+    margin: 0;
+}
+
 body {
     --bg-color: #fff;
     --sidebar-color: color-mix(in srgb, #000 25%, #fff);
@@ -282,6 +296,21 @@ label.material-symbols-outlined:hover {
     bottom: 10px;
 }
 
+@media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+
+    .filter-bar__filter-container > .filter-bar__z-a , .filter-bar__filter-container > .filter-bar__a-z, .filter-bar__filter-container > .filter-bar__logo-container {
+        display: none;
+    }
+
+    .sidebar__form {
+        display: none;
+    }
+}
+
+
 
 @media (max-width: 900px) {
     .group-container {
@@ -348,5 +377,11 @@ label.material-symbols-outlined:hover {
 @media (min-height: 950px) and (max-width: 900px) {
     .save-button {
         top: 13dvh;
+    }
+}
+
+@media (min-width: 576px) {
+    .container, .container-sm {
+        max-width: 100%;
     }
 }

@@ -13,7 +13,7 @@ label, .sidebar__nav {
 
 .container {
     margin: 0;
-    padding: 0;
+    padding: 0; 
 }
 
 .row {
@@ -144,3 +144,8 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     }
 }
 
+@media (min-width: 576px) {
+    .container, .container-sm {
+        max-width: 100%;
+    }
+}

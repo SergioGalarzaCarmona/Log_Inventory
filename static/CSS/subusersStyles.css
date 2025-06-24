@@ -7,6 +7,20 @@ body, div, ul, li, a, h1, h2, h3, h4, p {
     padding: 0;
 }
 
+
+label, .sidebar__nav {
+    user-select: none;
+}
+
+.container {
+    margin: 0;
+    padding: 0; 
+}
+
+.row {
+    margin: 0;
+}
+
 body {
     --bg-color: #fff;
     --sidebar-color: color-mix(in srgb, #000 25%, #fff);
@@ -16,7 +30,7 @@ body {
     background-color: var(--bg-color);
     font-family: Montserrat;
 }
-
+ 
 main {
     height: 100dvh;
     width: clamp(calc(100dvw - 300px), 80dvw, calc(100dvw - 220px));
@@ -301,6 +315,22 @@ td:first-child {
 }
 
 @media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+
+    .filter-bar__filter-container > .filter-bar__z-a , .filter-bar__filter-container > .filter-bar__a-z, .filter-bar__filter-container > .filter-bar__logo-container {
+        display: none;
+    }
+
+    .sidebar__form {
+        display: none;
+    }
+}
+
+
+
+@media (max-width: 768px) {
     .sidebar__form, .filter-bar__filter-container > .filter-bar__logo-container {
         display: none;
     }
@@ -360,3 +390,9 @@ td:first-child {
         height: 20dvh;
     }
 } 
+
+@media (min-width: 576px) {
+    .container, .container-sm {
+        max-width: 100%;
+    }
+}
