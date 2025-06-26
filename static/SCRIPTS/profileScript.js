@@ -1,9 +1,12 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const input_image = document.getElementById('id_image')
-
-    input_image.addEventListener('input',function (){
-        document.getElementById('id_submit').click()
-    })
+document.querySelectorAll('input[type="file"]').forEach(input => {
+    input.addEventListener('change', ()=> {
+        id = input.id;
+        instance_id = id.split('_')[2];
+        const button_submit = document.getElementById(`id_submit_${instance_id}`);
+        if (button_submit) {
+            button_submit.click();
+        }
+    });
 })
 
 const delete_button = document.getElementById('id_delete_button')
