@@ -1,0 +1,75 @@
+:root {
+  --blue-primary: #003366;
+  --gray-bg: color-mix(in srgb, #000 25%, #fff);
+  --gray-border: #ccc;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.history-container {
+  background-color: white;
+  border: 1px solid var(--gray-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.history-title {
+  color: var(--blue-primary);
+  font-size: 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timeline {
+  border-left: 3px solid var(--blue-primary);
+  padding-left: 20px;
+  margin-left: 10px;
+  position: relative;
+}
+
+.timeline-entry {
+  position: relative;
+  margin-bottom: 25px;
+  padding-left: 10px;
+}
+
+.timeline-entry::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  background-color: var(--blue-primary);
+  border-radius: 50%;
+}
+
+.entry-time {
+  font-size: 12px;
+  color: #666;
+}
+
+.entry-user {
+  font-weight: bold;
+  color: var(--blue-primary);
+}
+
+.entry-description {
+  background-color: var(--gray-bg);
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+  font-size: 14px;
+}

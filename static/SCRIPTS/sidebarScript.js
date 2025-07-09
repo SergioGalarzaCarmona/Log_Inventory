@@ -10,7 +10,7 @@ function checkWidth() {
 }
 
 checkWidth();
-window.addEventListener('resize', checkWidth);
+window.addEventListener('resize', checkWidth); 
 
 const span = document.getElementById('username');
 const username = span.textContent;

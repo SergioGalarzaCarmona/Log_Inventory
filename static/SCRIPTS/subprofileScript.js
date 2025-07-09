@@ -1,3 +1,4 @@
+// this script handles password change functionality if the user is an admin or has the permission to change passwords(subprofilesForm)
 const new_password = () => {
     const checkbox = document.getElementById('change_password')
     const pivot_password = document.getElementById('pivot_password')

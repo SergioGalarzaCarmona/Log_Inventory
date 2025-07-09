@@ -5,44 +5,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de usuarios</title>
+    <link rel="stylesheet" href="{% static 'CSS/logUsersStyles.css' %}">
+    <title></title>
 </head>
 <body>
-    <div>
-        <h2>Cambios de usuarios</h2>
-        {% for log in log_users %}
-        <div>
-            <p>Usuario afectado: {{log.user_changed.username}}</p>
-            <p>Tipo de cambio:{% trans log.type_change.value %} </p>
-            <p>Descripción: {% trans log.description %}</p>
-            <p>Fecha: {{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}} </p>
-            <form method="POST">
-                <input type="submit" value="Retroceder cambio">
-                {% csrf_token %}
-                <input type="hidden" name="user_id" value="{{ log.user_changed.id }}">
-                <input type="hidden" name="log_id" value="{{ log.id }}">
-            </form>
-        </div>
-        {% endfor %}
-
+  <div class="history-container">
+  <div class="history-title">
+    <span>📘</span> Historial de Cambios
+  </div>
+  
+  <div class="timeline">
+    <div class="timeline-entry">
+      {% for log in log_groups %}
+      <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
+      <div class="entry-user">{{log.group_changed.name}}</div>
+      <div class="entry-description">
+        {% trans log.description %}
+      </div>
+      {% endfor %}
     </div>
-    <div>
-        <h2>Cambios de grupos</h2>
-        {% for log in log_groups %}
-        <div>
-            <p>Usuario afectado: {{log.group_changed.name}}</p>
-            <p>Tipo de cambio:{% trans log.type_change.value %} </p>
-            <p>Descripción: {% trans log.description %}</p>
-            <p>Fecha: {{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}} </p>
-            <form method="POST">
-                <input type="submit" value="Retroceder cambio">
-                {% csrf_token %}
-                <input type="hidden" name="user_id" value="{{ log.user_changed.id }}">
-                <input type="hidden" name="log_id" value="{{ log.id }}">
-            </form>
-        </div>
-        {% endfor %}
-
+    <!-- Más entradas aquí -->
     </div>
+  </div>
+  <div class="history-container">
+  <div class="history-title">
+    <span>📘</span> Historial de Cambios
+  </div>
+  <div class="timeline">
+    <div class="timeline-entry">
+      {% for log in log_users %}
+      <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
+      <div class="entry-user">{{log.user_changed.username}}</div>
+      <div class="entry-description">
+        {% trans log.description %}
+      </div>
+      {% endfor %}
+    </div>
+    <!-- Más entradas aquí -->
+    </div>
+  </div>
+
 </body>
 </html>

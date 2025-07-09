@@ -80,7 +80,11 @@
                     {{form_post.errors.password}}
                     <div>
                         <input type='password' name='password_support' id="password_id_support"  placeholder='Password' disabled value='password'>
-                        <a title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>
+                        {% if permissions != 'Estudiante' %}
+                        <input type="checkbox" name="checkbox" title="Cambiar Contraseña"><span class="material-symbols-outlined">edit</span></a>
+                        {% else %}
+                        <input title="Cambiar Contraseña" href="{% url 'change_password' %}"><span class="material-symbols-outlined">edit</span></a>
+                        {% endif %}
                     </div>
                 </div>
                 <input type="checkbox" value="Actualizar">

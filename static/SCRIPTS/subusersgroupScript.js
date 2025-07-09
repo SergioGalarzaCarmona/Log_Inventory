@@ -1,3 +1,4 @@
+// This script handles that the subuser always belongs to a group, and if the group isn't selected, it opens a dialog to create a new group(subusersGroupForm)
 function validateGroup(){
     const select = document.getElementById('id_group');
     const option = select.children[0]
@@ -17,6 +18,10 @@ function validateGroup(){
         document.getElementById('submit').click();
     }
 }
+
+
+
+// This script handles both forms for creating a group or a subuser.(view forms subusersGroupForm and subusersForm)
 const select = document.getElementById('open-dialog');
 select.addEventListener('click', validateGroup)
 const label_group = document.querySelector('.create-group-label');

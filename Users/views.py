@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
-from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm
+from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm, SetPassword
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
 from .functions import create_parameterized_tables, create_description, get_description
 from django.core.exceptions import ObjectDoesNotExist
@@ -302,7 +302,8 @@ def subprofile(request,username):
             'form' : form,
             'image_form' : SetImageForm(),
             'type' : type,
-            'permissions' : permissions
+            'permissions' : permissions,
+            'password_form' : SetPassword(user=subuser),
         })
     else:
         image = request.FILES.get('image',False)
@@ -327,7 +328,8 @@ def subprofile(request,username):
                     'form' : form,
                     'image_form' : SetImageForm(),
                     'type' : type,
-                    'permissions' : permissions
+                    'permissions' : permissions,
+                    'password_form' : SetPassword(user=subuser),
             })
         elif delete_image:
             image_before = subprofile.image.name
@@ -349,7 +351,8 @@ def subprofile(request,username):
                     'form' : form,
                     'image_form' : SetImageForm(),
                     'type' : type,
-                    'permissions' : permissions
+                    'permissions' : permissions,
+                    'password_form' : SetPassword(user=subuser),
                 })
         else:
             form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = subuser_pk)
@@ -361,7 +364,8 @@ def subprofile(request,username):
                     'form' : form,
                     'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
-                    'permissions' : permissions
+                    'permissions' : permissions,
+                    'password_form' : SetPassword(user=subuser),
                 })
             if not form_post.is_valid():
                 return render(request, 'Users/subprofile.html',{
@@ -371,7 +375,8 @@ def subprofile(request,username):
                     'form_post' : form_post,
                     'image_form' : SetImageForm(),
                     'type' : type,
-                    'permissions' : permissions
+                    'permissions' : permissions,
+                    'password_form' : SetPassword(user=subuser),
             })
             user = User.objects.get(pk=subuser_pk)
             User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
