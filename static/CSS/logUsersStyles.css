@@ -166,3 +166,18 @@ aside:has(input[type="checkbox"]:checked) ~ main {
   margin-top: 5px;
   font-size: 14px;
 }
+
+@media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+
+    .sidebar__form {
+        display: none;
+    }
+
+    .history-container {
+      padding: 10px;
+      margin-top: 2dvh;
+    }
+}
