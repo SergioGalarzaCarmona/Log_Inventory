@@ -20,15 +20,17 @@
     <main> 
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
-                <label id="subusersLog-label" class="material-symbols-outlined col-2">manage_accounts</label>
-                <label id="subusersgroupsLog-label" class="material-symbols-outlined col-2">groups</label>
-                <label id="objectsLog-label" class="material-symbols-outlined col-2">view_object_track</label>
-                <div class="filter-bar__logo-container col-md-5 col-0">
+                <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersLog" id="subusersLog-label">manage_accounts</label></div>
+                <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersgroupsLog" id="subusersgroupsLog-label">groups</label></div>
+                <div class="material-symbols-outlined col-md-1 col-3"><label id="objectsLog-label">view_object_track</label></div>
+                <div class="material-symbols-outlined col-md-1 col-3"><label id="objectsLog-label">view_object_track</label></div>
+                <div class="filter-bar__logo-container col-md-8 col-0">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
             </div> 
         </div>
-        <div class="history-container"> 
+        <input type="checkbox" id="subusersLog" class="filter-bar__checkbox">
+        <div class="history-container subusersLog"> 
           <div class="history-title">
             <span class="material-symbols-outlined">event_note</span> Historial de Cambios
           </div>
@@ -45,7 +47,8 @@
             <!-- Más entradas aquí -->
           </div>
         </div>
-        <div class="history-container">
+        <input type="checkbox" id="subusersgroupsLog" class="filter-bar__checkbox">
+        <div class="history-container subusersgroupsLog">
           <div class="history-title">
             <span class="material-symbols-outlined">event_note</span> Historial de Cambios
           </div>
@@ -64,5 +67,6 @@
         </div>
     </main>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
+    <script src="{% static 'SCRIPTS/logScript.js' %}"></script>
 </body>
 </html>
