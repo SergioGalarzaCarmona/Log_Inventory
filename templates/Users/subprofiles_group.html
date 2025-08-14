@@ -89,7 +89,7 @@
                     {{form.permissions}}
                 </div>
                 
-                <input type="submit" value="delete" class="delete-button material-symbols-outlined">
+                <input type="submit" value="delete" class="delete-button material-symbols-outlined" form="delete_group_{{form.instance.id}}">
                 <input type="submit" value="Guardar" class="save-button">
             </form>
             <div class="group-description__container">
@@ -123,6 +123,11 @@
                 <input type="number" value="{{form.instance.id}}" hidden name="id">
                 <input type="checkbox" name="delete_image" checked id="id_delete_checkbox_{{form.instance.id}}" hidden>
                 <input type="submit" id="delete_image_{{form.instance.id}}" value="submit" on_click="" hidden>
+            </form>
+            <form  class="hidden" id="delete_group_{{form.instance.id}}" method="POST">
+                {% csrf_token %}
+                <input type="number" value="{{form.instance.id}}" hidden name="id">
+                <input type="checkbox" name="delete_group" id="id_delete_group_{{form.instance.id}}" checked hidden>
             </form>
         </div>
         {% endfor %}

@@ -1,19 +1,33 @@
 // this script handles password change functionality if the user is an admin or has the permission to change passwords(subprofilesForm)
-const new_password = () => {
-    const checkbox = document.getElementById('change_password')
-    const pivot_password = document.getElementById('pivot_password')
-    const form = document.getElementById('set_password_form')
-    const change_password = document.getElementById('open-dialog')
-    if (checkbox.checked == true){
-        form.style.display = 'block';
-        pivot_password.style.display = 'none';
-        change_password.style.display = 'none';
-    }
+const passwordInput = document.getElementById('id_new_password1');
+const passwordConfirm = document.querySelector('.container-password');
+const passwordConfirmInput = document.getElementById('id_new_password2');
 
-    else {
-        form.style.display = 'none';
-        pivot_password.style.display = 'block';
-        change_password.style.display = 'block';
+passwordInput.addEventListener('focus', ()=> {
+    if (passwordInput.value === 'passwordNow'){
+        passwordInput.value = '';
     }
-        
-}
+    
+});
+
+passwordInput.addEventListener('blur',()=> {
+    if (passwordInput.value === '') {
+        passwordInput.value = 'passwordNow';
+        passwordInput.removeAttribute('required');
+        passwordConfirmInput.removeAttribute('required');
+    }
+});
+
+passwordInput.addEventListener('input',()=> {
+    passwordInput.setAttribute('required','')
+    passwordConfirmInput.setAttribute('required','')
+    if (passwordInput.value.trim() === '') {
+        passwordConfirm.classList.remove('show-password');
+        passwordConfirm.classList.add('hidden');
+    }
+    else {
+        passwordConfirm.classList.remove('hidden');
+        passwordConfirm.classList.add('show-password');
+    }
+   
+})

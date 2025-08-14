@@ -308,6 +308,7 @@ def subprofile(request,username):
     else:
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
+        change_password = request.POST.get('new_password2',False)
         if image:
             image_before = subprofile.image.name
             if image_before == 'default.jpg':
@@ -355,9 +356,9 @@ def subprofile(request,username):
                     'password_form' : SetPassword(user=subuser),
                 })
         else:
-            form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = subuser_pk)
-            data = form_post.data            
-            if user.email == data['email'] and user.username == data['username']:
+            form_post = EditUserForm(request.POST,initial=form.initial,instance= subuser,user_pk = subuser_pk)
+            data = form_post.data
+            if subuser.email == data['email'] and subuser.username == data['username'] and change_password == False:
                 return render(request, 'Users/subprofile.html',{
                     'subprofile': subprofile,
                     'profile' : profile,
@@ -367,6 +368,27 @@ def subprofile(request,username):
                     'permissions' : permissions,
                     'password_form' : SetPassword(user=subuser),
                 })
+            if change_password:
+                password_form = SetPassword(request.POST)
+                if not password_form.is_valid():
+                    return render(request, 'Users/subprofile.html',{
+                        'subprofile': subprofile,
+                        'profile' : profile,
+                        'form' : form,
+                        'image_form' : SetImageForm(),
+                        'type' : type,
+                        'permissions' : permissions,
+                        'password_form' : password_form,
+                    })
+                password_form.save()
+                log = TypeChanges.objects.get(value='Update')
+                UserChanges.objects.create(
+                    main_user = subprofile.profile.user,
+                    user_changed = subuser,
+                    user = request.user,
+                    description=f'Change in password',
+                    type_change = log
+                )
             if not form_post.is_valid():
                 return render(request, 'Users/subprofile.html',{
                     'subprofile': subprofile,
@@ -378,6 +400,7 @@ def subprofile(request,username):
                     'permissions' : permissions,
                     'password_form' : SetPassword(user=subuser),
             })
+            
             user = User.objects.get(pk=subuser_pk)
             User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
             log = TypeChanges.objects.get(value='Update')
@@ -416,7 +439,7 @@ def manage_subusers_group(request):
             return render(request,'Users/error_403.html')
     except:
         return render(request,'Users/error_404.html')
-    query_subgroups = SubprofilesGroup.objects.filter(profile=profile_admin)
+    query_subgroups = SubprofilesGroup.objects.filter(profile=profile_admin, is_active=True)
     forms = []
     for group in query_subgroups:
         form = EditSubprofileGroupForm(instance=group,user_pk=user_pk)
@@ -435,6 +458,9 @@ def manage_subusers_group(request):
     else:
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
+        delete_group = request.POST.get('delete_group',False)
+        print(request.POST['delete_group'])
+        print(delete_group)
         if image:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
             image_before = group.image.name
@@ -466,6 +492,31 @@ def manage_subusers_group(request):
                     description=f'Change in image, before: "{image_before}", after: ""',
                     type_change = log
             )
+            return redirect('subusers_group')
+        elif delete_group:
+            group = SubprofilesGroup.objects.get(pk = request.POST['id'])
+            subprofiles = Subprofile.objects.filter(group=group)
+            if subprofiles.count() > 0:
+                return render(request,'Users/subprofiles_group.html',{
+                    'type' : type,
+                    'profile' : profile,
+                    'permissions' : permissions,
+                    'forms' : forms,
+                    'image_form' : SetImageForm(),
+                    'groups' : query_subgroups,
+                    'subuser_form': RegisterSubuser(user_pk = request.user.pk),
+                    'group_form': RegisterSubprofileGroup(),
+                    'message' : 'No se puede eliminar el grupo porque tiene subusuarios asociados',
+                })
+            log = TypeChanges.objects.get(value='Delete')
+            GroupChanges.objects.create(
+                main_user=profile_admin.user,
+                group_changed = group,
+                user = request.user,
+                description=f'Delete group {group.name} with permissions {group.permissions.name}',
+                type_change=log)
+            group.is_active = False
+            group.save()
             return redirect('subusers_group')
         else:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])

@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 from django import forms
 from .models import Profile, Subprofile, SubprofilesGroup, PermissionsGroup
 from django.core.exceptions import ValidationError
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
 
 #Forms to register users and subusers
 class RegisterUser(UserCreationForm):
@@ -217,7 +215,7 @@ class RegisterSubuser(UserCreationForm):
                 profile = Profile.objects.get(user=user)
             except Profile.DoesNotExist:
                 profile = None
-            self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile) 
+            self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile, is_active=True) 
 
     def create_subprofile(self,user, group_id,image):
         main_user = User.objects.get(pk = self.user_pk)
@@ -333,6 +331,7 @@ class SetPassword(SetPasswordForm):
         )
     class Meta:
         fields = ['new_password1', 'new_password2']
+
 
 #Forms to edit the user's or subuser's profile
 class EditUserForm(forms.ModelForm):
@@ -457,20 +456,6 @@ class EditSubprofileForm(forms.ModelForm):
         label='Grupo',
         widget=forms.Select(
             attrs={
-                'class' : ''
-                }
-            )
-        )
-    password = forms.CharField(
-        max_length=30,
-        label='Contraseña',
-        required=True, 
-        error_messages={
-            'invalid': 'La contraseña no coincide.'
-        },
-        widget=forms.PasswordInput(
-            attrs={
-                'placeholder': 'Contraseña',
                 'class' : ''
                 }
             )
