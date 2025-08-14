@@ -48,17 +48,22 @@ main {
     background-color: var(--bg-color);
     position: fixed;
     right: 0;
+    background-image: url(../IMAGES/Escritorio.webp);
+    background-size: cover;
 }
 
 aside:has(input[type="checkbox"]:checked) ~ main {
     width: calc(100dvw - 62px);
 }
-
+ 
 .filter-bar {
     width: 100%;
     height: calc(2rem + 44.78px);
     background-color: var(--fb-color);
     container-name: filter-bar;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .filter-bar__filter-container {
@@ -123,8 +128,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 .objects-area {
     width: 100%;
     height: calc(100dvh - (2rem + 44.78px));
-    background-image: url(../IMAGES/Escritorio.webp);
-    background-size: cover;
 } 
 
 
