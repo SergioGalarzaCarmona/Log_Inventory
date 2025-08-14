@@ -54,25 +54,25 @@
             </li>
             {% endif %}
             <li class="sidebar__item">
-                <a href="{% url 'main' %}" class="sidebar__item-link">
+                <a href="{% url 'main' %}" class="sidebar__item-link {{active_objects}}">
                     <span class="material-symbols-outlined">view_object_track</span>
                     <p>Objetos</p>
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="#" class="sidebar__item-link active">
+                <a href="#" class="sidebar__item-link {{active_borrowings}}">
                     <span class="material-symbols-outlined">partner_exchange</span>
                     <p>Prestamos</p>
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="{% url 'user_log' %}" class="sidebar__item-link">
+                <a href="{% url 'user_log' %}" class="sidebar__item-link {{active_log}}">
                     <span class="material-symbols-outlined">event_note</span>
                     <p>Historial</p>
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="{% url 'manage_subusers' %}" class="sidebar__item-link">
+                <a href="{% url 'manage_subusers' %}" class="sidebar__item-link {{active_subusers}}">
                     <span class="material-symbols-outlined">manage_accounts</span>
                     <p>Usuarios</p>
                 </a>
@@ -84,9 +84,9 @@
             <li class="sidebar__item">
                 
                 {% if type == 'profile' %}
-                <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link">
+                <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link {{active_profile}}">
                 {% else %}	
-                <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link">
+                <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link {{active_subproile}}">
                 {% endif %}
                     <img src="../../../media/{{profile.image}}" alt="profile-img">
                     <span id="username" class="profile-option">{{profile.user.username}}</span>
