@@ -7,10 +7,20 @@ from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileG
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
 from .functions import create_parameterized_tables, create_description, get_description
 from django.core.exceptions import ObjectDoesNotExist
-
+from asgiref.sync import sync_to_async
 ###################################
 ### ALL VIEWS HAVE DECORATOR @create_parameterized_tables TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
 ###################################
+
+@sync_to_async
+def get_user_log(profile_admin):
+    query_users = UserChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
+    query_groups = GroupChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
+    return query_users,query_groups
+
+@sync_to_async
+def render_async(request,template,context=None):
+    return render(request,template,context)
 
 class Error404View(TemplateView):
     template_name = 'Users/error_404.html'
@@ -566,26 +576,24 @@ def manage_subusers_group(request):
 
 @create_parameterized_tables
 @login_required
-def log_users(request):
+async def log_users(request):
     user = request.user
     try:
-        profile = Profile.objects.get(user=user)
-        profile_admin = profile
+        profile_admin = profile = await Profile.objects.aget(user=user)
         type = 'profile'
         permissions = 'admin'
     except ObjectDoesNotExist:
-        profile = Subprofile.objects.get(user=user)
-        profile_admin = profile.profile
+        profile = await Subprofile.objects.aget(user=user)
+        profile_admin = await profile.profile
         type = 'subprofile'
-        permissions = profile.group.permissions.name
+        permissions = await profile.group.permissions.name
         if permissions == 'Estudiante':
-            return render(request,'Users/error_403.html')
+            return await render_async(request,'Users/error_403.html')
     except:
-        return render(request,'Users/error_404.html')
-    query_users = UserChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
-    query_groups = GroupChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
+        return await render_async(request,'Users/error_404.html')
+    query_users,query_groups = await get_user_log(profile_admin)
     if request.method == 'GET':
-        return render(request,'Users/log_users.html',{
+        return await render_async(request,'Users/log_users.html',{
             'type' : type,
             'profile' : profile,
             'permissions' : permissions,
@@ -593,7 +601,7 @@ def log_users(request):
             'log_groups' : query_groups
         })
     else:
-        return render(request,'Users/log_users.html',{
+        return await render_async(request,'Users/log_users.html',{
             'type' : type,
             'profile' : profile,
             'permissions' : permissions,
