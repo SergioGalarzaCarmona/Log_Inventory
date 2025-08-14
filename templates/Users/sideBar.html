@@ -7,7 +7,7 @@
     <nav class="sidebar__nav">
         <ul> 
             {% if path == 'main' %} 
-            {% if permissions == 'admin' or permissions == "Profesor"  %}
+            {% if permissions == 'admin' or permissions == "Profesor" and path == "main"  %}
             <li class="sidebar__tools">
                 <p>Herramientas<span class="material-symbols-outlined">build</span></p>
                 <div class="sidebar__item">

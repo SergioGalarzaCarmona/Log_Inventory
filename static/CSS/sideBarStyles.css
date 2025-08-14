@@ -181,7 +181,7 @@ input[type="checkbox"], .open-menu {
     bottom: -25px;
     left: 19px;
     border-top-right-radius: 25px;
-    box-shadow: 4px -4px 0 4px var(--fb-color);
+    box-shadow: 4px -4px 0 4px var(--fb-color); 
 }
 
 .sidebar:has(input[type="checkbox"]:checked) .close-menu {
