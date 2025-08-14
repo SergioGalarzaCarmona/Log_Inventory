@@ -1,75 +1,190 @@
-:root {
-  --blue-primary: #003366;
-  --gray-bg: color-mix(in srgb, #000 25%, #fff);
-  --gray-border: #ccc;
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+* {
+    box-sizing: border-box;
 }
 
+body, div, ul, li, a, h1, h2, h3, h4, p {
+    margin: 0;
+    padding: 0;
+}
+
+label, .sidebar__nav {
+    user-select: none;
+}
+
+.container {
+    margin: 0;
+    padding: 0; 
+}
+
+.row {
+    margin: 0;
+}
+
+@media (min-width: 992px) {
+    .container, .container-lg, .container-md, .container-sm {
+        max-width: 100%;
+    }
+}
+ 
 body {
-  font-family: var(--font-family);
-  background-color: #f4f4f4;
-  color: #333;
-  margin: 0;
-  padding: 20px;
+    --bg-color: #fff;
+    --sidebar-color: color-mix(in srgb, #000 25%, #fff);
+    --dark-color: #222;
+    --fb-color: #003366;
+    --wood: #8B5E3C; 
+    background-color: var(--bg-color);
+    font-family: Montserrat;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+
+
+/*  MAIN STYLES  */
+
+main {
+    height: 100dvh;
+    width: clamp(calc(100dvw - 300px), 80dvw, calc(100dvw - 220px));
+    background-color: var(--bg-color);
+    position: fixed;
+    right: 0;
+    overflow-y: auto;
+    background-image: url(../IMAGES/Escritorio.webp);
+    background-size: cover;
+}
+
+aside:has(input[type="checkbox"]:checked) ~ main {
+    width: calc(100dvw - 62px);
+}
+
+.filter-bar {
+    width: 100%;
+    height: calc(2rem + 44.78px);
+    background-color: var(--fb-color);
+    container-name: filter-bar;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.filter-bar__filter-container {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.filter-bar__filter-container  > div, .filter-bar__filter-container > div {
+    color: var(--bg-color);
+    display: grid;
+    place-content: center;
+}
+
+.filter-bar__filter-container > div {
+    background-color: transparent;
+    border: none;
+    height: 100%;
+}
+
+.filter-bar__filter-container div >  label:hover {
+    color: #D2B48C;
+    cursor: pointer;
+}
+
+
+.filter-bar__filter-container > .filter-bar__logo-container {
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-right: .75rem;
+}
+
+.logo {
+    height: clamp(15px, calc(10dvh - 5px), 75px);
+    width: clamp(42px, calc(28dvh - 5px), 210px);
+    margin: 2.5px 0;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+.hidden {
+    display: none;
 }
 
 .history-container {
-  background-color: white;
-  border: 1px solid var(--gray-border);
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 800px;
-  margin: auto;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin: 4dvh auto;
+    background-color: white;
+    border: 1px solid var(--sidebar-color);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 800px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .history-title {
-  color: var(--blue-primary);
-  font-size: 24px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    color: var(--fb-color);
+    font-size: 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .timeline {
-  border-left: 3px solid var(--blue-primary);
-  padding-left: 20px;
-  margin-left: 10px;
-  position: relative;
+    border-left: 3px solid var(--fb-color);
+    padding-left: 20px;
+    margin-left: 10px;
+    position: relative;
 }
 
 .timeline-entry {
-  position: relative;
-  margin-bottom: 25px;
-  padding-left: 10px;
+    position: relative;
+    margin-bottom: 25px;
+    padding-left: 10px;
 }
 
 .timeline-entry::before {
-  content: "";
-  position: absolute;
-  left: -26px;
-  top: 0;
-  width: 14px;
-  height: 14px;
-  background-color: var(--blue-primary);
-  border-radius: 50%;
+    content: "";
+    position: absolute;
+    left: -26px;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    background-color: var(--fb-color);
+    border-radius: 50%;
 }
 
 .entry-time {
-  font-size: 12px;
-  color: #666;
+    font-size: 12px;
+    color: #666;
 }
 
 .entry-user {
-  font-weight: bold;
-  color: var(--blue-primary);
+    font-weight: bold;
+    color: var(--fb-color);
 }
 
 .entry-description {
-  background-color: var(--gray-bg);
-  padding: 10px;
-  border-radius: 8px;
-  margin-top: 5px;
-  font-size: 14px;
+    background-color: #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+
+    .sidebar__form {
+        display: none;
+    }
+
+    .history-container {
+        padding: 10px;
+        margin-top: 2dvh;
+    }
 }
