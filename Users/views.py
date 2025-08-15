@@ -13,10 +13,13 @@ from asgiref.sync import sync_to_async
 ###################################
 
 @sync_to_async
-def get_user_log(profile_admin):
-    query_users = UserChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
-    query_groups = GroupChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
-    return query_users,query_groups
+def get_users_log(profile_admin):
+    return UserChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
+
+@sync_to_async
+def get_groups_log(profile_admin):
+    return GroupChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
+    
 
 @sync_to_async
 def render_async(request,template,context=None):
@@ -469,8 +472,6 @@ def manage_subusers_group(request):
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
         delete_group = request.POST.get('delete_group',False)
-        print(request.POST['delete_group'])
-        print(delete_group)
         if image:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
             image_before = group.image.name
@@ -591,14 +592,15 @@ async def log_users(request):
             return await render_async(request,'Users/error_403.html')
     except:
         return await render_async(request,'Users/error_404.html')
-    query_users,query_groups = await get_user_log(profile_admin)
+    query_users = get_users_log(profile_admin)
+    query_groups = get_groups_log(profile_admin)
     if request.method == 'GET':
         return await render_async(request,'Users/log_users.html',{
             'type' : type,
             'profile' : profile,
             'permissions' : permissions,
-            'log_users' : query_users,
-            'log_groups' : query_groups
+            'log_users' : await query_users,
+            'log_groups' : await query_groups
         })
     else:
         return await render_async(request,'Users/log_users.html',{
