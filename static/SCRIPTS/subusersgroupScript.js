@@ -19,11 +19,23 @@ function validateGroup(){
     }
 }
 
-
-
-// This script handles both forms for creating a group or a subuser.(view forms subusersGroupForm and subusersForm)
 const select = document.getElementById('open-dialog');
 select.addEventListener('click', validateGroup)
+
+// This script handles the subprofiles group image upload and deletion functionality.(subprofiles group)
+document.querySelectorAll('input[type="file"]').forEach(input => {
+    input.addEventListener('change', ()=> {
+        id = input.id;
+        instance_id = id.split('_')[2];
+        const button_submit = document.getElementById(`id_submit_${instance_id}`);
+        if (button_submit) {
+            button_submit.click();
+        }
+    });
+})
+
+// This script handles both forms for creating a group or a subuser.(view forms subusersGroupForm and subusersForm)
+
 const label_group = document.querySelector('.create-group-label');
 const label_subuser = document.querySelector('.create-subuser-label');
 const create_group = document.getElementById('create-group');
