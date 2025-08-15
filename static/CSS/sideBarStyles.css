@@ -107,7 +107,7 @@
     text-decoration: none;
 }
 
-.sidebar__profile {
+.sidebar__profile { 
     position: relative;
     top: 20px;
 }

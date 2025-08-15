@@ -1,0 +1,11 @@
+nav.sidebar__nav > ul {
+    justify-content: flex-start;
+}
+
+.sidebar__form:has(input[type="checkbox"]:checked) ~ nav.sidebar__nav > ul {
+    justify-content: space-evenly;
+}
+
+.sidebar__item {
+    margin-bottom: 5%;
+}
