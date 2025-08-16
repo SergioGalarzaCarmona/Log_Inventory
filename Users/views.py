@@ -7,6 +7,7 @@ from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileG
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
 from .functions import create_parameterized_tables, create_description
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 from asgiref.sync import sync_to_async
 ###################################
 ### ALL VIEWS HAVE DECORATOR @create_parameterized_tables TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
@@ -47,10 +48,10 @@ def logIn(request):
         return redirect('main')
     #if not find user, return a error message 
     else:
+        messages.error(request,'Usuario o contraseña incorrectos')
         return render(request, 'Users/authenticate.html', {
             'form': RegisterUser,
-            'form_login': LoginUser(request.POST),
-            'error': 'Usuario o contraseña incorrectos'
+            'form_login': LoginUser(request.POST)
         })
 
 #Function to register users on app

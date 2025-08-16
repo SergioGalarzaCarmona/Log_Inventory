@@ -47,11 +47,12 @@
           <div class="messages-container">
             {% for message in messages %}
               <div class="message">
-                <div class="d-flex">
-                  <div class="toast-body">
+                  <div class="message-text">
                     {{ message }}
                   </div>
-                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                  <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                    <span class="material-symbols-outlined message-close-button">Close</span>
+                  </div>
                 </div>
               </div>
             {% endfor %}
