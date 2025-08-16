@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Users',
+    'Users.apps.UsersConfig',
     'Objects',
 ]
 
@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    "Users.middleware.OneSessionPerUserMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 

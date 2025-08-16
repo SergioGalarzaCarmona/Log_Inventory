@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm, SetPassword
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
-from .functions import create_parameterized_tables, create_description, get_description
+from .functions import create_parameterized_tables, create_description
 from django.core.exceptions import ObjectDoesNotExist
 from asgiref.sync import sync_to_async
 ###################################
@@ -321,7 +321,9 @@ def subprofile(request,username):
     else:
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
-        change_password = request.POST.get('new_password2',False)
+        change_password = request.POST["new_password2"]
+        if change_password == '':
+            change_password = False
         if image:
             image_before = subprofile.image.name
             if image_before == 'default.jpg':
@@ -388,6 +390,7 @@ def subprofile(request,username):
                         'subprofile': subprofile,
                         'profile' : profile,
                         'form' : form,
+                        'form_post' : form_post,
                         'image_form' : SetImageForm(),
                         'type' : type,
                         'permissions' : permissions,
@@ -416,6 +419,7 @@ def subprofile(request,username):
             
             user = User.objects.get(pk=subuser_pk)
             User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
+            Subprofile.objects.filter(user=user).update(group=data['group'])
             log = TypeChanges.objects.get(value='Update')
             UserChanges.objects.create(
                 main_user = user.subprofile.profile.user,

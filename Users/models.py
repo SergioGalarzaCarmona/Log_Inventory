@@ -16,6 +16,17 @@ class BaseAuditModel(models.Model):
     class Meta:
         abstract = True
 
+class UserSession(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+    session_key = models.CharField(
+        max_length=40, 
+        blank=True, 
+        null=True
+    )
+
 class Permissions(models.Model):
     name = models.CharField( 
         max_length=100

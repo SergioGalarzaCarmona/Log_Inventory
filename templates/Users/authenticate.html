@@ -42,7 +42,24 @@
                 </div>
             </div>
         </div>
+
+        {% if messages %}
+          <div class="messages-container">
+            {% for message in messages %}
+              <div class="message">
+                <div class="d-flex">
+                  <div class="toast-body">
+                    {{ message }}
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
     </div>
     <script src="{%static '/SCRIPTS/authenticateScript.js'%}"></script>
+
 </body>
 </html>

@@ -267,6 +267,14 @@ form > h2 {
     display: none;
 }
 
+.messages-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1080;
+
+}
+
 @keyframes move {
     0%, 49.99% {
         opacity: 0;
