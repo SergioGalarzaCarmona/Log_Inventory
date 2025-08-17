@@ -5,11 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm, SetPassword
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
-from .functions import create_parameterized_tables, create_description, get_description
+from .functions import create_description
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 from asgiref.sync import sync_to_async
 ###################################
-### ALL VIEWS HAVE DECORATOR @create_parameterized_tables TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
+### ALL VIEWS HAVE DECORATOR TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
 ###################################
 
 @sync_to_async
@@ -25,10 +26,14 @@ def get_groups_log(profile_admin):
 def render_async(request,template,context=None):
     return render(request,template,context)
 
+@sync_to_async
+def redirect_async(url):
+    return redirect(url)
+
 class Error404View(TemplateView):
     template_name = 'Users/error_404.html'
 
-@create_parameterized_tables
+
 def home(request):
     return render(request, 'Users/home.html')
 
@@ -47,10 +52,10 @@ def logIn(request):
         return redirect('main')
     #if not find user, return a error message 
     else:
+        messages.error(request,'Usuario o contraseña incorrectos')
         return render(request, 'Users/authenticate.html', {
             'form': RegisterUser,
-            'form_login': LoginUser(request.POST),
-            'error': 'Usuario o contraseña incorrectos'
+            'form_login': LoginUser(request.POST)
         })
 
 #Function to register users on app
@@ -77,7 +82,6 @@ def signUp(request):
     login(request, user)
     return redirect('main')
 
-@create_parameterized_tables
 #View to manage log in ang register of users
 def authenticate_user(request,type):
     if request.method == 'GET':
@@ -95,7 +99,6 @@ def authenticate_user(request,type):
             
 
 
-@create_parameterized_tables
 @login_required
 #View to show the main page of the app, with the profile of the user
 def main(request):
@@ -115,7 +118,6 @@ def main(request):
         'permissions' : permissions
     })
 
-@create_parameterized_tables
 @login_required
 #View to show the profile of the user, with the form to edit the user
 def profile(request,username):
@@ -124,10 +126,12 @@ def profile(request,username):
         user = User.objects.get(username=username)
         user_pk = user.pk
     except:
-        return render(request, 'Users/error_404.html')  
+        messages.error(request,'El usuario no existe.')
+        return redirect('/authenticate_user/deactivate')
     #Get user from request to validate if the user is the same that the username in the url
     if request.user != user:
         logout(request)
+        messages.warning(request,'No tienes permiso para ver ese usuario.')
         return redirect('/authenticate_user/deactivate')
     #Get profile from the user
     profile = Profile.objects.get(user=request.user)
@@ -150,6 +154,7 @@ def profile(request,username):
             profile = Profile.objects.get(user=request.user)
             profile.image = image
             profile.save()
+            messages.success(request,'La imagen se cambió con exito.')
             return render(request, 'Users/profile.html',{
                     'profile': profile,
                     'form' : form,
@@ -161,6 +166,7 @@ def profile(request,username):
             profile = Profile.objects.get(user=request.user)
             profile.image = 'default.jpg'
             profile.save()
+            messages.success(request,'La imagen se borró con exito.')
             return render(request, 'Users/profile.html',{
                     'profile': profile,
                     'form' : form,
@@ -174,10 +180,10 @@ def profile(request,username):
             data = form_post.data         
             #if the user email and username are the same that the data of the form, return a message that the data has not been updated   
             if user.email == data['email'] and user.username == data['username']:
+                messages.error(request,'Los datos no han sido actualizados.')
                 return render(request, 'Users/profile.html',{
                     'profile': profile,
                     'form' : form,
-                    'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
                     'permissions' : permissions
                 })
@@ -192,9 +198,9 @@ def profile(request,username):
             })
             #if the form is valid, update the user with the data of the form
             user = User.objects.filter(pk=user_pk).update(username=data['username'],email=data['email']) 
+            messages.success(request,'Los datos se actualizaron con éxito.')
             return redirect('main')
-     
-@create_parameterized_tables   
+        
 @login_required
 #view to manage subusers 
 def manage_subusers(request):
@@ -209,7 +215,8 @@ def manage_subusers(request):
         permissions = profile.group.permissions.name
         #if the permissions of the subprofile is 'Estudiante', return a 403 error
         if permissions == 'Estudiante':
-            return render(request,'Users/error_403.html')
+            messages.warning(request,'No tienes permiso para ver esa página.')
+            return redirect('/authenticate_user/deactivate')
     #Get all subusers of the profile(main account)
     subusers = Subprofile.objects.filter(profile=profile_admin)
     if request.method == 'GET':
@@ -245,6 +252,7 @@ def manage_subusers(request):
                 user = request.user,
                 description=f'Creating subuser {subuser.username} with group {subuser.subprofile.group.name}',
                 type_change=log)
+            messages.success(request,'El usuario se creó con éxito.')
             return redirect('manage_subusers')
         else: 
             form = RegisterSubprofileGroup(request.POST,request.FILES,user_pk = request.user.pk)
@@ -266,16 +274,17 @@ def manage_subusers(request):
                 user = request.user,
                 description=f'Creating group {group.name} with permissions {group.permissions.name}',
                 type_change=log)
+            messages.success(request,'El grupo se creó con éxito.')
             return redirect('manage_subusers')
 
-@create_parameterized_tables
 @login_required
 def subprofile(request,username):
     #verifie that exist one user with this name
     try:
         subuser = User.objects.get(username=username)
     except:
-        return render(request, 'Users/error_404.html')
+        messages.error(request,'El usuario no existe.')
+        return redirect('/authenticate/deactivate')
     #Get user 
     user = request.user
     if subuser != user:
@@ -289,6 +298,7 @@ def subprofile(request,username):
             permissions = 'admin'
             if subprofile.profile != profile:
                 logout(request)
+                messages.warning(request,'No tienes permiso para ver información acerca de ese usuario.')
                 return redirect('/authenticate_user/deactivate')
         except ObjectDoesNotExist:
             profile = Subprofile.objects.get(user=user)
@@ -296,11 +306,14 @@ def subprofile(request,username):
             permissions = profile.group.permissions.name
             if subprofile.profile != profile.profile:
                 logout(request)
+                messages.warning(request,'No tienes permiso para ver información acerca de ese usuario.')
                 return redirect('/authenticate_user/deactivate')
             if permissions == 'Estudiante':
-                return render(request, 'Users/error_403.html')
+                messages.warning(request,'No tienes permiso para ver información de otros usuarios.')
+                return redirect('/authenticate_user/deactivate')
         except:
-            return render(request, 'Users/error_404.html')
+            messages.error(request,'El usuario no existe.')
+            return redirect('main')
     else:
         subprofile = Subprofile.objects.get(user=subuser)
         subuser_pk = subuser.pk
@@ -321,7 +334,9 @@ def subprofile(request,username):
     else:
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
-        change_password = request.POST.get('new_password2',False)
+        change_password = request.POST.get("new_password2",'')
+        if change_password == '':
+            change_password = False
         if image:
             image_before = subprofile.image.name
             if image_before == 'default.jpg':
@@ -336,6 +351,7 @@ def subprofile(request,username):
                 description=f'Change in image, before: {image_before}, after: {image}',
                 type_change = log
             )
+            messages.success(request,'La iamgen se cambió con éxito.')
             return render(request, 'Users/subprofile.html',{
                     'subprofile': subprofile,
                     'profile' : profile,
@@ -359,6 +375,7 @@ def subprofile(request,username):
                 description=f'Change in image, before: "{image_before}", after: ""',
                 type_change = log
             )
+            messages.success(request,'La imagen se borró con éxito.')
             return render(request, 'Users/subprofile.html',{
                     'subprofile': subprofile,
                     'profile' : profile,
@@ -369,25 +386,29 @@ def subprofile(request,username):
                     'password_form' : SetPassword(user=subuser),
                 })
         else:
-            form_post = EditUserForm(request.POST,initial=form.initial,instance= subuser,user_pk = subuser_pk)
+            
+            form_post = EditSubprofileForm(request.POST,initial=form.initial,instance=subuser,user_pk = subuser_pk,permissions=permissions)
             data = form_post.data
-            if subuser.email == data['email'] and subuser.username == data['username'] and change_password == False:
+            
+            if not form_post.has_changed() and change_password == False:
+                messages.error(request,'Los datos no han sido actualizados.')
                 return render(request, 'Users/subprofile.html',{
                     'subprofile': subprofile,
                     'profile' : profile,
                     'form' : form,
-                    'message': 'Los datos no han sido actualizados.',
                     'image_form' : SetImageForm(),
                     'permissions' : permissions,
                     'password_form' : SetPassword(user=subuser),
                 })
             if change_password:
-                password_form = SetPassword(request.POST)
+                password_form = SetPassword(user=subuser,data=request.POST)
                 if not password_form.is_valid():
+                    messages.warning(request,'Hubo un error al cambiar la contraseña, todos los demás posibles datos ingresados no se guardarán.')
                     return render(request, 'Users/subprofile.html',{
                         'subprofile': subprofile,
                         'profile' : profile,
                         'form' : form,
+                        'form_post' : form_post,
                         'image_form' : SetImageForm(),
                         'type' : type,
                         'permissions' : permissions,
@@ -402,6 +423,7 @@ def subprofile(request,username):
                     description=f'Change in password',
                     type_change = log
                 )
+                messages.success(request,'La contraseña se cambió con exito.')
             if not form_post.is_valid():
                 return render(request, 'Users/subprofile.html',{
                     'subprofile': subprofile,
@@ -416,6 +438,10 @@ def subprofile(request,username):
             
             user = User.objects.get(pk=subuser_pk)
             User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
+            try:
+                Subprofile.objects.filter(user=user).update(group=data['group'])
+            except:
+                pass
             log = TypeChanges.objects.get(value='Update')
             UserChanges.objects.create(
                 main_user = user.subprofile.profile.user,
@@ -430,9 +456,12 @@ def subprofile(request,username):
                     ),
                 type_change = log
             )
-            return redirect('manage_subusers')
+            messages.success(request,'Los datos se actualizaron con éxito.')
+            if permissions == 'admin' or permissions == 'Profesor':
+                return redirect('manage_subusers')
+            else:
+                return redirect('main')
     
-@create_parameterized_tables
 @login_required
 def manage_subusers_group(request):
     user = request.user
@@ -449,9 +478,11 @@ def manage_subusers_group(request):
         type = 'subprofile'
         permissions = profile.group.permissions.name
         if permissions == 'Estudiante':
-            return render(request,'Users/error_403.html')
+            messages.warning(request,'No tienes permiso para ver esa página.')
+            return redirect('/authenticate_user/deactivate/')
     except:
-        return render(request,'Users/error_404.html')
+        messages.error(request,'Hubo un error al tratar de cargar los grupos.')
+        return redirect('/authenticate_user/deactivate/')
     query_subgroups = SubprofilesGroup.objects.filter(profile=profile_admin, is_active=True)
     forms = []
     for group in query_subgroups:
@@ -487,6 +518,7 @@ def manage_subusers_group(request):
                 description=f'Change in image, before: {image_before}, after: {image}',
                 type_change = log
             )
+            messages.success(request,'La imagen se cambió con éxito.')
             return redirect('subusers_group')
         elif delete_image:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
@@ -503,11 +535,13 @@ def manage_subusers_group(request):
                     description=f'Change in image, before: "{image_before}", after: ""',
                     type_change = log
             )
+            messages.success(request,'La imagen se borró con éxito.')
             return redirect('subusers_group')
         elif delete_group:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
             subprofiles = Subprofile.objects.filter(group=group)
             if subprofiles.count() > 0:
+                messages.error(request,'No se puede eliminar el grupo porque tiene subusuarios asociados.')
                 return render(request,'Users/subprofiles_group.html',{
                     'type' : type,
                     'profile' : profile,
@@ -517,7 +551,6 @@ def manage_subusers_group(request):
                     'groups' : query_subgroups,
                     'subuser_form': RegisterSubuser(user_pk = request.user.pk),
                     'group_form': RegisterSubprofileGroup(),
-                    'message' : 'No se puede eliminar el grupo porque tiene subusuarios asociados',
                 })
             log = TypeChanges.objects.get(value='Delete')
             GroupChanges.objects.create(
@@ -528,12 +561,14 @@ def manage_subusers_group(request):
                 type_change=log)
             group.is_active = False
             group.save()
+            messages.success(request,'El grupo se borró con éxito.')
             return redirect('subusers_group')
         else:
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
             form = EditSubprofileGroupForm(instance=group,user_pk=user_pk)
             form_post = EditSubprofileGroupForm(request.POST,instance=group,user_pk=user_pk)
             if request.POST['name'] == group.name and request.POST['permissions'] == str(group.permissions.pk) and request.POST['description'] == group.description:
+                messages.error(request,'Los datos no han sido actualizados.')
                 return render(request,'Users/subprofiles_group.html',{
                     'type' : type,
                     'profile' : profile,
@@ -543,7 +578,6 @@ def manage_subusers_group(request):
                     'group' : group,
                     'image_form' : SetImageForm(instance=group),
                     'groups' : query_subgroups,
-                    'message' : 'Los datos no han sido actualizados',
                     'subuser_form': RegisterSubuser(user_pk = request.user.pk),
                     'group_form': RegisterSubprofileGroup(),
                 })
@@ -573,9 +607,9 @@ def manage_subusers_group(request):
                     permissions = request.POST['permissions']
                     ),
                 type_change=log)
+            messages.success(request,'Los datos se actualizaron con éxito.')
             return redirect('subusers_group')
 
-@create_parameterized_tables
 @login_required
 async def log_users(request):
     user = request.user
@@ -589,9 +623,11 @@ async def log_users(request):
         type = 'subprofile'
         permissions = await profile.group.permissions.name
         if permissions == 'Estudiante':
-            return await render_async(request,'Users/error_403.html')
+            messages.warning(request,'No tienes permiso para ver esa página.')
+            return await redirect_async('/authenticate_user/deactivate')
     except:
-        return await render_async(request,'Users/error_404.html')
+        messages.error(request,'Hubo un error al tratar de cargar el inventario.')
+        return await redirect_async('/authenticate_user/deactivate')
     query_users = get_users_log(profile_admin)
     query_groups = get_groups_log(profile_admin)
     if request.method == 'GET':

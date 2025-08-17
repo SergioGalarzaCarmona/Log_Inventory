@@ -332,7 +332,6 @@ class SetPassword(SetPasswordForm):
     class Meta:
         fields = ['new_password1', 'new_password2']
 
-
 #Forms to edit the user's or subuser's profile
 class EditUserForm(forms.ModelForm):
     username = forms.CharField(
@@ -463,7 +462,7 @@ class EditSubprofileForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ['username', 'email', "password"]
+        fields = ['username', 'email', "group"]
     
     def __init__(self, *args, **kwargs):
         user_pk = kwargs.pop('user_pk')
@@ -498,14 +497,6 @@ class EditSubprofileForm(forms.ModelForm):
                                     code='unique')
             self.add_error('email', error)
             
-    def clean_password(self):
-        password = self.cleaned_data['password']
-        user = User.objects.get(pk=self.user_pk)
-        if not user.check_password(password):
-            error = ValidationError(self.fields['password'].error_messages['invalid'], 
-                                    code='invalid')
-            self.add_error('password', error)
-        return password
 class EditSubprofileGroupForm(forms.ModelForm):
     name = forms.CharField(
         max_length=24,

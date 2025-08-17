@@ -18,14 +18,20 @@ function validateGroup(){
         document.getElementById('submit').click();
     }
 }
-
-// This script handles both forms for creating a group or a subuser.(view forms subusersGroupForm and subusersForm)
 const select = document.getElementById('open-dialog');
 select.addEventListener('click', validateGroup)
+// This script handles both forms for creating a group or a subuser.(view forms subusersGroupForm and subusersForm)
+
 const label_group = document.querySelector('.create-group-label');
 const label_subuser = document.querySelector('.create-subuser-label');
+
+const closeFormGroup = document.querySelector(".close-formGroup");
+const closeFormSubuser = document.querySelector(".close-formSubuser");
+
 const create_group = document.getElementById('create-group');
 const create_subuser = document.getElementById('create-subuser');
+const subusersTable = document.querySelector('.subusers-table__container');
+
 label_group.addEventListener('click', function (){
     create_subuser.checked = false; 
 });
@@ -34,9 +40,7 @@ label_subuser.addEventListener('click', function (){
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const subusersTable = document.querySelector('.subusers-table__container');
-    const closeFormGroup = document.querySelector(".close-formGroup");
-    const closeFormSubuser = document.querySelector(".close-formSubuser");
+
 
     function toggleTableVisibility() {
         if (create_subuser.checked) {
@@ -60,4 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
     create_group.addEventListener("change", toggleTableVisibility);
     
     toggleTableVisibility();
+});
+
+// Handle all close button to alert messages
+const closeButtons = document.querySelectorAll('.message-close-button');
+
+closeButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const alert = button.closest('.message-error, .message-success, .message-warning'); 
+    if (alert) {
+      alert.classList.add('hidden');
+    }
+  });
 });

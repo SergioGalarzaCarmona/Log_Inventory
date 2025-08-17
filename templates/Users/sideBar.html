@@ -71,12 +71,14 @@
                     <p>Historial</p>
                 </a>
             </li>
+            {% if permissions == 'admin' or permissions == "Profesor" %}
             <li class="sidebar__item">
                 <a href="{% url 'manage_subusers' %}" class="sidebar__item-link {{active_subusers}}">
                     <span class="material-symbols-outlined">manage_accounts</span>
                     <p>Usuarios</p>
                 </a>
             </li>
+            {% endif %}
         </ul>
     </nav>
     <div class="sidebar__profile">
