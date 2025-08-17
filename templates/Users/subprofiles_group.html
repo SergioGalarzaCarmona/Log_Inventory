@@ -110,13 +110,6 @@
                     {{form_post.errors.description}}
                     {%endif%}
                 </div>
-                <div>
-                    {%if form.instance.pk == group.pk %}
-                    <ul class="errorlist">
-                        <li>{{message}}</li>
-                    </ul>
-                    {%endif%}
-                </div>
             </div>
             <form method="POST">
                 {% csrf_token %}
@@ -132,6 +125,21 @@
         </div>
         {% endfor %}
         </div>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message-{{message.tags}}">
+                        <div class="message-text">
+                            {{ message }}
+                        </div>
+                        <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                            <span class="material-symbols-outlined message-close-button">Close</span>
+                        </div>
+                      </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </main>
     <script src="{%static '/SCRIPTS/subusersGroupScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>

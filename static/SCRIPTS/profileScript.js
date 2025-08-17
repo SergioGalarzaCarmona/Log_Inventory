@@ -17,3 +17,15 @@ delete_button.addEventListener('click',function () {
 const dialog = document.getElementById("modify-confirmation");
 document.getElementById("open-dialog").addEventListener("click", () => dialog.showModal());
 document.getElementById("close-dialog").addEventListener("click", () => dialog.close());
+
+// Handle all close button to alert messages
+const closeButtons = document.querySelectorAll('.message-close-button');
+
+closeButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const alert = button.closest('.message-error, .message-success, .message-warning'); 
+    if (alert) {
+      alert.classList.add('hidden');
+    }
+  });
+});

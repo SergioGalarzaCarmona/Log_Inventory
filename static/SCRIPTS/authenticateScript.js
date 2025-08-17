@@ -21,16 +21,14 @@ loginResponsive.addEventListener('click', () => {
 });
 
 
-// Select all close buttons
+// Handle all close button to alert messages
 const closeButtons = document.querySelectorAll('.message-close-button');
 
 closeButtons.forEach(button => {
   button.addEventListener('click', () => {
-    const alert = button.closest('.message'); // find parent .message
+    const alert = button.closest('.message-error, .message-success, .message-warning'); 
     if (alert) {
-      alert.classList.add('hidden'); // fade out (CSS handles hiding)
-      // Or remove immediately:
-      // alert.remove();
+      alert.classList.add('hidden');
     }
   });
 });

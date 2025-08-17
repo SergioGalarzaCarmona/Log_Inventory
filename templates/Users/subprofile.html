@@ -54,11 +54,6 @@
             </div>
             <form method="POST">
                 {% csrf_token %}
-                <div class="message">
-                    <p>
-                        {{message}} 
-                    </p>
-                </div>
                 <div>
                     <label for="id_username">Nombre de Usuario:</label>
                     {{form_post.errors.username}}
@@ -102,13 +97,13 @@
 
                 <div>
                     <label for="id_new_password1">Contraseña</label>
-                    {{password_form.errors.new_password1}}
-                    <input type="password" name="new_password1" placeholder="Contraseña" maxlength="30" value="passwordNow" id="id_new_password1">
+                    {{password_form.errors.new_password2}}
+                    <input type="password" name="new_password1" placeholder="Contraseña" maxlength="30" minlength="8" value="passwordNow" id="id_new_password1">
                 </div>
                 <div class="container-password hidden">
                     <label for="id_new_password2">Confirmación de contraseña:</label>
-                    {{password_form.errors.new_password2}}
-                    <input type="password" name="new_password2" placeholder="Confirmar Contraseña"  maxlength="30"  id="id_new_password2">
+                    
+                    <input type="password" name="new_password2" placeholder="Confirmar Contraseña"  maxlength="30" minlength="8"  id="id_new_password2">
                 </div>
                 <input type="submit" id="submit" value="Actualizar">
 
@@ -116,6 +111,23 @@
                 
             </form>
         </div>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message-{{message.tags}}">
+                        <div class="message-text">
+                            {{ message }}
+                        </div>
+                        <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                            <span class="material-symbols-outlined message-close-button">Close</span>
+                        </div>
+                      </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+
     </main>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/subprofileScript.js'%}"></script>
