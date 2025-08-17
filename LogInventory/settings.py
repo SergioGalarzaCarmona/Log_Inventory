@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     "Users.middleware.OneSessionPerUserMiddleware",
+    "Users.middleware.SetParameterizedTablesMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 

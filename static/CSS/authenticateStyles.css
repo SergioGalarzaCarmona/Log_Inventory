@@ -267,7 +267,8 @@ form > h2 {
     display: none;
 }
 
-.hidden {  
+
+.closed {
     display: none;
 }
 
@@ -336,7 +337,7 @@ form > h2 {
   align-items: center;
 }
 
-.message-error.hidden, .message-success.hidden,.message-warning.hidden {
+.message-error.closed, .message-success.closed,.message-warning.closed {
   opacity: 0;
   transform: translateY(-8px);
   pointer-events: none;

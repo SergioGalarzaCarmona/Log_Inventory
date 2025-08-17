@@ -5,12 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm, SetPassword
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
-from .functions import create_parameterized_tables, create_description
+from .functions import create_description
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from asgiref.sync import sync_to_async
 ###################################
-### ALL VIEWS HAVE DECORATOR @create_parameterized_tables TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
+### ALL VIEWS HAVE DECORATOR TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
 ###################################
 
 @sync_to_async
@@ -33,7 +33,7 @@ def redirect_async(url):
 class Error404View(TemplateView):
     template_name = 'Users/error_404.html'
 
-@create_parameterized_tables
+
 def home(request):
     return render(request, 'Users/home.html')
 
@@ -82,7 +82,6 @@ def signUp(request):
     login(request, user)
     return redirect('main')
 
-@create_parameterized_tables
 #View to manage log in ang register of users
 def authenticate_user(request,type):
     if request.method == 'GET':
@@ -100,7 +99,6 @@ def authenticate_user(request,type):
             
 
 
-@create_parameterized_tables
 @login_required
 #View to show the main page of the app, with the profile of the user
 def main(request):
@@ -120,7 +118,6 @@ def main(request):
         'permissions' : permissions
     })
 
-@create_parameterized_tables
 @login_required
 #View to show the profile of the user, with the form to edit the user
 def profile(request,username):
@@ -130,7 +127,7 @@ def profile(request,username):
         user_pk = user.pk
     except:
         messages.error(request,'El usuario no existe.')
-        return redirect('/authenticate/deactivate')
+        return redirect('/authenticate_user/deactivate')
     #Get user from request to validate if the user is the same that the username in the url
     if request.user != user:
         logout(request)
@@ -203,8 +200,7 @@ def profile(request,username):
             user = User.objects.filter(pk=user_pk).update(username=data['username'],email=data['email']) 
             messages.success(request,'Los datos se actualizaron con éxito.')
             return redirect('main')
-     
-@create_parameterized_tables   
+        
 @login_required
 #view to manage subusers 
 def manage_subusers(request):
@@ -220,7 +216,7 @@ def manage_subusers(request):
         #if the permissions of the subprofile is 'Estudiante', return a 403 error
         if permissions == 'Estudiante':
             messages.warning(request,'No tienes permiso para ver esa página.')
-            return redirect('/authenticate/deactivate/')
+            return redirect('/authenticate_user/deactivate')
     #Get all subusers of the profile(main account)
     subusers = Subprofile.objects.filter(profile=profile_admin)
     if request.method == 'GET':
@@ -281,7 +277,6 @@ def manage_subusers(request):
             messages.success(request,'El grupo se creó con éxito.')
             return redirect('manage_subusers')
 
-@create_parameterized_tables
 @login_required
 def subprofile(request,username):
     #verifie that exist one user with this name
@@ -315,7 +310,7 @@ def subprofile(request,username):
                 return redirect('/authenticate_user/deactivate')
             if permissions == 'Estudiante':
                 messages.warning(request,'No tienes permiso para ver información de otros usuarios.')
-                return redirect('/authenticate/deactivate/')
+                return redirect('/authenticate_user/deactivate')
         except:
             messages.error(request,'El usuario no existe.')
             return redirect('main')
@@ -339,7 +334,7 @@ def subprofile(request,username):
     else:
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
-        change_password = request.POST["new_password2"]
+        change_password = request.POST.get("new_password2",'')
         if change_password == '':
             change_password = False
         if image:
@@ -443,7 +438,10 @@ def subprofile(request,username):
             
             user = User.objects.get(pk=subuser_pk)
             User.objects.filter(pk=subuser_pk).update(username=data['username'],email=data['email']) 
-            Subprofile.objects.filter(user=user).update(group=data['group'])
+            try:
+                Subprofile.objects.filter(user=user).update(group=data['group'])
+            except:
+                pass
             log = TypeChanges.objects.get(value='Update')
             UserChanges.objects.create(
                 main_user = user.subprofile.profile.user,
@@ -459,9 +457,11 @@ def subprofile(request,username):
                 type_change = log
             )
             messages.success(request,'Los datos se actualizaron con éxito.')
-            return redirect('manage_subusers')
+            if permissions == 'admin' or permissions == 'Profesor':
+                return redirect('manage_subusers')
+            else:
+                return redirect('main')
     
-@create_parameterized_tables
 @login_required
 def manage_subusers_group(request):
     user = request.user
@@ -479,10 +479,10 @@ def manage_subusers_group(request):
         permissions = profile.group.permissions.name
         if permissions == 'Estudiante':
             messages.warning(request,'No tienes permiso para ver esa página.')
-            return redirect('authenticate/deactivate')
+            return redirect('/authenticate_user/deactivate/')
     except:
         messages.error(request,'Hubo un error al tratar de cargar los grupos.')
-        return redirect('authenticate/deactivate')
+        return redirect('/authenticate_user/deactivate/')
     query_subgroups = SubprofilesGroup.objects.filter(profile=profile_admin, is_active=True)
     forms = []
     for group in query_subgroups:
@@ -610,7 +610,6 @@ def manage_subusers_group(request):
             messages.success(request,'Los datos se actualizaron con éxito.')
             return redirect('subusers_group')
 
-@create_parameterized_tables
 @login_required
 async def log_users(request):
     user = request.user
@@ -625,10 +624,10 @@ async def log_users(request):
         permissions = await profile.group.permissions.name
         if permissions == 'Estudiante':
             messages.warning(request,'No tienes permiso para ver esa página.')
-            return await redirect_async('/authenticate/deactivate/')
+            return await redirect_async('/authenticate_user/deactivate')
     except:
         messages.error(request,'Hubo un error al tratar de cargar el inventario.')
-        return await redirect_async('/authenticate/deactivate/')
+        return await redirect_async('/authenticate_user/deactivate')
     query_users = get_users_log(profile_admin)
     query_groups = get_groups_log(profile_admin)
     if request.method == 'GET':

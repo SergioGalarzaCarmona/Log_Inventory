@@ -1,77 +1,58 @@
-from .models import Permissions,PermissionsGroup, TypeChanges
-from Objects.models import TypeTransaction
 from django.utils.translation import gettext as _
-import functools
-from asgiref.sync import iscoroutinefunction, sync_to_async
-
-def create_parameterized_tables(function):
-
-    async def async_setup():
-        # Wrap the existing ORM logic inside sync_to_async to avoid blocking
-        await sync_to_async(_setup_tables)()
-
-    def sync_setup():
-        _setup_tables()
-
-    @functools.wraps(function)
-    async def async_wrapper(*args, **kwargs):
-        await async_setup()
-        return await function(*args, **kwargs)
-
-    @functools.wraps(function)
-    def sync_wrapper(*args, **kwargs):
-        sync_setup()
-        return function(*args, **kwargs)
-
-    if iscoroutinefunction(function):
-        return async_wrapper
-    return sync_wrapper
 
 def _setup_tables():
-    """This contains your original ORM setup code."""
-    if TypeTransaction.objects.count() != 6:
-        TypeTransaction.objects.all().delete()
-        TypeTransaction.objects.create(name="Create")
-        TypeTransaction.objects.create(name="Delete")
-        TypeTransaction.objects.create(name="Add")
-        TypeTransaction.objects.create(name="Subtract")
-        TypeTransaction.objects.create(name="Update")
-        TypeTransaction.objects.create(name="Returning")
+    
+    from .models import Permissions,PermissionsGroup, TypeChanges
+    from Objects.models import TypeTransaction
+    
+    # TYPE TRASACTION TABLE
+    REQUIRED = ['Create','Delete','Add','Substract','Update','Returning']
+    for name in REQUIRED:
+        TypeTransaction.objects.get_or_create(name=name)
+    TypeTransaction.objects.exclude(name__in=REQUIRED).delete()
+    
+    
+    # PERMISSIONS TABLE
+    REQUIRED = ["Create_Objects","Delete_Objects","Update_Objects","View_Objects","Update_Users","Update_Log","View_Objects_Log","View_Users_Log"]
+    for name in REQUIRED:
+        Permissions.objects.get_or_create(name=name)
+    Permissions.objects.exclude(name__in=REQUIRED).delete()
+    
+    
+    # PERMISSIONS GROUP TABLE
+    REQUIRED_GROUPS = ["Profesor", "Estudiante"]
+    REQUIRED_TEACHER_PERMISSIONS = [
+        "Create_Objects", "Delete_Objects", "Update_Objects", "View_Objects",
+        "Update_Users", "Update_Log", "View_Objects_Log", "View_Users_Log"
+    ]
+    REQUIRED_STUDENT_PERMISSIONS = ["View_Objects", "View_Objects_Log"]
 
-    if Permissions.objects.count() != 8:
-        Permissions.objects.all().delete()
-        Permissions.objects.create(name="Create_Objects")
-        Permissions.objects.create(name="Delete_Objects")
-        Permissions.objects.create(name="Update_Objects")
-        Permissions.objects.create(name="View_Objects")
-        Permissions.objects.create(name="Update_Users")
-        Permissions.objects.create(name="Update_Log")
-        Permissions.objects.create(name="View_Objects_Log")
-        Permissions.objects.create(name="View_Users_Log")
+    for group_name in REQUIRED_GROUPS:
+        group, created = PermissionsGroup.objects.get_or_create(name=group_name)
 
-    if PermissionsGroup.objects.count() != 2:
-        PermissionsGroup.objects.all().delete()
-        teacher = PermissionsGroup.objects.create(name="Profesor")
-        teacher.permissions_id.add(
-            Permissions.objects.get(name="Create_Objects"),
-            Permissions.objects.get(name="Delete_Objects"),
-            Permissions.objects.get(name="Update_Objects"),
-            Permissions.objects.get(name='View_Objects'),
-            Permissions.objects.get(name="Update_Log"),
-            Permissions.objects.get(name="View_Objects_Log"),
-            Permissions.objects.get(name="View_Users_Log")
-        )
-        student = PermissionsGroup.objects.create(name="Estudiante")
-        student.permissions_id.add(
-            Permissions.objects.get(name='View_Objects'),
-            Permissions.objects.get(name="View_Objects_Log")
-        )
+        if group_name == "Profesor":
+            required = REQUIRED_TEACHER_PERMISSIONS
+        else:
+            required = REQUIRED_STUDENT_PERMISSIONS
 
-    if TypeChanges.objects.count() != 3:
-        TypeChanges.objects.all().delete()
-        TypeChanges.objects.create(value="Create")
-        TypeChanges.objects.create(value="Update")
-        TypeChanges.objects.create(value="Delete")
+        # Add required permissions
+        for perm_name in required:
+            perm, _ = Permissions.objects.get_or_create(name=perm_name)
+            group.permissions_id.add(perm)
+
+        # Remove extra permissions (only disassociate, not delete from DB)
+        to_remove = group.permissions_id.exclude(name__in=required)
+        group.permissions_id.remove(*to_remove)
+
+
+    # TYPE CHANGES TABLE
+    REQUIRED = ['Create','Update','Delete']
+    
+    for value in REQUIRED:
+        TypeChanges.objects.get_or_create(value=value)
+    TypeChanges.objects.exclude(value__in=REQUIRED).delete()
+    
+
 def create_description(object : object,type : str,**kwargs):
     if type == 'Subuser':
         initial =  {

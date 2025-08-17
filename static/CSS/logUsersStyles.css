@@ -161,7 +161,7 @@ input[type="checkbox"] {
     color: #666;
 }
 
-.entry-user {
+.entry-user, .entry-group {
     font-weight: bold;
     color: var(--fb-color);
 }

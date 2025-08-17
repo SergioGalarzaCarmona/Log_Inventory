@@ -55,7 +55,7 @@
             {% for log in log_groups %}
             <div class="timeline-entry">
               <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
-              <div class="entry-user">{{log.group_changed.name}}</div>
+              <div class="entry-group">{{log.group_changed.name}}</div>
               <div class="entry-description">
                 {% trans log.description %}
               </div>

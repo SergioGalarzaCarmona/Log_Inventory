@@ -28,7 +28,7 @@ closeButtons.forEach(button => {
   button.addEventListener('click', () => {
     const alert = button.closest('.message-error, .message-success, .message-warning'); 
     if (alert) {
-      alert.classList.add('hidden');
+      alert.classList.add('closed');
     }
   });
 });

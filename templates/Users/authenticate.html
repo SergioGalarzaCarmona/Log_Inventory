@@ -46,7 +46,7 @@
         {% if messages %}
           <div class="messages-container">
             {% for message in messages %}
-              <div class="message">
+              <div class="message-{{message.tags}}">
                   <div class="message-text">
                     {{ message }}
                   </div>
