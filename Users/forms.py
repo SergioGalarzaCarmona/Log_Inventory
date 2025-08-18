@@ -264,7 +264,8 @@ class LoginUser(AuthenticationForm):
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Nombre de Usuario',
-                'class' : ''
+                'class' : '',
+                'id' : 'username_login_id'
                 }
             )
         )

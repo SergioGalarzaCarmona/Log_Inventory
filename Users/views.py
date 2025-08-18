@@ -2,17 +2,28 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
 from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm, SetPassword
-from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
+from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges, UserSession
 from .functions import create_description
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from asgiref.sync import sync_to_async
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 ###################################
 ### ALL VIEWS HAVE DECORATOR TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
 ###################################
 
+class UserPasswordChangeView(PasswordChangeView):
+    success_url = '/work_space/'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "La constraseña se cambió con éxito.")
+        UserSession.objects.update_or_create(
+            user=self.request.user,
+            defaults={'session_key' : self.request.session.session_key}
+        )
+        return response
 
 def home(request):
     return render(request, 'Users/home.html')
