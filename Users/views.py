@@ -611,7 +611,7 @@ def manage_subusers_group(request):
             return redirect('subusers_group')
 
 @login_required
-async def log_users(request):
+async def log(request):
     user = request.user
     try:
         profile_admin = profile = await Profile.objects.aget(user=user)
@@ -631,7 +631,7 @@ async def log_users(request):
     query_users = get_users_log(profile_admin)
     query_groups = get_groups_log(profile_admin)
     if request.method == 'GET':
-        return await render_async(request,'Users/log_users.html',{
+        return await render_async(request,'Users/log.html',{
             'type' : type,
             'profile' : profile,
             'permissions' : permissions,
@@ -639,7 +639,7 @@ async def log_users(request):
             'log_groups' : await query_groups
         })
     else:
-        return await render_async(request,'Users/log_users.html',{
+        return await render_async(request,'Users/log.html',{
             'type' : type,
             'profile' : profile,
             'permissions' : permissions,

@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/sideBarSmallStyles.css'%}">
-    <link rel="stylesheet" href="{% static 'CSS/logUsersStyles.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/logStyles.css' %}">
     <title>Historial de Cambios - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Historial Log Inventory">
@@ -33,7 +33,7 @@
         <input type="checkbox" id="subusersLog" class="filter-bar__checkbox">
         <div class="history-container subusersLog"> 
           <div class="history-title">
-            <span class="material-symbols-outlined">event_note</span> Historial de Cambios
+            <span class="material-symbols-outlined">event_note</span> Historial de Usuarios
           </div>
           <div class="timeline">
             {% for log in log_users %}
@@ -50,7 +50,7 @@
         <input type="checkbox" id="subusersgroupsLog" class="filter-bar__checkbox">
         <div class="history-container subusersgroupsLog hidden">
           <div class="history-title">
-            <span class="material-symbols-outlined">event_note</span> Historial de Cambios
+            <span class="material-symbols-outlined">event_note</span> Historial de Grupos de Usuarios
           </div>
           <div class="timeline">
             {% for log in log_groups %}
