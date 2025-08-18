@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
-    <link rel="stylesheet" href="{%static '/CSS/profileStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/Users/profileStyles.css'%}">
     <title>Usuario - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Visualización subusuario Log Inventory">
@@ -14,7 +14,7 @@
     <meta name="robots" content="noindex, nofollow">
 </head> 
 <body>
-    {% include 'Users/sideBar.html' with path='subprofile' profile=profile type=type permissions=permissions active_subprofile="active"%}
+    {% include 'sideBar.html' with path='subprofile' profile=profile type=type permissions=permissions active_subprofile="active"%}
     <main>
         <div class="filter-bar"> 
             <div class="filter-bar__filter-container">
@@ -44,7 +44,7 @@
                             <input type="submit" id="delete_image" value="submit" hidden>
                         </form>
                     </div>
-                    <img src="../../../media/{{subprofile.image}}" alt="profile-img" class="profile-img">
+                    <img src="{{subprofile.image.url}}" alt="profile-img" class="profile-img">
                 </label>
                 <form method="POST" enctype="multipart/form-data" class="image_form">
                     {% csrf_token %}
@@ -111,24 +111,24 @@
                 
             </form>
         </div>
-        {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                    <div class="message-{{message.tags}}">
-                        <div class="message-text">
-                            {{ message }}
-                        </div>
-                        <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
-                            <span class="material-symbols-outlined message-close-button">Close</span>
-                        </div>
-                      </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+        
         
 
     </main>
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message-{{message.tags}}">
+            <div class="message-text">
+                {{ message }}
+            </div>
+            <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                <span class="material-symbols-outlined message-close-button">Close</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/subprofileScript.js'%}"></script>
 </body>

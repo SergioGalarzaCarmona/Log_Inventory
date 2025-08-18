@@ -49,7 +49,7 @@ main {
     position: fixed;
     right: 0;
     overflow-y: auto;
-    background-image: url(../IMAGES/Escritorio.webp);
+    background-image: url(../../IMAGES/Escritorio.webp);
     background-size: cover;
 }
 

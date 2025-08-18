@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <link rel="stylesheet" href="{%static '/CSS/authenticateStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/Users/authenticateStyles.css'%}">
     <title>Comenzar</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Página inicio de sesión y registro Log Inventory">
@@ -43,23 +43,23 @@
             </div>
         </div>
 
-        {% if messages %}
-          <div class="messages-container">
-            {% for message in messages %}
-              <div class="message-{{message.tags}}">
-                  <div class="message-text">
-                    {{ message }}
-                  </div>
-                  <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
-                    <span class="material-symbols-outlined message-close-button">Close</span>
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
 
     </div>
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message-{{message.tags}}">
+            <div class="message-text">
+                {{ message }}
+            </div>
+            <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                <span class="material-symbols-outlined message-close-button">Close</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <script src="{%static '/SCRIPTS/authenticateScript.js'%}"></script>
 
 </body>

@@ -17,15 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include, re_path
 from django.conf import settings
-from django.conf.urls import handler404
 from django.views.static import serve
 
-from Users.views import Error404View
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Users.urls')),
+    path('',include('Objects.urls')),
 ]
 
 if settings.DEBUG:
@@ -38,5 +37,3 @@ if settings.DEBUG:
             },
         ),
     ]
-    
-handler404 = Error404View.as_view()

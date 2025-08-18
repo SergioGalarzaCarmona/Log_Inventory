@@ -90,7 +90,7 @@ a.subusers-link span.material-symbols-outlined:hover {
     display: flex;
     flex-direction: row;
     place-content: center;
-    background-image: url(../IMAGES/Escritorio.webp);
+    background-image: url(../../IMAGES/Escritorio.webp);
     background-size: cover;
     padding-top: calc(2rem + 44.78px);
 }

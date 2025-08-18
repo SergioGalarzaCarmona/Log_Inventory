@@ -37,7 +37,7 @@ main {
     background-color: var(--bg-color);
     position: fixed;
     right: 0;
-    background-image: url(../IMAGES/Escritorio.webp);
+    background-image: url(../../IMAGES/Escritorio.webp);
     background-size: cover;
     overflow-y: auto;
 }

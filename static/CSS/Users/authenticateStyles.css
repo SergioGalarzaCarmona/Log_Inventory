@@ -14,7 +14,7 @@ body {
     width: 100dvw;
     display: grid;
     place-items: center;
-    background-image: url(../IMAGES/Troncos.webp);
+    background-image: url(../../IMAGES/Troncos.webp);
     background-size: cover;
     font-family: Montserrat;
 }
@@ -274,7 +274,7 @@ form > h2 {
 
 .messages-container {
   position: fixed;
-  top: 20px;
+  top: 10%;
   right: 20px;
   max-width: 350px;
   z-index: 1050; 

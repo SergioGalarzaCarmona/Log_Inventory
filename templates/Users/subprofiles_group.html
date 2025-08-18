@@ -7,8 +7,8 @@
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
-    <link rel="stylesheet" href="{%static '/CSS/subprofilesGroupStyles.css'%}">
-    <link rel="stylesheet" href="{%static '/CSS/subusersStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/Users/subprofilesGroupStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/Users/subusersStyles.css'%}">
     <title>Manejo de Grupos - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Subusers Groups Log Inventory">
@@ -16,7 +16,7 @@
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
-    {% include 'Users/sideBar.html' with path='manage_subusergroups' profile=profile type=type permissions=permissions active_subusers="active"%}
+    {% include 'sideBar.html' with path='manage_subusergroups' profile=profile type=type permissions=permissions active_subusers="active"%}
     <main>
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
@@ -64,7 +64,7 @@
         <div class="group-container">
             <form method="POST" class="group-image" enctype="multipart/form-data">
                 <label for="id_image_{{form.instance.id}}">
-                    <img src="../../../media/{{form.instance.image}}" alt="Group Image">
+                    <img src="{{form.instance.image.url}}" alt="Group Image">
                     <div class="image-overlay">
                         <label class="delete-image material-symbols-outlined" for="delete_image_{{form.instance.id}}">delete</label>
                     </div>
@@ -125,22 +125,21 @@
         </div>
         {% endfor %}
         </div>
-        {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                    <div class="message-{{message.tags}}">
-                        <div class="message-text">
-                            {{ message }}
-                        </div>
-                        <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
-                            <span class="material-symbols-outlined message-close-button">Close</span>
-                        </div>
-                      </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
     </main>
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message-{{message.tags}}">
+            <div class="message-text">
+                {{ message }}
+            </div>
+            <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                <span class="material-symbols-outlined message-close-button">Close</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <script src="{%static '/SCRIPTS/subusersGroupScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
 </body>
