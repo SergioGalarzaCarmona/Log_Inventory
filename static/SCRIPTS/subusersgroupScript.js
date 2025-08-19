@@ -87,3 +87,24 @@ closeButtons.forEach(button => {
     }
   });
 });
+
+// Handle search user in subusers
+
+const filterBar = document.querySelector('.filter-bar__search');
+
+filterBar.addEventListener('input', () => {
+    const groups = document.querySelectorAll('.username__container');
+    const filterText = filterBar.value.toLowerCase();
+
+    groups.forEach((group) => {
+        const groupFather = group.parentElement.parentElement
+        const groupChildren = group.lastElementChild;
+        const name = groupChildren.value.toLowerCase();
+
+        if (!name.includes(filterText)) {
+            groupFather.classList.add('hidden');
+        } else {
+            groupFather.classList.remove('hidden');
+        }
+    });
+});

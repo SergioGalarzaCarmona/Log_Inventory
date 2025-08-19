@@ -23,7 +23,7 @@
                 <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0">
                 <input onclick="window.location.href='/subusers_group';" type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-md-1 col-3">
                 <div class="filter-bar__name col-md-4 col-8">
-                    <input type="text">
+                    <input type="text" class="filter-bar__search">
                     <input value="search" type="submit" class="material-symbols-outlined">
                 </div>
                 <div class="filter-bar__logo-container col-md-5 col-0">
@@ -69,7 +69,7 @@
                 {% for subuser in subusers %}
                 <tr onclick="window.location.href='/subprofile/{{ subuser.user.username }}';">
                     <td>{{forloop.counter}}</td>
-                    <td>{{subuser.user.username}}</td>
+                    <td class="username">{{subuser.user.username}}</td>
                     <td>{{subuser.group.name}}</td>
                     <td>{{subuser.user.email}}</td>
                 </tr>

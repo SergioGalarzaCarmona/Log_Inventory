@@ -496,15 +496,13 @@ class EditSubprofileForm(forms.ModelForm):
         if len(users) > 0:
             error = ValidationError(self.fields['email'].error_messages['unique'], 
                                     code='unique')
-            self.add_error('email', error)
-            
+            self.add_error('email', error)    
 class EditSubprofileGroupForm(forms.ModelForm):
     name = forms.CharField(
         max_length=24,
         required = True, 
         label= 'Nombre del grupo:',
-        widget=forms.TextInput(
-            ),
+        widget=forms.TextInput(),
         error_messages={
             'is_too_short': 'El nombre del grupo debe tener al menos 8 caracteres.',
             'unique' : 'El nombre del grupo ya está registrado.',
