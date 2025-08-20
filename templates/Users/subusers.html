@@ -19,8 +19,8 @@
     <main>
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
-                <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0">
-                <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0">
+                <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0" title="ordenar a-z">
+                <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0" title="ordenar z-a">
                 <input onclick="window.location.href='/subusers_group';" type="submit" value="filter_alt" class="filter-bar__type material-symbols-outlined col-md-1 col-3">
                 <div class="filter-bar__name col-md-4 col-8">
                     <input type="text" class="filter-bar__search">
@@ -60,20 +60,26 @@
         </div> 
         <div class="subusers-table__container">
             <table class="subusers-table">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Grupo</th>
-                    <th>Correo</th>
-                </tr>
-                {% for subuser in subusers %}
-                <tr onclick="window.location.href='/subprofile/{{ subuser.user.username }}';">
-                    <td>{{forloop.counter}}</td>
-                    <td class="username">{{subuser.user.username}}</td>
-                    <td>{{subuser.group.name}}</td>
-                    <td>{{subuser.user.email}}</td>
-                </tr>
-                {% endfor %}
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Grupo</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for subuser in subusers %}
+                    <tr onclick="window.location.href='/subprofile/{{ subuser.user.username }}';" >
+                        <td>{{forloop.counter}}</td>
+                        <td class="username">{{subuser.user.username}}</td>
+                        <td>{{subuser.group.name}}</td>
+                        <td>{{subuser.user.email}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
             </table>
         </div>
 

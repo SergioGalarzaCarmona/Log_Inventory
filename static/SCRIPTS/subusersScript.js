@@ -97,3 +97,31 @@ filterBar.addEventListener('input', () => {
         }
     });
 });
+
+// Handle order buttons 
+
+function sortTable(order = "asc") {
+  const table = document.querySelector(".subusers-table");
+  const tbody = table.querySelector("tbody");
+
+  // Get rows as array
+  let rows = Array.from(tbody.querySelectorAll("tr"));
+
+  // Sort by first column (Name)
+  rows.sort((a, b) => {
+    let nameA = a.cells[1].textContent.trim();
+    let nameB = b.cells[1].textContent.trim();
+
+    return order === "asc"
+      ? nameA.localeCompare(nameB)
+      : nameB.localeCompare(nameA);
+  });
+
+  // Re-render
+  tbody.innerHTML = "";
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// Bind buttons
+document.querySelector(".filter-bar__a-z").addEventListener("click", ()=> sortTable("asc"));
+document.querySelector(".filter-bar__z-a").addEventListener("click", ()=> sortTable("desc"));
