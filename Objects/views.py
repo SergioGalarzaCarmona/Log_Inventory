@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from Users.models import Profile,Subprofile
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from Users.async_functions import redirect_async,render_async,get_users_log,get_groups_log
-
+from .forms import ObjectForm,ObjectsGroupForm
 # Create your views here.
 
 @login_required
@@ -20,11 +20,46 @@ def main(request):
         profile = Subprofile.objects.get(user=request.user) 
         type = 'subprofile'
         permissions = profile.group.permissions.name
-    return render(request, 'Objects/main.html',{
-        'profile': profile,
-        'type' : type,
-        'permissions' : permissions
-    })
+        
+    if request.method == 'GET':
+        return render(request, 'Objects/main.html',{
+            'profile': profile,
+            'type' : type,
+            'permissions' : permissions,
+            'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user),
+            'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user)
+        })
+    else:
+        object = request.POST.get('stock', None)
+        if object:
+            form = ObjectForm(request.POST, request.FILES or None, user=profile.user if type == 'profile' else profile.profile.user)
+            if not form.is_valid():
+                messages.error(request, 'Hubo un error al tratar de crear el objeto.')
+                return render(request, 'Objects/main.html',{
+                    'profile': profile,
+                    'type' : type,
+                    'permissions' : permissions,
+                    'object_form' : form,
+                    'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user)
+                })
+            form.save()
+            messages.success(request, 'Objeto creado correctamente.')
+            return redirect('main')
+        else:
+            form = ObjectsGroupForm(request.POST, request.FILES or None,  user=profile.user if type == 'profile' else profile.profile.user)
+            if not form.is_valid():
+                messages.error(request, 'Hubo un error al tratar de crear el grupo de objetos.')
+                return render(request, 'Objects/main.html',{
+                    'profile': profile,
+                    'type' : type,
+                    'permissions' : permissions,
+                    'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user),
+                    'object_group_form' : form
+                })
+            form.save()
+            messages.success(request, 'Grupo de objetos creado correctamente.')
+            return redirect('main')
+        
 
 @login_required
 async def log(request):

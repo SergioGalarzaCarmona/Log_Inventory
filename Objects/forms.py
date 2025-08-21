@@ -3,7 +3,7 @@ from .models import Object, ObjectsGroup
 from Users.models import Subprofile
 from django.core.exceptions import ValidationError
 
-class CreateObjectForm(forms.ModelForm):
+class ObjectForm(forms.ModelForm):
     name = forms.CharField(
         label="Nombre",
         required=True,
@@ -87,7 +87,8 @@ class CreateObjectForm(forms.ModelForm):
         super().__init__(*args,**kwargs)
         if user: 
             self.fields['group'].queryset = ObjectsGroup.objects.filter(user=user)
-            self.fields['in_charge'].queryset = Subprofile.objects.filter(user=user)
+            self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile)
+            self.fields['in_charge'].initial = self.instance.group.in_charge if self.instance else None
         
     def clean_name(self):
         name = self.cleaned_data.get('name')
@@ -127,3 +128,71 @@ class CreateObjectForm(forms.ModelForm):
             self.add_error('in_charge', error)
         return in_charge
     
+class ObjectsGroupForm(forms.ModelForm):
+    name = forms.CharField(
+        label="Nombre",
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+
+            }
+        ),
+        error_messages={
+            "invalid_lenght" : "El nombre es muy corto o muy largo.",
+            "unique" : "El nombre del grupo solo puede estar registrado una sola vez."
+        }
+    )
+    
+    image = forms.ImageField(
+        label="Imagen",
+        required=False,
+        widget=forms.FileInput(
+            attrs={
+
+            }
+        )
+    )
+    
+    in_charge = forms.ModelChoiceField(
+        queryset=None,
+        label="Encargado",
+        widget=forms.Select(
+            attrs={
+                
+            }
+        ),
+        error_messages={
+            "invalid" : "Este encargado no pertenece al usuario referenciado."
+        }
+    )
+    
+    class Meta:
+        model=ObjectsGroup
+        fields = ["name", "image", "in_charge"]
+        
+    def __init__(self, *args,**kwargs):
+        user = kwargs.pop('user',None)
+        self.user = user
+        super().__init__(*args,**kwargs)
+        if user: 
+            self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile)
+            
+    def clean_in_charge(self):
+        in_charge = self.cleaned_data.get('in_charge')
+        if in_charge.profile != self.user.profile:
+            error = ValidationError(self.fields['in_charge'].error_messages['invalid'],
+                                    code="invalid")
+            self.add_error('in_charge',error)
+        return in_charge
+    
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if name.lenght < 3 or name.lenght > 100:
+            error = ValidationError(self.fields['name'].error_messages['invalid_lenght'],
+                                    code="invalid_lenght")
+        self.add_error('invalid_lenght',error)
+        if ObjectsGroup.objects.filter(name=name, user=self.user):
+            error = ValidationError(self.fields['name'].error_messages['unique'],
+                                    code="unique")
+            self.add_error('name', error)
+        return name
