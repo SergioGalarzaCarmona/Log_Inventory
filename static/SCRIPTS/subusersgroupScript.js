@@ -118,24 +118,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnZA = document.querySelector(".filter-bar__z-a");
 
     function sortGroups(order = "asc") {
-// Get all groups
+        // Get all groups
         const groups = Array.from(groupsContainer.querySelectorAll(".group-container"));
 
-// Order by the name input value
+        // Order by the name input value
         groups.sort((a, b) => {
             const nameA = a.querySelector(".group-info input[name='name']").value.toLowerCase();
             const nameB = b.querySelector(".group-info input[name='name']").value.toLowerCase();
 
-            if (nameA < nameB) return order === "asc" ? -1 : 1;
-            if (nameA > nameB) return order === "asc" ? 1 : -1;
-            return 0;
+            return order === "asc"
+            ? nameA.localeCompare(nameB)
+            : nameB.localeCompare(nameA)
         });
 
-// Reinsert in the DOM in the new order
+        // Reinsert in the DOM in the new order
         groups.forEach(group => groupsContainer.appendChild(group));
     }
 
-// Bind buttons
+    // Bind buttons
     btnAZ.addEventListener("click", () => sortGroups("asc"));
     btnZA.addEventListener("click", () => sortGroups("desc"));
 });
