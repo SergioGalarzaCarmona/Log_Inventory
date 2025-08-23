@@ -29,9 +29,52 @@
                 <div class="filter-bar__logo-container col-md-5 col-0">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
-            </div> 
+            </div>
         </div>
+        <div class="forms-container">
+            <nav>
+                <label for="create-object" class="material-symbols-outlined close-formObject hidden">arrow_back</label>
+                <label for="create-group" class="material-symbols-outlined close-formGroup hidden">arrow_back</label>
+            </nav>
+            <input type="checkbox" {{checked}} id="create-object">
+            <form class="create-object" id='form-object' enctype="multipart/form-data" method="POST">
+                {% csrf_token %}    
+                {{object_form}}
+                <input type="button" value="Crear Objeto" id="open-dialog">
+                <input type="submit" hidden id="submit">
+            </form>
+            <input type="checkbox" {{checked_group}} id="create-group">
+            <form class="create-group" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{object_group_form}}
+                <input type="submit" value="Crear Grupo">
+            </form>
+            <dialog id="group-dialog">
+                <label for="close-dialog" class="material-symbols-outlined">Close</label>
+                <p>Para poder crear un objeto necesita un grupo primero, ¿Desea crear un grupo?</p>
+                <div>
+                    <button value=0 id="close-dialog">No</button>
+                    <button value=1 id="create">Si</button>
+                </div>
+            </dialog>
+        </div> 
+        
+
         <div class="objects-area">
+            {% for object in objects %}
+                <div class="object-card">
+                    <div class="object-card__image-container">
+                        <img src="{{ object.image.url }}" alt="Imagen del objeto {{ object.name }}">
+                    </div>
+                    <div class="object-card__info-container">
+                        <h3 class="object-card__name">{{ object.name }}</h3>
+                        <p class="object-card__group">Grupo: <span class="bold">{{ object.group.name }}</span></p>
+                        <p class="object-card__quantity">Cantidad: <span class="bold">{{ object.stock }}</span></p>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="no-objects">No hay objectos todavía</p>
+            {% endfor %}
         </div>
         {% if messages %}
             <div class="messages-container">

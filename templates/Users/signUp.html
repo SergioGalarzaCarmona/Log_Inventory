@@ -1,16 +1,32 @@
 <form method="POST" enctype="multipart/form-data" class="signUp-form">
-    <h2 class="{{class_h2}}">Crear cuenta</h2>
+    <h2 class="">Crear cuenta</h2>
     {% csrf_token %}
-    {{ form }}
-    {% if messages %}
-    <ul class="errorlist">
-        <li>
-            {{messages}}
-        </li>
-    </ul>
-    {% endif %}
-    <input type="submit" name="signup" value="Registrarse">
-    <div class="button-container">
-        ¿Ya tienes cuenta?<button class="logIn-button" id="login-responsive">Iniciar Sesión</button>
+    <div>
+        {{ form.username.label_tag}}
+        {{ form.username }}
     </div>
-</form> 
+
+    <div>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+    </div>
+
+    <div>
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+    </div>
+
+    <div>
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+    </div>
+
+    <div>
+        {{ form.image.label_tag }}
+        {{ form.image }}
+    </div>
+        <input type="submit" name="signup" value="Registrarse">
+        <div class="button-container">
+            ¿Ya tienes cuenta?<button class="logIn-button" id="login-responsive">Iniciar Sesión</button>
+        </div>
+</form>

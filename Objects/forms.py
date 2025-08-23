@@ -1,5 +1,5 @@
 from django import forms
-from .models import Object, ObjectsGroup
+from .models import Objects, ObjectsGroup
 from Users.models import Subprofile
 from django.core.exceptions import ValidationError
 
@@ -31,15 +31,7 @@ class ObjectForm(forms.ModelForm):
         }
     )
     
-    image = forms.ImageField(
-        label="Imagen",
-        required=False,
-        widget=forms.FileInput(
-            attrs={
-                
-            }
-        )
-    )
+    
     
     description = forms.CharField(
         label="Descripción",
@@ -77,9 +69,19 @@ class ObjectForm(forms.ModelForm):
         }
     )
     
+    
+    image = forms.ImageField(
+        label="Imagen",
+        required=False,
+        widget=forms.FileInput(
+            attrs={
+                
+            }
+        )
+    )
     class Meta:
-        model=Object
-        fields = ["name", "stock", "image", "description", "group", "in_charge"]
+        model=Objects
+        fields = ["name", "stock","description", "group", "in_charge","image"]
         
     def __init__(self, *args,**kwargs):
         user = kwargs.pop('user',None)
@@ -88,7 +90,7 @@ class ObjectForm(forms.ModelForm):
         if user: 
             self.fields['group'].queryset = ObjectsGroup.objects.filter(user=user)
             self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile)
-            self.fields['in_charge'].initial = self.instance.group.in_charge if self.instance else None
+            self.fields['in_charge'].initial = self.instance.group.in_charge if not isinstance(self.instance,object) else None
         
     def clean_name(self):
         name = self.cleaned_data.get('name')
@@ -96,7 +98,7 @@ class ObjectForm(forms.ModelForm):
             error = ValidationError(self.fields['name'].error_messages['invalid_lenght'],
                                     code="invalid_lenght")
             self.add_error('name',error)
-        if Object.objects.filter(name=name, user=self.user):
+        if Objects.objects.filter(name=name, user=self.user):
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code="unique")
             self.add_error('name', error)
@@ -187,10 +189,10 @@ class ObjectsGroupForm(forms.ModelForm):
     
     def clean_name(self):
         name = self.cleaned_data.get('name')
-        if name.lenght < 3 or name.lenght > 100:
+        if len(name) < 3 or len(name) > 100:
             error = ValidationError(self.fields['name'].error_messages['invalid_lenght'],
                                     code="invalid_lenght")
-        self.add_error('invalid_lenght',error)
+            self.add_error('name',error)
         if ObjectsGroup.objects.filter(name=name, user=self.user):
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code="unique")

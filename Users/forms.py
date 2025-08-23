@@ -83,7 +83,7 @@ class RegisterUser(UserCreationForm):
         Profile.objects.create(user=user,image=image)
 class RegisterSubprofileGroup(forms.ModelForm):
     name = forms.CharField(
-        max_length=24,
+        max_length=100,
         required = True, 
         label= 'Nombre del grupo',
         widget=forms.TextInput(

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Users.models import Subprofile
+from Users.models import Subprofile, TypeChanges
 
 # Create your models here.
 
@@ -22,8 +22,8 @@ class ObjectsGroup(BaseAuditModel):
         max_length=100
         )
     image = models.ImageField(
-        default='default_group.jpg',
-        upload_to='objects_images'
+        default='default_object_group.jpg',
+        upload_to='objectGroups_images'
         )
     user = models.ForeignKey(
         User, 
@@ -34,13 +34,13 @@ class ObjectsGroup(BaseAuditModel):
         )
     
     def __str__(self):
-        return f'{self.name} Object Group '
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'Group'
         verbose_name_plural = 'Groups'
 
-class Object(BaseAuditModel):
+class Objects(BaseAuditModel):
     group = models.ForeignKey(
         ObjectsGroup,
         on_delete=models.CASCADE
@@ -54,7 +54,7 @@ class Object(BaseAuditModel):
         )
     stock = models.IntegerField()
     image = models.ImageField(
-        default='default.jpg',
+        default='default_object.jpg',
         upload_to='objects_images'
         )
     description = models.TextField()
@@ -64,7 +64,7 @@ class Object(BaseAuditModel):
         )
     
     def __str__(self):
-        return f'{self.name} Object'
+        return f'{self.name}'
     
     class Meta:
         verbose_name = 'Object'
@@ -82,6 +82,33 @@ class TypeTransaction(models.Model):
         verbose_name = 'TypeTransaction'
         verbose_name_plural = 'TypeTransactions'
 
+class GroupObjectsChanges(models.Model):
+    main_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="group_objects_main_user"
+    )
+    group_changed = models.ForeignKey(
+        ObjectsGroup,
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="group_objects_user"
+    )
+    type_change = models.ForeignKey(
+        TypeChanges,
+        on_delete=models.CASCADE
+    )
+    description = models.CharField(
+        max_length=1000
+    )
+    date = models.DateTimeField(
+        auto_now_add=True
+    )
+    
+
 class Transaction(models.Model):
     user = models.ForeignKey(
         User, 
@@ -92,12 +119,13 @@ class Transaction(models.Model):
         on_delete=models.CASCADE
         )
     object = models.ForeignKey(
-        Object, 
+        Objects, 
         on_delete=models.CASCADE
         )
     in_charge = models.ForeignKey(
-        Subprofile,
-        on_delete=models.CASCADE
+        User,
+        on_delete=models.CASCADE,
+        related_name='objects_in_charge'
         )
     stock_before = models.IntegerField()
     stock_after = models.IntegerField()
@@ -115,7 +143,7 @@ class Transaction(models.Model):
 
 class Borrowings(models.Model):
     object = models.ForeignKey(
-        Object,
+        Objects,
         on_delete=models.CASCADE
     )
     in_charge = models.ForeignKey(

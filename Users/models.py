@@ -125,7 +125,7 @@ class Subprofile(BaseAuditModel):
         )
     
     def __str__(self):
-        return f'{self.user.username} Subprofile'
+        return f'{self.user.username}'
     
     class Meta:
         verbose_name = 'Subprofile'

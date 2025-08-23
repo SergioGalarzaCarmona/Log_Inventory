@@ -45,7 +45,7 @@ def logIn(request):
     else:
         messages.error(request,'Usuario o contraseña incorrectos')
         return render(request, 'Users/authenticate.html', {
-            'form': RegisterUser,
+            'form': RegisterUser(),
             'form_login': LoginUser(request.POST)
         })
 
@@ -226,7 +226,7 @@ def manage_subusers(request):
         else: 
             form = RegisterSubprofileGroup(request.POST,request.FILES,user_pk = request.user.pk)
             if not form.is_valid():
-                    return render(request, 'Users/subusers.html',{
+                    return render(request, 'Users/subprofiles_group.html',{
                     'form': RegisterSubuser(user_pk = request.user.pk),
                     'group_form': form,
                     'checked_group' : 'checked',
@@ -244,7 +244,7 @@ def manage_subusers(request):
                 description=f'Creating group {group.name} with permissions {group.permissions.name}',
                 type_change=log)
             messages.success(request,'El grupo se creó con éxito.')
-            return redirect('manage_subusers')
+            return redirect('subusers_group')
 
 @login_required
 def subprofile(request,username):

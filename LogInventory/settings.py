@@ -83,10 +83,10 @@ DATABASES = {
     "default":
        {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": 'loginventory_sgs9',
-            "USER": 'loginventory_sgs9_user',
-            "PASSWORD": 'ZI7dUw6Ws3GI1RPL91HorqdORSrU4LBR',
-            "HOST": 'dpg-d1vng6juibrs739ism20-a.oregon-postgres.render.com',
+            "NAME": 'loginventory_j2az',
+            "USER": 'loginventoryuser',
+            "PASSWORD": 'P2r0qHnc0wQPiRYlFEiKfZkLwxI9eyas',
+            "HOST": 'dpg-d2kgbfv5r7bs73cj9070-a.oregon-postgres.render.com',
             "PORT": 5432,
             'OPTIONS': {
             'client_encoding': 'UTF8',
