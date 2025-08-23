@@ -21,15 +21,18 @@
     <main> 
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
+                {% if type != "Estudiante" %}
                 <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersLog" id="subusersLog-label">manage_accounts</label></div>
                 <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersgroupsLog" id="subusersgroupsLog-label">groups</label></div>
+                {% endif %}
                 <div class="material-symbols-outlined col-md-1 col-3"><label id="objectsLog-label">view_object_track</label></div>
-                <div class="material-symbols-outlined col-md-1 col-3"><label id="objectsLog-label">view_object_track</label></div>
+                <div class="material-symbols-outlined col-md-1 col-3"><label id="objectgroupsLog-label">view_object_track</label></div>
                 <div class="filter-bar__logo-container col-md-8 col-0">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
             </div> 
         </div>
+        <!-- SUBUSERS LOG -->
         <input type="checkbox" id="subusersLog" class="filter-bar__checkbox">
         <div class="history-container subusersLog"> 
           <div class="history-title">
@@ -39,7 +42,7 @@
             {% for log in log_users %}
             <div class="timeline-entry">
               <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
-              <div class="entry-user">{{log.user_changed.username}}</div>
+              <div class="entry-user">{{log.user_changed.username}} <span class="entry-changer"> Cambio hecho por {{log.user}}</span></div>
               <div class="entry-description">
                 {% trans log.description %}
               </div>
@@ -47,16 +50,56 @@
             {% endfor %}
           </div>
         </div>
+
+        <!-- SUBUSERGROUPS LOG -->
         <input type="checkbox" id="subusersgroupsLog" class="filter-bar__checkbox">
         <div class="history-container subusersgroupsLog hidden">
           <div class="history-title">
             <span class="material-symbols-outlined">event_note</span> Historial de Grupos de Usuarios
           </div>
           <div class="timeline">
-            {% for log in log_groups %}
+            {% for log in log_user_groups %}
             <div class="timeline-entry">
               <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
-              <div class="entry-group">{{log.group_changed.name}}</div>
+              <div class="entry-group">{{log.group_changed.name}} <span class="entry-changer"> Cambio hecho por {{log.user}}</span></div>
+              <div class="entry-description">
+                {% trans log.description %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- OBJECTS LOG -->
+        <input type="checkbox" id="objectsLog" class="filter-bar__checkbox">
+        <div class="history-container objectsLog hidden">
+          <div class="history-title">
+            <span class="material-symbols-outlined">event_note</span> Historial de Objetos
+          </div>
+          <div class="timeline">
+            {% for log in log_objects %}
+            <div class="timeline-entry">
+              <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
+              <div class="entry-object">{{log.object.name}} <span class="entry-changer"> Cambio hecho por {{log.in_charge}}</span></div>
+              <div class="entry-description">
+                {% trans log.description %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- OBJECTGROUPS LOG -->
+        <input type="checkbox" id="objectGroupsLog" class="filter-bar__checkbox">
+        <div class="history-container objectgroupsLog hidden">
+          <div class="history-title">
+            <span class="material-symbols-outlined">event_note</span> Historial de Grupos de Objetos
+          </div>
+          <div class="timeline">
+            {% for log in log_object_groups %}
+            <div class="timeline-entry">
+              <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
+              <div class="entry-object-group">{{log.group_changed.name}} <span class="entry-changer"> Cambio hecho por {{log.user}}</span></div>
               <div class="entry-description">
                 {% trans log.description %}
               </div>

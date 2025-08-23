@@ -8,7 +8,7 @@ def get_users_log(profile_admin):
     return UserChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
 
 @sync_to_async
-def get_groups_log(profile_admin):
+def get_user_groups_log(profile_admin):
     return GroupChanges.objects.filter(main_user=profile_admin.user).order_by('-date')
     
 

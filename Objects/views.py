@@ -4,7 +4,8 @@ from Users.models import Profile,Subprofile, TypeChanges
 from .models import Objects,ObjectsGroup,Transaction,GroupObjectsChanges, TypeTransaction
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from Users.async_functions import redirect_async,render_async,get_users_log,get_groups_log
+from Users.async_functions import redirect_async, render_async, get_users_log, get_user_groups_log
+from .async_functions import get_objects_log, get_object_groups_log
 from .forms import ObjectForm,ObjectsGroupForm
 # Create your views here.
 
@@ -106,14 +107,19 @@ async def log(request):
         messages.error(request,'Hubo un error al tratar de cargar el inventario.')
         return await redirect_async('/authenticate_user/deactivate')
     query_users = get_users_log(profile_admin)
-    query_groups = get_groups_log(profile_admin)
+    query_user_groups = get_user_groups_log(profile_admin)
+    query_objects = get_objects_log(profile_admin)
+    query_object_groups = get_object_groups_log(profile_admin)
+    
     if request.method == 'GET':
         return await render_async(request,'Objects/log.html',{
             'type' : type,
             'profile' : profile,
             'permissions' : permissions,
             'log_users' : await query_users,
-            'log_groups' : await query_groups
+            'log_user_groups' : await query_user_groups,
+            'log_objects' : await query_objects,
+            'log_object_groups' : await query_object_groups
         })
     else:
         return await render_async(request,'Objects/log.html',{

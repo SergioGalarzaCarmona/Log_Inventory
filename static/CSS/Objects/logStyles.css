@@ -161,11 +161,15 @@ input[type="checkbox"] {
     color: #666;
 }
 
-.entry-user, .entry-group {
+.entry-user, .entry-group, .entry-object, .entry-object-group {
     font-weight: bold;
     color: var(--fb-color);
 }
 
+.entry-changer {
+    font-size: 12px;
+    color: #666;
+}
 .entry-description {
     background-color: #ccc;
     padding: 10px;

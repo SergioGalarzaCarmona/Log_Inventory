@@ -1,5 +1,3 @@
-from django.utils.translation import gettext as _
-
 def _setup_tables():
     
     from .models import Permissions,PermissionsGroup, TypeChanges
