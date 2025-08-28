@@ -126,16 +126,19 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 .objects-area {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
     width: 100%;
-    height: calc(100dvh - (2rem + 44.78px));
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows : repeat(4,1fr);
-    gap: 15px;
-    padding: 15px;
+    padding: 1.15rem 2.3rem;
+    overflow-y: auto;
+    row-gap: 2rem;
 } 
 
 .object-card {
+    width: 22.5dvw;
+    height: 22.5dvh;
     background-color: var(--sidebar-color);
     border-radius: 15px;
     box-shadow: 0 4px 8px #0002;
@@ -143,7 +146,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     flex-direction: row;
     text-align: center;
     cursor: pointer;
-    height: 80%;
     padding: 0;
 }
 
@@ -229,7 +231,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     cursor: pointer;
     transition: box-shadow .3s;
     outline: none;
-}
+} 
 
 .forms-container input[type="submit"]:hover, .forms-container input[type="button"]:hover {
     box-shadow: 7px 7px 0px rgb(100, 166, 231),
@@ -256,15 +258,23 @@ textarea {
     resize: none;
 }
 
-.forms-container form.create-object div:has(input[type="file"]) {
-    width: 45%;
+.forms-container form.create-object > div:has(input[id="id_name"]) {
+    width: 70%;
+    margin-right: 5%;
+}
+
+.forms-container form.create-object > div:has(input[id="id_stock"]) {
+    width: 25%;
 }
 
 .forms-container form.create-object div:has(select) {
     width: 45%;
-    margin-right: 10%;
 }
 
+.forms-container form.create-object > div:has(select[id="id_group"]) {
+    margin-right: 10%;
+}
+ 
 .forms-container form input:focus, form select:focus, textarea:focus {
     outline: var(--wood) 1px solid;
 }
@@ -450,8 +460,81 @@ dialog button:hover {
     }
 }
 
+
+
+@media (max-width: 768px) {
+    .sidebar__form, .filter-bar__filter-container > .filter-bar__logo-container {
+        display: none;
+    }
+    
+    td:last-child, th:last-child {
+        display: none;
+    }
+
+    .forms-container form {
+        width: 90%;
+        margin-left: 5%;
+        padding: 0 20px;
+    }
+
+    .forms-container form {
+        height: 65dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 65dvh) / 2);
+    } 
+
+    .forms-container form input, form select {
+        margin: 3% 0;
+    }
+
+    .forms-container form div {
+        margin: 1% 0;
+    }
+
+    .close-formSubuser, .close-formGroup {
+        position: absolute;
+        top: calc(calc(2rem + 44.78px) + 10px);
+        margin-left: 5%;
+        font-size: 2rem;
+    }
+
+    textarea {
+        height: 15dvh;
+    }
+
+    .forms-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .forms-container form {
+        height: auto;
+    }
+}
+
+@media (max-height: 840px) and (max-width: 1024px) {
+
+    .forms-container form {
+        height: 80dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 75dvh) / 2);
+    } 
+}
+
+@media (min-height: 1024px) and (max-width: 1024px) {
+    .forms-container form{
+        width: 70%;
+        margin-left: 15%;
+        height: 60dvh;
+        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 60dvh) / 2);
+    }
+
+    textarea {
+        height: 20dvh;
+    }
+} 
+
 @media (min-width: 576px) {
     .container, .container-sm {
         max-width: 100%;
     }
-}
+}   
