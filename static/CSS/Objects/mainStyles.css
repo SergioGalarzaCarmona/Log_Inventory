@@ -50,6 +50,7 @@ main {
     right: 0;
     background-image: url(../../IMAGES/Escritorio.webp);
     background-size: cover;
+    overflow-y: auto;
 }
 
 aside:has(input[type="checkbox"]:checked) ~ main {
@@ -131,8 +132,8 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     flex-direction: row;
     justify-content: space-evenly;
     width: 100%;
+    height: auto;
     padding: 1.15rem 2.3rem;
-    overflow-y: auto;
     row-gap: 2rem;
 } 
 
@@ -147,19 +148,50 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     text-align: center;
     cursor: pointer;
     padding: 0;
+    border: #335a94 solid 2px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.object-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px #0003;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 13px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.object-card:hover .overlay {
+    opacity: 1;
 }
 
 .object-card__image-container {
-    width: 50%;
+    width: calc(50% - 2px);
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #eee;
+    background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                      linear-gradient(-45deg, #ccc 25%, transparent 25%), 
+                      linear-gradient(45deg, transparent 75%, #ccc 75%), 
+                      linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    background-size: 20px 20px;
+    border-radius: 15px 0 0 15px;
 }
 
 .object-card__image-container > img {
     width: 100%;
-    height: 100%;
+    height: 100%; 
     object-fit: cover;
     border-radius: 15px 0 0 15px;
 }
@@ -169,13 +201,33 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-evenly;
+    border-left: #335a94 solid 2px;
 }
 
-.bold {
+.object-card__name {
+    width: 100%;
+    padding: 0 5%;
+    font-size: 1.5rem;
     font-weight: bold;
+    margin: 10px 0;
+    white-space: nowrap;       
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
+
+.object-card__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 5%;
+}
+
+.object-card__info p {
+    margin: -0.12rem 0;
+    font-size: .9rem;
+}
+
 /* FORMS STYLES */
 
 .close-formObject, .close-formGroup {
@@ -509,6 +561,11 @@ dialog button:hover {
 
     .forms-container form {
         height: auto;
+    }
+
+    .object-card {
+        width: 85dvw;
+        height: 17.5dvh;
     }
 }
 

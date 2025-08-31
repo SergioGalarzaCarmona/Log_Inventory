@@ -58,18 +58,21 @@
                 </div>
             </dialog>
         </div>  
-        
+         
 
         <div class="objects-area">
             {% for object in objects %}
                 <div class="object-card">
+                    <div class="overlay"></div>
                     <div class="object-card__image-container">
                         <img src="{{ object.image.url }}" alt="Imagen del objeto {{ object.name }}">
                     </div>
                     <div class="object-card__info-container">
                         <h3 class="object-card__name">{{ object.name }}</h3>
-                        <p class="object-card__group">Grupo: <span class="bold">{{ object.group.name }}</span></p>
-                        <p class="object-card__quantity">Cantidad: <span class="bold">{{ object.stock }}</span></p>
+                        <div class="object-card__info">
+                            <p class="object-card__group">Grupo: <strong>{{ object.group.name }}</strong></p>
+                            <p class="object-card__quantity">Cantidad: <strong>{{ object.stock }}</strong></p>
+                        </div>
                     </div>
                 </div>
             {% empty %}
