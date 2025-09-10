@@ -174,7 +174,7 @@ a.subusers-link span.material-symbols-outlined:hover {
     font-size: .9rem;
 }
 
-form input, form select {
+form input, form select, textarea {
     background-color: #eee;
     border: none;
     margin: 10px 0;
@@ -184,6 +184,7 @@ form input, form select {
     border-radius: 8px;
     width: 100%;
     outline: none;
+    resize: none;
 }
 
 form select {
@@ -250,7 +251,7 @@ form > div {
     margin-top: 10px;
     cursor: pointer;
     transition: box-shadow .3s;
-    outline: none;
+    outline: none; 
 }
 
 #open-dialog:hover, dialog input[type="submit"]:hover {

@@ -27,7 +27,7 @@
         </div> 
         <nav>
             <div class="subusers-link__container"> 
-                <a title="Volver a Usuarios" class="subusers-link" href="{% url 'manage_subusers' %}">
+                <a title="Volver a Usuarios" class="subusers-link" href="{% url 'main' %}">
                     <span class="material-symbols-outlined">arrow_back</span>
                 </a>
             </div>
@@ -45,7 +45,7 @@
                             <input type="submit" id="delete_image" value="submit" hidden>
                         </form>
                     </div>
-                    <img src="{{subprofile.image.url}}" alt="profile-img" class="profile-img">
+                    <img src="{{object.image.url}}" alt="profile-img" class="profile-img">
                 </label>
                 <form method="POST" enctype="multipart/form-data" class="image_form">
                     {% csrf_token %}
@@ -53,50 +53,60 @@
                     <input type="submit" id='id_submit' value="Cambiar imagen">
                 </form>
             </div>
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST">
                 {% csrf_token %}
 
                 <div>
                     {{ object_form.name.label_tag }}
-                    {{ object_form.name }}
                     {% if object_form.name.errors %}
                         <div class="error">
                             {{ object_form.name.errors }}
                         </div>
                     {% endif %}
+                    {{ object_form.name }}
                 </div>
 
                 <div>
                     {{ object_form.stock.label_tag }}
-                    {{ object_form.stock }}
                     {% if object_form.stock.errors %}
                         <div class="error">
                             {{ object_form.stock.errors }}
                         </div>
                     {% endif %}
+                    {{ object_form.stock }}
                 </div>
             
                 <div>
                     {{ object_form.description.label_tag }}
-                    {{ object_form.description }}
                     {% if object_form.description.errors %}
                         <div class="error">
                             {{ object_form.description.errors }}
                         </div>
                     {% endif %}
+                    {{ object_form.description }}
                 </div>
             
                 <div>
                     {{ object_form.in_charge.label_tag }}
-                    {{ object_form.in_charge }}
                     {% if object_form.in_charge.errors %}
                         <div class="error">
                             {{ object_form.in_charge.errors }}
                         </div>
                     {% endif %}
+                    {{ object_form.in_charge }}
+                </div>
+
+                <div>
+                    {{ object_form.group.label_tag }}
+                    {% if object_form.group.errors %}
+                        <div class="error">
+                            {{ object_form.group.errors }}
+                        </div>
+                    {% endif %}
+                    {{ object_form.group }}
                 </div>
             
-                <input type="submit" value="Guardar cambios" class="submit-button">
+                <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
             </form>
 
         </div>
@@ -119,6 +129,6 @@
     </div>
     {% endif %}
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
-    <script src="{%static '/SCRIPTS/subprofileScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/objectScript.js'%}"></script>
 </body>
 </html>

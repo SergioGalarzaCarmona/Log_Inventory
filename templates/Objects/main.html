@@ -62,7 +62,7 @@
 
         <div class="objects-area">
             {% for object in objects %}
-                <div class="object-card">
+                <div class="object-card" onclick="window.location.href='{{object.id}}'">
                     <div class="overlay"></div>
                     <div class="object-card__image-container">
                         <img src="{{ object.image.url }}" alt="Imagen del objeto {{ object.name }}">
