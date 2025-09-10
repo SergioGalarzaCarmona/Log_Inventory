@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from Users.models import Profile,Subprofile, TypeChanges
 from .models import Objects,ObjectsGroup,Transaction,GroupObjectsChanges, TypeTransaction
@@ -87,6 +88,60 @@ def main(request):
             messages.success(request, 'Grupo de objetos creado correctamente.')
             return redirect('main')
         
+
+@login_required
+def edit_object(request, id):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+        type = 'profile'
+        permissions = 'admin'
+    except ObjectDoesNotExist:
+        profile = Subprofile.objects.get(user=user)
+        type = 'subprofile'
+        permissions = profile.group.permissions.name
+        if permissions == 'Estudiante':
+            messages.warning(request,'No tienes permiso para ver esa página.')
+            logout(request)
+            return redirect('/authenticate_user/deactivate')
+    except:
+        messages.error(request,'Hubo un error al tratar de cargar el objeto.')
+        return redirect('/authenticate_user/deactivate')
+    
+    try:
+        object = Objects.objects.get(id=id)
+    except:
+        messages.error(request,'No se encontró el objeto que intentas editar.')
+        return redirect('main')
+    
+    if object.user != (profile.user if type == 'profile' else profile.profile.user):
+        messages.error(request,'No tienes permiso para editar ese objeto.')
+        logout(request)
+        return redirect('main')
+    
+    if request.method == 'GET':
+        form = ObjectForm(user=profile.user if type == 'profile' else profile.profile.user, instance=object)
+        return render(request, 'Objects/object.html',{
+            'profile': profile,
+            'type' : type,
+            'permissions' : permissions,
+            'object' : object,
+            'object_form' : form
+        })
+    else:
+        form = ObjectForm(request.POST, request.FILES or None, user=profile.user if type == 'profile' else profile.profile.user, instance=object)
+        if not form.is_valid():
+            messages.error(request, 'Hubo un error al tratar de editar el objeto.')
+            return render(request, 'Objects/object.html',{
+                'profile': profile,
+                'type' : type,
+                'permissions' : permissions,
+                'object' : object,
+                'object_form' : form
+            })
+        object = form.save()
+        messages.success(request, 'Objeto editado correctamente.')
+        return redirect('main')
 
 @login_required
 async def log(request):

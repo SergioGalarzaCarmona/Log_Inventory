@@ -155,6 +155,17 @@ class ObjectsGroupForm(forms.ModelForm):
         )
     )
     
+    description = forms.CharField(
+        label='Descripción',
+        required=False,
+        widget = forms.Textarea(
+            attrs={
+                
+            }
+        )
+    )
+    
+    
     in_charge = forms.ModelChoiceField(
         queryset=None,
         label="Encargado",

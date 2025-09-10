@@ -1,0 +1,124 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/sideBarSmallStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/Users/profileStyles.css'%}">
+    <title>Usuario - Log Inventory</title>
+    <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
+    <meta name="description" content="Visualización subusuario Log Inventory">
+    <meta name="author" content="Log Inventory">
+    <meta name="robots" content="noindex, nofollow">
+</head> 
+<body>
+    {% include 'sideBar.html' with path='edit_object' profile=profile type=type permissions=permissions active_objects="active"%}
+    <main>
+        <div class="filter-bar"> 
+            <div class="filter-bar__filter-container">
+                <div class="name">{{objects.name}}</div>
+                <div class="filter-bar__logo-container">
+                    <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
+                </div>
+            </div>
+        </div> 
+        <nav>
+            <div class="subusers-link__container"> 
+                <a title="Volver a Usuarios" class="subusers-link" href="{% url 'manage_subusers' %}">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </a>
+            </div>
+        </nav>
+        <div class="profile-container">
+            <div class="profile-img-container">
+                <label for="id_image">
+                    <div class="img-overlay">
+                        <button id = 'id_delete_button'>
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="checkbox" name="delete_image" id="id_delete_checkbox" hidden>
+                            <input type="submit" id="delete_image" value="submit" hidden>
+                        </form>
+                    </div>
+                    <img src="{{subprofile.image.url}}" alt="profile-img" class="profile-img">
+                </label>
+                <form method="POST" enctype="multipart/form-data" class="image_form">
+                    {% csrf_token %}
+                    {{image_form}}
+                    <input type="submit" id='id_submit' value="Cambiar imagen">
+                </form>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div>
+                    {{ object_form.name.label_tag }}
+                    {{ object_form.name }}
+                    {% if object_form.name.errors %}
+                        <div class="error">
+                            {{ object_form.name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    {{ object_form.stock.label_tag }}
+                    {{ object_form.stock }}
+                    {% if object_form.stock.errors %}
+                        <div class="error">
+                            {{ object_form.stock.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <div>
+                    {{ object_form.description.label_tag }}
+                    {{ object_form.description }}
+                    {% if object_form.description.errors %}
+                        <div class="error">
+                            {{ object_form.description.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <div>
+                    {{ object_form.in_charge.label_tag }}
+                    {{ object_form.in_charge }}
+                    {% if object_form.in_charge.errors %}
+                        <div class="error">
+                            {{ object_form.in_charge.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            
+                <input type="submit" value="Guardar cambios" class="submit-button">
+            </form>
+
+        </div>
+        
+        
+
+    </main>
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message-{{message.tags}}">
+            <div class="message-text">
+                {{ message }}
+            </div>
+            <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                <span class="material-symbols-outlined message-close-button">Close</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/subprofileScript.js'%}"></script>
+</body>
+</html>
