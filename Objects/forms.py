@@ -98,7 +98,7 @@ class ObjectForm(forms.ModelForm):
             error = ValidationError(self.fields['name'].error_messages['invalid_lenght'],
                                     code="invalid_lenght")
             self.add_error('name',error)
-        if Objects.objects.filter(name=name, user=self.user):
+        if Objects.objects.filter(name=name, user=self.user).exclude(id=self.instance.id).exists():
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code="unique")
             self.add_error('name', error)

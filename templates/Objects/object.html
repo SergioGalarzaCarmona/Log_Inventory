@@ -111,23 +111,23 @@
 
         </div>
         
-        
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message-{{message.tags}}">
+                        <div class="message-text">
+                            {{ message }}
+                        </div>
+                        <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                            <span class="material-symbols-outlined message-close-button">Close</span>
+                        </div>
+                      </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
     </main>
-    {% if messages %}
-    <div class="messages-container">
-        {% for message in messages %}
-        <div class="message-{{message.tags}}">
-            <div class="message-text">
-                {{ message }}
-            </div>
-            <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
-                <span class="material-symbols-outlined message-close-button">Close</span>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/objectScript.js'%}"></script>
 </body>

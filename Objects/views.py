@@ -129,7 +129,17 @@ def edit_object(request, id):
             'object_form' : form
         })
     else:
-        form = ObjectForm(request.POST, request.FILES or None, user=profile.user if type == 'profile' else profile.profile.user, instance=object)
+        form = ObjectForm(request.POST, request.FILES or None, user=profile.user if type == 'profile' else profile.profile.user, instance=object, initial=object.__dict__)
+        if not form.has_changed():
+            messages.warning(request, 'No se realizaron cambios.')
+            return render(request, 'Objects/object.html',{
+                'profile': profile,
+                'type' : type,
+                'permissions' : permissions,
+                'object' : object,
+                'object_form' : form
+            })
+            
         if not form.is_valid():
             messages.error(request, 'Hubo un error al tratar de editar el objeto.')
             return render(request, 'Objects/object.html',{

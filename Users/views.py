@@ -149,7 +149,7 @@ def profile(request,username):
             data = form_post.data         
             #if the user email and username are the same that the data of the form, return a message that the data has not been updated   
             if user.email == data['email'] and user.username == data['username']:
-                messages.error(request,'Los datos no han sido actualizados.')
+                messages.warning(request,'Los datos no han sido actualizados.')
                 return render(request, 'Users/profile.html',{
                     'profile': profile,
                     'form' : form,
@@ -360,7 +360,7 @@ def subprofile(request,username):
             data = form_post.data
             
             if not form_post.has_changed() and change_password == False:
-                messages.error(request,'Los datos no han sido actualizados.')
+                messages.warning(request,'Los datos no han sido actualizados.')
                 return render(request, 'Users/subprofile.html',{
                     'subprofile': subprofile,
                     'profile' : profile,
@@ -537,7 +537,7 @@ def manage_subusers_group(request):
             form = EditSubprofileGroupForm(instance=group,user_pk=user_pk)
             form_post = EditSubprofileGroupForm(request.POST,instance=group,user_pk=user_pk)
             if request.POST['name'] == group.name and request.POST['permissions'] == str(group.permissions.pk) and request.POST['description'] == group.description:
-                messages.error(request,'Los datos no han sido actualizados.')
+                messages.warning(request,'Los datos no han sido actualizados.')
                 return render(request,'Users/subprofiles_group.html',{
                     'type' : type,
                     'profile' : profile,

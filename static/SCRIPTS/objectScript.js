@@ -1,3 +1,16 @@
+// Handle all close button to alert messages
+const closeButtons = document.querySelectorAll('.message-close-button');
+console.log(closeButtons)
+closeButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const alert = button.closest('.message-error, .message-success, .message-warning'); 
+    if (alert) {
+      alert.classList.add('hidden');
+    }
+  });
+})
+
+
 // This script handles the subprofile image upload functionality for the profile image.
 const object_image_input = document.getElementById('id_image');
 object_image_input.addEventListener('change', function () {
@@ -11,16 +24,3 @@ delete_button.addEventListener('click',function () {
     checkbox.checked = true
     document.getElementById('delete_image').click()
 })
-
-// Handle all close button to alert messages
-const closeButtons = document.querySelectorAll('.message-close-button');
-
-closeButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const alert = button.closest('.message-error, .message-success, .message-warning'); 
-    if (alert) {
-      alert('hola')
-      alert.classList.add('hidden');
-    }
-  });
-});
