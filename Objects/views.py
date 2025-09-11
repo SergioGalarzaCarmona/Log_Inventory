@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from Users.async_functions import redirect_async, render_async, get_users_log, get_user_groups_log
 from .async_functions import get_objects_log, get_object_groups_log
+from .functions import create_transaction_description
 from .forms import ObjectForm,ObjectsGroupForm
 # Create your views here.
 
@@ -139,7 +140,6 @@ def edit_object(request, id):
                 'object' : object,
                 'object_form' : form
             })
-            
         if not form.is_valid():
             messages.error(request, 'Hubo un error al tratar de editar el objeto.')
             return render(request, 'Objects/object.html',{
@@ -149,7 +149,25 @@ def edit_object(request, id):
                 'object' : object,
                 'object_form' : form
             })
+            
+        stock_before = object.stock
         object = form.save()
+        if not 'stock' in form.changed_data:
+            type_transaction = TypeTransaction.objects.get(name='Update')
+        if stock_before > object.stock:
+            type_transaction = TypeTransaction.objects.get(name='Substract')
+        else:
+            type_transaction = TypeTransaction.objects.get(name='Add')
+        Transaction.objects.create(
+            user = profile.user if type == 'profile' else profile.profile.user,
+            type = type_transaction,
+            object = object,
+            in_charge = request.user,
+            stock_before = stock_before,
+            stock_after = object.stock,
+            description = create_transaction_description(object=object ),
+            
+        )
         messages.success(request, 'Objeto editado correctamente.')
         return redirect('main')
 
