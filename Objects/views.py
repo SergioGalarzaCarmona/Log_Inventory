@@ -9,6 +9,7 @@ from Users.async_functions import redirect_async, render_async, get_users_log, g
 from .async_functions import get_objects_log, get_object_groups_log
 from .functions import create_transaction_description
 from .forms import ObjectForm,ObjectsGroupForm
+from Users.forms import SetImageForm
 # Create your views here.
 
 @login_required
@@ -127,18 +128,60 @@ def edit_object(request, id):
             'type' : type,
             'permissions' : permissions,
             'object' : object,
-            'object_form' : form
+            'object_form' : form,
+            'image_form' : SetImageForm(),
         })
     else:
+        image = request.FILES.get('image',False)
+        delete_image = request.POST.get('delete_image',False)
+        
+        if image:
+            image_before = object.image.name
+            if image_before == 'default_object.jpg':
+                image_before = 'Ninguna'
+            object_image = image_before.split('/')[1]
+            object.image = image
+            object.save()
+            Transaction.objects.create(
+                user = profile.user if type == 'profile' else profile.profile.user,
+                type = TypeTransaction.objects.get(name = 'Update'),
+                object = object,
+                in_charge = request.user,
+                stock_before = object.stock,
+                stock_after = object.stock,
+                description = f'Cambio en imagen, antes: {object_image} después: {image}.',
+            )
+            messages.success(request, 'La imagen se cambió con éxito.')
+            return redirect('main')
+        if delete_image: 
+            image_before = object.image.name
+            if image_before == 'default_object.jpg':
+                messages.error(request, 'No se pudo borrar la imagen ya que el objeto no tenía una imagen relacionada.')
+                return redirect(f'/work_space/{id}')
+            object_image = image_before.split('/')[1]
+            object.image = 'default_object.jpg'
+            object.save()
+            Transaction.objects.create(
+                user = profile.user if type == 'profile' else profile.profile.user,
+                type = TypeTransaction.objects.get(name = 'Update'),
+                object = object,
+                in_charge = request.user,
+                stock_before = object.stock,
+                stock_after = object.stock,
+                description = f'Cambio en imagen, antes: {object_image} después: {image}.',
+            )
+            messages.success(request, 'La imagen se cambió con éxito.')
+            return redirect('main')
         form = ObjectForm(request.POST, request.FILES or None, user=profile.user if type == 'profile' else profile.profile.user, instance=object, initial=object.__dict__)
         if not form.has_changed():
-            messages.warning(request, 'No se realizaron cambios.')
+            messages.warning(request, 'No se realizaron cambios porque no había ningun campo editado.')
             return render(request, 'Objects/object.html',{
                 'profile': profile,
                 'type' : type,
                 'permissions' : permissions,
                 'object' : object,
-                'object_form' : form
+                'object_form' : form,
+                'image_form': SetImageForm(),
             })
         if not form.is_valid():
             messages.error(request, 'Hubo un error al tratar de editar el objeto.')
@@ -147,7 +190,8 @@ def edit_object(request, id):
                 'type' : type,
                 'permissions' : permissions,
                 'object' : object,
-                'object_form' : form
+                'object_form' : form,
+                'image_form' : SetImageForm(),
             })
             
         stock_before = object.stock
@@ -165,7 +209,7 @@ def edit_object(request, id):
             in_charge = request.user,
             stock_before = stock_before,
             stock_after = object.stock,
-            description = create_transaction_description(object=object ),
+            description = create_transaction_description(object=form.initial,updated_data = object.__dict__ ),
             
         )
         messages.success(request, 'Objeto editado correctamente.')

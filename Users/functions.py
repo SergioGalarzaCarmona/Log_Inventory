@@ -4,7 +4,7 @@ def _setup_tables():
     from Objects.models import TypeTransaction
     
     # TYPE TRASACTION TABLE
-    REQUIRED = ['Create','Delete','Add','Substract','Update','Returning']
+    REQUIRED = ['Create','Delete','Add','Substract','Update']
     for name in REQUIRED:
         TypeTransaction.objects.get_or_create(name=name)
     TypeTransaction.objects.exclude(name__in=REQUIRED).delete()
@@ -63,13 +63,8 @@ def create_description(object : object,type : str,**kwargs):
             'name' : object.name,
             'permissions' : str(object.permissions.pk)
         }
-    return '\n'.join([f'Change in {key}, before: {initial[key]}, after: {kwargs[key]}' for key in kwargs.keys() if initial[key] != kwargs[key]])
-
-def get_description(description : str):
-    description = description.split('\n')
-    description = [i.split(' ') for i in description]
-    for i in description:
-        subdescription = [t.replace(',','') for t in i]
-        description.append(subdescription)
-    return description
-
+    return ', \n'.join([
+        f'Cambio en {key}, antes: {initial[key]}, después: {kwargs[key]}' 
+        for key in kwargs.keys() 
+        if initial[key] != kwargs[key]]
+        )

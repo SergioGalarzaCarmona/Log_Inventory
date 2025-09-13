@@ -124,25 +124,15 @@ def profile(request,username):
             profile.image = image
             profile.save()
             messages.success(request,'La imagen se cambió con exito.')
-            return render(request, 'Users/profile.html',{
-                    'profile': profile,
-                    'form' : form,
-                    'image_form' : SetImageForm(),
-                    'type' : 'profile',
-                    'permissions' : permissions
-                })
+            return redirect(f'/profile/{username}')
         elif delete_image:
             profile = Profile.objects.get(user=request.user)
+            if profile.image.name == 'default.jpg':
+                messages.error(request, 'No se pudo cambiar la imagen porque no tienes ninguna imagen relacionada a tu perfil.')
             profile.image = 'default.jpg'
             profile.save()
             messages.success(request,'La imagen se borró con exito.')
-            return render(request, 'Users/profile.html',{
-                    'profile': profile,
-                    'form' : form,
-                    'image_form' : SetImageForm(),
-                    'type' : 'profile',
-                    'permissions' : permissions
-                })
+            return redirect(f'/profile/{username}')
         else:
             #Create a new form with the data of the request.POST, and the initial data of the form
             form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = user_pk)
@@ -317,23 +307,17 @@ def subprofile(request,username):
                 main_user = subprofile.profile.user,
                 user_changed = subprofile.user,
                 user = request.user,
-                description=f'Change in image, before: {image_before}, after: {image}',
+                description=f'Cambio en imagen, antes: {image_before}, después: {image}',
                 type_change = log
             )
             messages.success(request,'La iamgen se cambió con éxito.')
-            return render(request, 'Users/subprofile.html',{
-                    'subprofile': subprofile,
-                    'profile' : profile,
-                    'form' : form,
-                    'image_form' : SetImageForm(),
-                    'type' : type,
-                    'permissions' : permissions,
-                    'password_form' : SetPassword(user=subuser),
-            })
+            return redirect(f'/subprofile/{username}')
         elif delete_image:
             image_before = subprofile.image.name
             if image_before == 'default.jpg':
-                image_before = ''
+                
+                messages.error(request, 'La imagen no se puedo borrar ya que el usuario no tiene una image relacionada.')
+                return redirect(f'/subprofile/{username}')
             subprofile.image = 'default.jpg'
             subprofile.save()
             log = TypeChanges.objects.get(value='Update')
@@ -341,19 +325,11 @@ def subprofile(request,username):
                 main_user = subprofile.profile.user,
                 user_changed = subprofile.user,
                 user = request.user,
-                description=f'Change in image, before: "{image_before}", after: ""',
+                description=f'Cambio en imagen, antes: "{image_before}", despúes: ""',
                 type_change = log
             )
             messages.success(request,'La imagen se borró con éxito.')
-            return render(request, 'Users/subprofile.html',{
-                    'subprofile': subprofile,
-                    'profile' : profile,
-                    'form' : form,
-                    'image_form' : SetImageForm(),
-                    'type' : type,
-                    'permissions' : permissions,
-                    'password_form' : SetPassword(user=subuser),
-                })
+            return redirect(f'/subprofile/{username}')
         else:
             
             form_post = EditSubprofileForm(request.POST,initial=form.initial,instance=subuser,user_pk = subuser_pk,permissions=permissions)
@@ -361,14 +337,7 @@ def subprofile(request,username):
             
             if not form_post.has_changed() and change_password == False:
                 messages.warning(request,'Los datos no han sido actualizados.')
-                return render(request, 'Users/subprofile.html',{
-                    'subprofile': subprofile,
-                    'profile' : profile,
-                    'form' : form,
-                    'image_form' : SetImageForm(),
-                    'permissions' : permissions,
-                    'password_form' : SetPassword(user=subuser),
-                })
+                return redirect(f'/subprofile/{username}')
             if change_password:
                 password_form = SetPassword(user=subuser,data=request.POST)
                 if not password_form.is_valid():
@@ -493,7 +462,7 @@ def manage_subusers_group(request):
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
             image_before = group.image.name
             if image_before == 'default_group.jpg':
-                image_before = ''
+                messages.error(request, f'No se puede borrar la imagen del grupo {group.name} porque no tiene image.')   
             group.image = 'default_group.jpg'
             group.save()
             log = TypeChanges.objects.get(value='Update')

@@ -1,27 +1,21 @@
 def create_transaction_description(object: object, **kwargs):
     # Capture the initial state
     initial = {
-        'name': object.name,
-        'description': object.description,
-        'stock': object.stock,
-        'group': object.group.name if object.group else None,
-        'in_charge': object.in_charge.username if object.in_charge else None
+        'name': object['name'],
+        'description': object['description'],
+        'stock': object['stock'],
+        'group_id': object['group'],
+        'in_charge_id': object['in_charge']
     }
 
     # Capture the new state from kwargs
-    updated = {
-        'name': kwargs.get('name', initial['name']),
-        'description': kwargs.get('description', initial['description']),
-        'stock': kwargs.get('stock', initial['stock']),
-        'group': kwargs.get('group').name if kwargs.get('group') else initial['group'],
-        'in_charge': kwargs.get('in_charge').username if kwargs.get('in_charge') else initial['in_charge'],
-    }
+    updated = kwargs.get('updated_data', {})
 
     # Create the change description
     changes = [
-        f"Change in {key}, before: {initial[key]}, after: {updated[key]}"
+        f"Cambio en  {key}, antes: {initial[key]}, después: {updated[key]}"
         for key in initial.keys()
         if initial[key] != updated[key]
     ]
 
-    return '\n'.join(changes)
+    return ', \n'.join(changes)

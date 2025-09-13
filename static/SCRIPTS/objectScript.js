@@ -11,13 +11,13 @@ closeButtons.forEach(button => {
 })
 
 
-// This script handles the subprofile image upload functionality for the profile image.
+// This script handles the objet image upload functionality for the object image.
 const object_image_input = document.getElementById('id_image');
 object_image_input.addEventListener('change', function () {
     document.getElementById('id_submit').click()
 })
 
-// This script handles the delete button functionality for subprofile images.
+// This script handles the delete button functionality for object images.
 const delete_button = document.getElementById('id_delete_button')
 delete_button.addEventListener('click',function () {
     const checkbox = document.getElementById('id_delete_checkbox')
