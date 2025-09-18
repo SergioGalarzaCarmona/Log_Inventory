@@ -53,7 +53,8 @@
                     <input type="submit" id='id_submit' value="Cambiar imagen">
                 </form>
             </div>
-            <form method="POST">
+            <div class="info-container">
+                <form method="POST">
                 {% csrf_token %}
                 <div>
                     <label for="id_username">Nombre de Usuario:</label>
@@ -111,6 +112,7 @@
                 {% endif %}
                 
             </form>
+            </div>
         </div>
         
         

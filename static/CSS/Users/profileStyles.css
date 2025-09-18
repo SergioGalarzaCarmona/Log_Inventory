@@ -95,7 +95,7 @@ a.subusers-link span.material-symbols-outlined:hover {
     padding-top: calc(2rem + 44.78px);
 }
 
-.profile-img-container {
+.profile-img-container { 
     display: flex;
     place-content: center;
     width: 37.5%;
@@ -152,17 +152,20 @@ a.subusers-link span.material-symbols-outlined:hover {
     display: none;
 }
 
-.profile-container > form {
+.info-container {
     width: 37.5%;
     height: 75%;
     background-color: var(--sidebar-color);
+    border-radius: 0 20px 20px 0;
+    overflow-y: auto;
+}
+
+.info-container form {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
-    border-radius: 0 20px 20px 0;
-    overflow-y: auto;
+    padding: 20px 30px;
 }
 
 .errorlist {

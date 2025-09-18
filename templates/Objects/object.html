@@ -53,6 +53,8 @@
                     <input type="submit" id='id_submit' value="Cambiar imagen">
                 </form>
             </div>
+            <div class="info-container">
+            
             <form method="POST">
                 {% csrf_token %}
 
@@ -109,6 +111,7 @@
                 <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
             </form>
 
+            </div>
         </div>
         
         {% if messages %}
