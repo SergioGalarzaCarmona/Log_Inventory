@@ -287,42 +287,61 @@ dialog button:hover {
 }
 
 
-
 .subusers-table__container {
     width: 96%;
-    height: auto;
-    overflow-y: auto;
-    padding: 2px;
     margin: 1.8% 2%;
-    background-color: var(--fb-color);
+    background-color: transparent;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
 }
 
 .subusers-table {
     width: 100%;
+    border-collapse: collapse;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
-.subusers-table td, .subusers-table th {
-    border: 1px solid #ddd;
-    padding: 8px;
+.subusers-table thead {
+    background-color: var(--fb-color);
+    color: #fff;
+    text-align: left;
+    font-weight: bold;
 }
 
-.subusers-table tr {
+.subusers-table thead th {
+    padding: 12px;
+    font-size: 1rem;
+}
+
+.subusers-table tbody tr {
     background-color: #fff;
-    transition: background-color 0.1s;
+    transition: background-color 0.2s;
 }
 
-.subusers-table tr:hover {
-    background-color: #888;
+.subusers-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.subusers-table tbody tr:hover {
+    background-color: #d2b48c;
     cursor: pointer;
 }
 
-.subusers-table tr:first-child:hover {
-    background-color: #fff;
-    cursor: default;
+.subusers-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
 }
 
-td:first-child {
+.subusers-table td:first-child {
     text-align: center;
+    font-weight: 600;
+    color: var(--fb-color);
+}
+
+.subusers-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .hidden {
