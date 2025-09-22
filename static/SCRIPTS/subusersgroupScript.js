@@ -1,5 +1,6 @@
 // This script handles that the subuser always belongs to a group, and if the group isn't selected, it opens a dialog to create a new group(subusersGroupForm)
 function validateGroup(){
+    const subusersGroup = document.querySelector('.groups');
     const select = document.getElementById('id_group');
     const option = select.children[0]
     option.value = 0
@@ -12,6 +13,9 @@ function validateGroup(){
             dialog.close()
             document.getElementById('create-group').checked = true;
             document.getElementById('create-subuser').checked = false;
+            groupsContainer.classList.add('hidden');
+            closeFormSubuser.classList.add("hidden");
+            closeFormGroup.classList.remove("hidden");
         });
     }
     else {
@@ -36,10 +40,17 @@ document.querySelectorAll('input[type="file"]').forEach(input => {
 
 // This script handles both forms for creating a group or a subuser.(view forms subusersGroupForm and subusersForm)
 
+
 const label_group = document.querySelector('.create-group-label');
 const label_subuser = document.querySelector('.create-subuser-label');
+
+const closeFormGroup = document.querySelector(".close-formGroup");
+const closeFormSubuser = document.querySelector(".close-formSubuser");
+
 const create_group = document.getElementById('create-group');
 const create_subuser = document.getElementById('create-subuser');
+const groupsContainer = document.querySelector('.groups');
+
 label_group.addEventListener('click', function (){
     create_subuser.checked = false; 
 });
@@ -48,23 +59,21 @@ label_subuser.addEventListener('click', function (){
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const subusersGroup = document.querySelector('.groups');
-    const closeFormGroup = document.querySelector(".close-formGroup");
-    const closeFormSubuser = document.querySelector(".close-formSubuser");
+
 
     function toggleTableVisibility() {
         if (create_subuser.checked) {
-            subusersGroup.classList.add("hidden");
+            groupsContainer.classList.add("hidden");
             closeFormGroup.classList.add("hidden");
             closeFormSubuser.classList.remove("hidden");
         } 
         else if (create_group.checked) {
-            subusersGroup.classList.add("hidden");
+            groupsContainer.classList.add("hidden");
             closeFormSubuser.classList.add("hidden");
             closeFormGroup.classList.remove("hidden");
         }
         else {
-            subusersGroup.classList.remove("hidden");
+            groupsContainer.classList.remove("hidden");
             closeFormGroup.classList.add("hidden");
             closeFormSubuser.classList.add("hidden");
         }
@@ -75,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     toggleTableVisibility();
 });
+
 
 // Handle all close button to alert messages
 const closeButtons = document.querySelectorAll('.message-close-button');

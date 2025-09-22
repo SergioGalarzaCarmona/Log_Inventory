@@ -12,6 +12,9 @@ function validateGroup(){
             dialog.close()
             document.getElementById('create-group').checked = true;
             document.getElementById('create-subuser').checked = false;
+            subusersTable.classList.add("hidden");
+            closeFormSubuser.classList.add("hidden");
+            closeFormGroup.classList.remove("hidden");
         });
     }
     else {

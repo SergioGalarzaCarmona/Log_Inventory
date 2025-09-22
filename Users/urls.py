@@ -15,8 +15,8 @@ urlpatterns = [
     path('reset_complete/', PasswordResetCompleteView.as_view(template_name = 'Users/password_reset_complete.html'), name = 'password_reset_complete'),
     path('change_password/', UserPasswordChangeView.as_view(template_name = 'Users/change_password.html', form_class = SetPassword), name='change_password'),
     path('change_password_done/', PasswordChangeDoneView.as_view(template_name = 'Users/password_reset_complete.html'), name='change_password_done'),
-    path('profile/<str:username>', profile, name='profile'),
+    path('profile/<int:id>', profile, name='profile'),
     path('manage_subusers/',manage_subusers, name='manage_subusers'),
-    path('subprofile/<str:username>',subprofile, name='subprofile'),
+    path('subprofile/<int:id>',subprofile, name='subprofile'),
     path('subusers_group/',manage_subusers_group,name='subusers_group'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

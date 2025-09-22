@@ -65,13 +65,13 @@
                     <p>Prestamos</p>
                 </a>
             </li>
+            {% if permissions == 'admin' or permissions == "Profesor" %}
             <li class="sidebar__item">
                 <a href="{% url 'log' %}" class="sidebar__item-link {{active_log}}">
                     <span class="material-symbols-outlined">event_note</span>
                     <p>Historial</p>
                 </a>
             </li>
-            {% if permissions == 'admin' or permissions == "Profesor" %}
             <li class="sidebar__item">
                 <a href="{% url 'manage_subusers' %}" class="sidebar__item-link {{active_subusers}}">
                     <span class="material-symbols-outlined">manage_accounts</span>
@@ -86,12 +86,16 @@
             <li class="sidebar__item">
                 
                 {% if type == 'profile' %}
-                <a href="{% url 'profile' user.username %}" class="item--profile sidebar__item-link {{active_profile}}">
+                <a href="{% url 'profile' user.id %}" class="item--profile sidebar__item-link {{active_profile}}">
                 {% else %}	
-                <a href="{% url 'subprofile' user.username %}" class="item--profile sidebar__item-link {{active_subprofile}}">
+                <a href="{% url 'subprofile' user.id %}" class="item--profile sidebar__item-link {{active_subprofile}}">
                 {% endif %}
                     <img src="{{profile.image.url}}" alt="profile-img">
+                    {% if type == 'profile' %}
                     <span id="username" class="profile-option">{{profile.user.username}}</span>
+                    {% else %}	
+                    <span id="username" class="profile-option">{{profile.user.first_name}}</span>
+                    {% endif %}
                 </a>
             </li>
             <li class="sidebar__item">

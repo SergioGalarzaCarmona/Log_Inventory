@@ -102,10 +102,6 @@ def edit_object(request, id):
         profile = Subprofile.objects.get(user=user)
         type = 'subprofile'
         permissions = profile.group.permissions.name
-        if permissions == 'Estudiante':
-            messages.warning(request,'No tienes permiso para ver esa página.')
-            logout(request)
-            return redirect('/authenticate_user/deactivate')
     except:
         messages.error(request,'Hubo un error al tratar de cargar el objeto.')
         return redirect('/authenticate_user/deactivate')
@@ -120,16 +116,22 @@ def edit_object(request, id):
         messages.error(request,'No tienes permiso para editar ese objeto.')
         logout(request)
         return redirect('main')
-    
+    image_form = SetImageForm()
     if request.method == 'GET':
         form = ObjectForm(user=profile.user if type == 'profile' else profile.profile.user, instance=object)
+        
+        if permissions == 'Estudiante':
+            for field in form.fields:
+                form.fields[field].disabled = True
+            for field in image_form.fields:
+                image_form.fields[field].disabled = True
         return render(request, 'Objects/object.html',{
             'profile': profile,
             'type' : type,
             'permissions' : permissions,
             'object' : object,
             'object_form' : form,
-            'image_form' : SetImageForm(),
+            'image_form' : image_form,
         })
     else:
         image = request.FILES.get('image',False)
@@ -214,6 +216,62 @@ def edit_object(request, id):
         )
         messages.success(request, 'Objeto editado correctamente.')
         return redirect('main')
+
+@login_required
+def object_groups(request):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+        type = 'profile'
+        permissions = 'admin'
+    except ObjectDoesNotExist:
+        profile = Subprofile.objects.get(user=user)
+        type = 'subprofile'
+        permissions = profile.group.permissions.name
+    except:
+        messages.error(request,'Hubo un error al tratar de cargar el inventario.')
+        return redirect('/authenticate_user/deactivate')
+    
+    groups = ObjectsGroup.objects.filter(user = profile.user if type == 'profile' else profile.profile.user)
+    forms = []
+    for group in groups:
+        form = ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance=group)
+        if permissions == 'Estudiante':
+            for field in form.fields:
+                form.fields[field].disabled = True
+        forms.append(form)
+    if request.method == 'GET':
+        return render(request, 'Objects/object_groups.html',{
+            'profile': profile,
+            'type' : type,
+            'permissions' : permissions,
+            'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user,instance = None),
+            'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance = None),
+            'forms' : forms
+        })
+    else:
+        group = ObjectsGroup.objects.get(id=request.POST.get('group_id', None))
+        if not form.is_valid():
+            messages.error(request, 'Hubo un error al tratar de crear el grupo de objetos.')
+            return render(request, 'Objects/object_groups.html',{
+                'profile': profile,
+                'type' : type,
+                'permissions' : permissions,
+                'groups' : groups,
+                'object_group_form' : form
+            })
+        group = form.save(commit = False)
+        group.user = profile.user if type == 'profile' else profile.profile.user
+        group.save()            
+        GroupObjectsChanges.objects.create(
+            main_user = profile.user if type == 'profile' else profile.profile.user,
+            group_changed = group,
+            user = request.user,
+            type_change = TypeChanges.objects.get(value='Create'),
+            description = f'Se creó el grupo de objetos {group.name}',
+        )
+        messages.success(request, 'Grupo de objetos creado correctamente.')
+        return redirect('object_groups')
 
 @login_required
 async def log(request):

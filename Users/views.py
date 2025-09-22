@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterUser, LoginUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm, SetPassword
+from .forms import RegisterUser, RegisterSubuser, RegisterSubprofileGroup, SetImageForm, EditSubprofileForm, EditUserForm, EditSubprofileGroupForm, SetPassword
 from .models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges, UserSession
 from .functions import create_description
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,17 +36,23 @@ def Logout(request):
 #Function to log in user on app
 def logIn(request):
     #authenticate user
-    user = authenticate(username=request.POST['username'], password=request.POST['password'], is_active=True)
+    try:
+        user = User.objects.get(email = request.POST['email'])
+    except ObjectDoesNotExist:
+        messages.error(request,'Usuario o contraseña incorrectos')
+        return render(request, 'Users/authenticate.html', {
+            'form': RegisterUser()
+        })
+    user = authenticate(username=user.username, password=request.POST['password'])
     #If find user and two values are corrects, log in.
-    if user is not None:
+    if user is not None and user.is_active == True:
         login(request, user)
         return redirect('main')
     #if not find user, return a error message 
     else:
         messages.error(request,'Usuario o contraseña incorrectos')
         return render(request, 'Users/authenticate.html', {
-            'form': RegisterUser(),
-            'form_login': LoginUser(request.POST)
+            'form': RegisterUser()
         })
 
 #Function to register users on app
@@ -59,7 +65,6 @@ def signUp(request):
     if not form.is_valid():
             return render(request, 'Users/authenticate.html', {
                 'form': RegisterUser(request.POST,request.FILES),
-                'form_login': LoginUser,
                 'class' : 'active',
                 "class_h2": class_h2,
             })
@@ -78,7 +83,6 @@ def authenticate_user(request,type):
     if request.method == 'GET':
         return render(request, 'Users/authenticate.html',{
         'form': RegisterUser,
-        'form_login': LoginUser,
         'class' : type,
         })
     else:
@@ -89,13 +93,14 @@ def authenticate_user(request,type):
 
 @login_required
 #View to show the profile of the user, with the form to edit the user
-def profile(request,username):
-    #verifie that exist one user with this name
+def profile(request,id):
+    #verifie that exist one user with this id
     try:
-        user = User.objects.get(username=username)
+        user = User.objects.get(id=id)
         user_pk = user.pk
     except:
         messages.error(request,'El usuario no existe.')
+        logout(request)
         return redirect('/authenticate_user/deactivate')
     #Get user from request to validate if the user is the same that the username in the url
     if request.user != user:
@@ -124,7 +129,7 @@ def profile(request,username):
             profile.image = image
             profile.save()
             messages.success(request,'La imagen se cambió con exito.')
-            return redirect(f'/profile/{username}')
+            return redirect(f'/profile/{id}')
         elif delete_image:
             profile = Profile.objects.get(user=request.user)
             if profile.image.name == 'default.jpg':
@@ -132,7 +137,7 @@ def profile(request,username):
             profile.image = 'default.jpg'
             profile.save()
             messages.success(request,'La imagen se borró con exito.')
-            return redirect(f'/profile/{username}')
+            return redirect(f'/profile/{id}')
         else:
             #Create a new form with the data of the request.POST, and the initial data of the form
             form_post = EditUserForm(request.POST,initial=form.initial,instance= user,user_pk = user_pk)
@@ -189,7 +194,7 @@ def manage_subusers(request):
     })
     else:
         #Get the username from the request.POST, if exist, is to create a subuser, if not, is to create a subprofile group
-        create_subuser = request.POST.get('username', False)
+        create_subuser = request.POST.get('first_name', False)
         if create_subuser:
             form = RegisterSubuser(request.POST,request.FILES,user_pk = request.user.pk)
             if not form.is_valid():
@@ -237,10 +242,10 @@ def manage_subusers(request):
             return redirect('subusers_group')
 
 @login_required
-def subprofile(request,username):
+def subprofile(request,id):
     #verifie that exist one user with this name
     try:
-        subuser = User.objects.get(username=username)
+        subuser = User.objects.get(id=id)
     except:
         messages.error(request,'El usuario no existe.')
         return redirect('/authenticate/deactivate')
@@ -311,13 +316,13 @@ def subprofile(request,username):
                 type_change = log
             )
             messages.success(request,'La iamgen se cambió con éxito.')
-            return redirect(f'/subprofile/{username}')
+            return redirect(f'/subprofile/{id}')
         elif delete_image:
             image_before = subprofile.image.name
             if image_before == 'default.jpg':
                 
                 messages.error(request, 'La imagen no se puedo borrar ya que el usuario no tiene una image relacionada.')
-                return redirect(f'/subprofile/{username}')
+                return redirect(f'/subprofile/{id}')
             subprofile.image = 'default.jpg'
             subprofile.save()
             log = TypeChanges.objects.get(value='Update')
@@ -329,7 +334,7 @@ def subprofile(request,username):
                 type_change = log
             )
             messages.success(request,'La imagen se borró con éxito.')
-            return redirect(f'/subprofile/{username}')
+            return redirect(f'/subprofile/{id}')
         else:
             
             form_post = EditSubprofileForm(request.POST,initial=form.initial,instance=subuser,user_pk = subuser_pk,permissions=permissions)
@@ -337,7 +342,7 @@ def subprofile(request,username):
             
             if not form_post.has_changed() and change_password == False:
                 messages.warning(request,'Los datos no han sido actualizados.')
-                return redirect(f'/subprofile/{username}')
+                return redirect(f'/subprofile/{id}')
             if change_password:
                 password_form = SetPassword(user=subuser,data=request.POST)
                 if not password_form.is_valid():

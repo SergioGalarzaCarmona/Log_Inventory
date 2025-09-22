@@ -1,7 +1,14 @@
 <form method="POST" class="logIn-form">
     <h2>Iniciar Sesión</h2>
     {% csrf_token %}
-    {{ form_login }}
+    <div>
+        <label for="email_login_id">Correo Electrónico:</label>
+        <input type="text" name="email" placeholder="ejemplo@gmail.com" id="email_login_id" maxlength="150" required>
+    </div>
+    <div>
+        <label for="id_password">Contraseña:</label>
+        <input type="password" name="password" placeholder="Contraseña" maxlength="30" required id="id_password">
+    </div>
     <input type="submit"  value="Iniciar Sesión">
     <div class="error">{{error}}</div>
     <a href="{% url 'password_reset' %}">Olvidé la contraseña</a>

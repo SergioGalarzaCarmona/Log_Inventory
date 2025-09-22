@@ -71,9 +71,9 @@
 
                 <tbody>
                     {% for subuser in subusers %}
-                    <tr onclick="window.location.href='/subprofile/{{ subuser.user.username }}';" >
+                    <tr onclick="window.location.href='/subprofile/{{ subuser.user.id }}';" >
                         <td>{{forloop.counter}}</td>
-                        <td class="username">{{subuser.user.username}}</td>
+                        <td class="username">{{subuser.user.first_name}} {{subuser.user.last_name}}</td>
                         <td>{{subuser.group.name}}</td>
                         <td>{{subuser.user.email}}</td>
                     </tr>

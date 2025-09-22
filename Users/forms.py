@@ -163,11 +163,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
         return name
 class RegisterSubuser(UserCreationForm):
 
-    username = forms.CharField(
-        max_length=30,
-        label='Nombre de Usuario',
-        required=True,
-        widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario','class' : ''}))
+
     group = forms.ModelChoiceField (
         queryset=None,
         label='Grupo',
@@ -202,7 +198,7 @@ class RegisterSubuser(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2','group']
+        fields = ['first_name','last_name', 'email', 'password1', 'password2','group']
         help_texts = {k:"" for k in fields}
     
     def __init__(self,*args, **kwargs):

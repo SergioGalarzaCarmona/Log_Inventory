@@ -10,7 +10,7 @@ closeButtons.forEach(button => {
   });
 })
 
-// This script handles that the object always belongs to a group, and if the group isn't selected, it opens a dialog to create a new group(objectsGroupForm)
+// This script handles that the object always belongs to a group, and if the group isn't selected, it opens a dialog to create a new group(object_groupsGroupForm)
 function validateGroup(){
     const select = document.getElementById('id_group');
     const option = select.children[0]
@@ -24,7 +24,7 @@ function validateGroup(){
             dialog.close()
             document.getElementById('create-group').checked = true;
             document.getElementById('create-object').checked = false;
-            objects.classList.add("hidden");
+            object_groups.classList.add("hidden");
             closeFormObject.classList.add("hidden");
             closeFormGroup.classList.remove("hidden");
         });
@@ -46,7 +46,7 @@ const closeFormObject = document.querySelector(".close-formObject");
 
 const create_group = document.getElementById('create-group');
 const create_object = document.getElementById('create-object');
-const objects = document.querySelector('.objects-area');
+const object_groups = document.querySelector('.groups');
 
 label_group.addEventListener('click', function (){
     create_object.checked = false; 
@@ -60,17 +60,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function toggleTableVisibility() {
         if (create_object.checked) {
-            objects.classList.add("hidden");
+            object_groups.classList.add("hidden");
             closeFormGroup.classList.add("hidden");
             closeFormObject.classList.remove("hidden");
         } 
         else if (create_group.checked) {
-            objects.classList.add("hidden");
+            object_groups.classList.add("hidden");
             closeFormObject.classList.add("hidden");
             closeFormGroup.classList.remove("hidden");
         }
         else {
-            objects.classList.remove("hidden");
+            object_groups.classList.remove("hidden");
             closeFormGroup.classList.add("hidden");
             closeFormObject.classList.add("hidden");
         }

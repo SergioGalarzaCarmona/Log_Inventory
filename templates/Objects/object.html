@@ -36,6 +36,7 @@
             <div class="profile-img-container">
                 <label for="id_image">
                     <div class="img-overlay">
+                        {% if permissions != 'Estudiante' %}
                         <button id = 'id_delete_button'>
                             <span class="material-symbols-outlined">delete</span>
                         </button>
@@ -44,6 +45,7 @@
                             <input type="checkbox" name="delete_image" id="id_delete_checkbox" hidden>
                             <input type="submit" id="delete_image" value="submit" hidden>
                         </form>
+                        {% endif %}
                     </div>
                     <img src="{{object.image.url}}" alt="profile-img" class="profile-img">
                 </label>
@@ -55,7 +57,7 @@
             </div>
             <div class="info-container">
             
-            <form method="POST">
+            <form method="POST" {% if permissions == 'Estudiante' %} style="overflow-y: hidden;"{% endif %}> 
                 {% csrf_token %}
 
                 <div>
@@ -107,8 +109,9 @@
                     {% endif %}
                     {{ object_form.group }}
                 </div>
-            
+                {% if permissions != 'Estudiante' %}
                 <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
+                {% endif %}
             </form>
 
             </div>
