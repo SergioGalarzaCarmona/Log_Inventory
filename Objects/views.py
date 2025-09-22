@@ -10,6 +10,7 @@ from .async_functions import get_objects_log, get_object_groups_log
 from .functions import create_transaction_description
 from .forms import ObjectForm,ObjectsGroupForm
 from Users.forms import SetImageForm
+from django.forms.models import model_to_dict
 # Create your views here.
 
 @login_required
@@ -250,28 +251,67 @@ def object_groups(request):
             'forms' : forms
         })
     else:
-        group = ObjectsGroup.objects.get(id=request.POST.get('group_id', None))
-        if not form.is_valid():
-            messages.error(request, 'Hubo un error al tratar de crear el grupo de objetos.')
-            return render(request, 'Objects/object_groups.html',{
-                'profile': profile,
-                'type' : type,
-                'permissions' : permissions,
-                'groups' : groups,
-                'object_group_form' : form
-            })
-        group = form.save(commit = False)
-        group.user = profile.user if type == 'profile' else profile.profile.user
-        group.save()            
-        GroupObjectsChanges.objects.create(
-            main_user = profile.user if type == 'profile' else profile.profile.user,
-            group_changed = group,
-            user = request.user,
-            type_change = TypeChanges.objects.get(value='Create'),
-            description = f'Se creó el grupo de objetos {group.name}',
-        )
-        messages.success(request, 'Grupo de objetos creado correctamente.')
-        return redirect('object_groups')
+        if image:= request.FILES.get('image', False):
+            group = ObjectsGroup.objects.get(id=request.POST['id'])
+            group_image_before = group.image.name
+
+            if group_image_before == 'default_object_group.jpg':
+                group_image_before = 'Ninguna'
+            group.image = image
+            group.save()
+            GroupObjectsChanges.objects.create(
+                main_user = profile.user if type == 'profile' else profile.profile.user,
+                group_changed = group,
+                user = request.user,
+                type_change = TypeChanges.objects.get(value='Update'),
+                description = f'Cambio en imagen, antes: {group_image_before} después: {image}.',
+            )
+            messages.success(request, 'La imagen se cambió con exito')
+            return redirect('object_groups')
+        if request.POST.get('delete_image', False):
+            group = ObjectsGroup.objects.get(id=request.POST['id'])
+            group_image_before = group.image.name
+            if group_image_before == 'default_object_group.jpg':
+                messages.error(request, 'No se pudo borrar la imagen ya que el grupo no tenía una imagen relacionada.')
+                return redirect('object_groups')
+            group.image = 'default_object_group.jpg'
+            group.save()
+            GroupObjectsChanges.objects.create(
+                main_user = profile.user if type == 'profile' else profile.profile.user,
+                group_changed = group,
+                user = request.user,
+                type_change = TypeChanges.objects.get(value='Update'),
+                description = f'Cambio en imagen, antes: {group_image_before} después: Ninguna.',
+            )
+            messages.success(request, 'La imagen se borró con exito')
+            return redirect('object_groups')
+        else:
+            group = ObjectsGroup.objects.get(id=request.POST['id'])
+            initial_data = model_to_dict(group, fields=[field.name for field in group._meta.fields if field.name != 'image'])
+            form = ObjectsGroupForm(request.POST, user=profile.user if type == 'profile' else profile.profile.user, instance=group, initial=initial_data)
+            if not form.has_changed():
+                messages.warning(request, 'No se realizaron cambios porque no había ningun campo editado.')
+                return redirect('object_groups')
+            if not form.is_valid():
+                messages.error(request, 'Hubo un error en los datos ingresados del usuario.')
+                return render(request, 'Objects/object_groups.html',{
+                    'profile': profile,
+                    'type' : type,
+                    'permissions' : permissions,
+                    'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user,instance = None),
+                    'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance = None),
+                    'forms' : forms,
+                })
+            group = form.save()        
+            GroupObjectsChanges.objects.create(
+                main_user = profile.user if type == 'profile' else profile.profile.user,
+                group_changed = group,
+                user = request.user,
+                type_change = TypeChanges.objects.get(value='Create'),
+                description = f'Se creó el grupo de objetos {group.name}',
+            )
+            messages.success(request, 'Grupo de objetos editado correctamente.')
+            return redirect('object_groups')
 
 @login_required
 async def log(request):

@@ -181,7 +181,7 @@ class ObjectsGroupForm(forms.ModelForm):
     
     class Meta:
         model=ObjectsGroup
-        fields = ["name", "image", "in_charge"]
+        fields = ["name", "image", "in_charge", "description"]
         
     def __init__(self, *args,**kwargs):
         user = kwargs.pop('user',None)

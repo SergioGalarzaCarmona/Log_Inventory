@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/Objects/mainStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/Users/subprofilesGroupStyles.css'%}">
     <title>Work space - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Work space Log Inventory">
@@ -82,12 +83,12 @@
                     {%csrf_token%}
                     <input type="number" value="{{form.instance.id}}" hidden name="id">
                     <div class="group-name__container username__container">
-                        <label for="id_name">Nombre:</label>
+                        {{form.name.label_tag}}
                         {{form.name}}
                     </div>
-                    <div class="group-permissions__container">
-                        <label for="id_permissions">Tipo de grupo:</label>
-                        {{form.permissions}}
+                    <div class="group-in-charge__container">
+                        {{form.in_charge.label_tag}}
+                        {{form.in_charge}}
                     </div>
 
                     <input type="submit" value="delete" class="delete-button material-symbols-outlined" form="delete_group_{{form.instance.id}}">
@@ -103,7 +104,7 @@
                     </div>
                     <div>
                         {%if form.instance.pk == group.pk %}
-                        {{form_post.errors.permissions}}
+                        {{form_post.errors.in_charge}}
                         {%endif%}
                     </div>
                     <div>
