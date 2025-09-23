@@ -89,11 +89,11 @@ def main(request):
                 description = f'Se creó el grupo de objetos {group.name}',
             )
             messages.success(request, 'Grupo de objetos creado correctamente.')
-            return redirect('main')
+            return redirect('object_groups')
         
 
 @login_required
-def edit_object(request, id):
+def manage_object(request, id):
     user = request.user
     try:
         profile = Profile.objects.get(user=user)
@@ -198,6 +198,7 @@ def edit_object(request, id):
             })
             
         stock_before = object.stock
+        object_before = model_to_dict(object)
         object = form.save()
         if not 'stock' in form.changed_data:
             type_transaction = TypeTransaction.objects.get(name='Update')
@@ -212,14 +213,14 @@ def edit_object(request, id):
             in_charge = request.user,
             stock_before = stock_before,
             stock_after = object.stock,
-            description = create_transaction_description(object=form.initial,updated_data = object.__dict__ ),
+            description = create_transaction_description(object=object_before,updated_data=model_to_dict(object) ),
             
         )
         messages.success(request, 'Objeto editado correctamente.')
         return redirect('main')
 
 @login_required
-def object_groups(request):
+def manage_object_groups(request):
     user = request.user
     try:
         profile = Profile.objects.get(user=user)
@@ -289,11 +290,11 @@ def object_groups(request):
             group = ObjectsGroup.objects.get(id=request.POST['id'])
             form = ObjectsGroupForm(request.POST, user=profile.user if type == 'profile' else profile.profile.user, instance=group)
             changed_fields = form.changed_data
-            print(changed_fields)
             if not changed_fields:
                 messages.warning(request, 'No se realizaron cambios porque no había ningun campo editado.')
                 return redirect('object_groups')
             if not form.is_valid():
+                print(form.errors)
                 messages.error(request, 'Hubo un error en los datos ingresados del usuario.')
                 return render(request, 'Objects/object_groups.html',{
                     'profile': profile,
@@ -302,14 +303,16 @@ def object_groups(request):
                     'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user,instance = None),
                     'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance = None),
                     'forms' : forms,
+                    'form_post' : form
                 })
+            last_group = model_to_dict(group)
             group = form.save()        
             GroupObjectsChanges.objects.create(
                 main_user = profile.user if type == 'profile' else profile.profile.user,
                 group_changed = group,
                 user = request.user,
-                type_change = TypeChanges.objects.get(value='Create'),
-                description = f'Se creó el grupo de objetos {group.name}',
+                type_change = TypeChanges.objects.get(value='Update'),
+                description = create_transaction_description(object=group,updated_data = last_group)
             )
             messages.success(request, 'Grupo de objetos editado correctamente.')
             return redirect('object_groups')

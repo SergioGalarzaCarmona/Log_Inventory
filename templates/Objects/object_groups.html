@@ -107,11 +107,6 @@
                         {{form_post.errors.in_charge}}
                         {%endif%}
                     </div>
-                    <div>
-                        {%if form.instance.pk == group.pk %}
-                        {{form_post.errors.description}}
-                        {%endif%}
-                    </div>
                 </div>
                 <form method="POST">
                     {% csrf_token %}
