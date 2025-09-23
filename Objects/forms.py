@@ -190,6 +190,7 @@ class ObjectsGroupForm(forms.ModelForm):
         if user: 
             self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile)
             
+            
     def clean_in_charge(self):
         in_charge = self.cleaned_data.get('in_charge')
         if in_charge.profile != self.user.profile:

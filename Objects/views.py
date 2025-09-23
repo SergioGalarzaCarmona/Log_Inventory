@@ -287,9 +287,10 @@ def object_groups(request):
             return redirect('object_groups')
         else:
             group = ObjectsGroup.objects.get(id=request.POST['id'])
-            initial_data = model_to_dict(group, fields=[field.name for field in group._meta.fields if field.name != 'image'])
-            form = ObjectsGroupForm(request.POST, user=profile.user if type == 'profile' else profile.profile.user, instance=group, initial=initial_data)
-            if not form.has_changed():
+            form = ObjectsGroupForm(request.POST, user=profile.user if type == 'profile' else profile.profile.user, instance=group)
+            changed_fields = form.changed_data
+            print(changed_fields)
+            if not changed_fields:
                 messages.warning(request, 'No se realizaron cambios porque no había ningun campo editado.')
                 return redirect('object_groups')
             if not form.is_valid():
