@@ -46,7 +46,8 @@
                     <input type="submit" id='id_submit' value="Cambiar imagen">
                 </form>
             </div>
-            <form method="POST">
+            <div class="info-container">
+                <form method="POST">
                 {% csrf_token %}
                 <div class="message">
                     <p>
@@ -83,7 +84,8 @@
                     </div>
                     <button class="material-symbols-outlined" id="close-dialog">Close</button>
                 </dialog>
-            </form>
+                </form>
+            </div>
         </div>
         
         

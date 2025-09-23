@@ -161,11 +161,12 @@ a.subusers-link span.material-symbols-outlined:hover {
 }
 
 .info-container form {
-    display: flex;
+    display: flex; 
     align-items: center;
     justify-content: center;
     flex-direction: column;
     padding: 20px 30px;
+    min-height: 100%;
 }
 
 .errorlist {
