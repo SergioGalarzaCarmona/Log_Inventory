@@ -1,6 +1,4 @@
-from django.forms.models import model_to_dict
-
-def create_transaction_description(object: object, **kwargs):
+def create_transaction_description(object: dict, **kwargs):
     # Capture the initial state
     initial = object
 
@@ -9,7 +7,7 @@ def create_transaction_description(object: object, **kwargs):
     # Create the change description
     changes = [
         f"Cambio en  {key}, antes: {initial[key]}, después: {updated[key]}"
-        for key in initial.keys()
+        for key in updated.keys()
         if initial[key] != updated[key]
     ]
 

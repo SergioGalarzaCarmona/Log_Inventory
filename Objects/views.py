@@ -196,9 +196,7 @@ def manage_object(request, id):
                 'object_form' : form,
                 'image_form' : SetImageForm(),
             })
-            
         stock_before = object.stock
-        object_before = model_to_dict(object)
         object = form.save()
         if not 'stock' in form.changed_data:
             type_transaction = TypeTransaction.objects.get(name='Update')
@@ -213,8 +211,7 @@ def manage_object(request, id):
             in_charge = request.user,
             stock_before = stock_before,
             stock_after = object.stock,
-            description = create_transaction_description(object=object_before,updated_data=model_to_dict(object) ),
-            
+            description = create_transaction_description(object=form.initial,updated_data=form.cleaned_data),
         )
         messages.success(request, 'Objeto editado correctamente.')
         return redirect('main')
@@ -312,7 +309,7 @@ def manage_object_groups(request):
                 group_changed = group,
                 user = request.user,
                 type_change = TypeChanges.objects.get(value='Update'),
-                description = create_transaction_description(object=group,updated_data = last_group)
+                description = create_transaction_description(object=last_group,updated_data=group)
             )
             messages.success(request, 'Grupo de objetos editado correctamente.')
             return redirect('object_groups')
