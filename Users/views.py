@@ -207,14 +207,16 @@ def manage_subusers(request):
                     'type' : 'profile',
                     'permissions' : permissions
                 })
-            subuser = form.save()
+            subuser = form.save(commit=False)
+            subuser.username = subuser.first_name.replace(" ", "") +  subuser.last_name.replace(" ", "")
+            subuser.save()
             form.create_subprofile(user=subuser,group_id=request.POST['group'],image=request.FILES.get('image','default.jpg'))
             log = TypeChanges.objects.get(value='Create')
             UserChanges.objects.create(
                 main_user=profile_admin.user,
                 user_changed = subuser,
                 user = request.user,
-                description=f'Creating subuser {subuser.username} with group {subuser.subprofile.group.name}',
+                description=f'Se creó el usuario "{subuser.username}" perteneciente al grupo "{subuser.subprofile.group.name}"',
                 type_change=log)
             messages.success(request,'El usuario se creó con éxito.')
             return redirect('manage_subusers')
@@ -236,7 +238,7 @@ def manage_subusers(request):
                 main_user=profile_admin.user,
                 group_changed = group,
                 user = request.user,
-                description=f'Creating group {group.name} with permissions {group.permissions.name}',
+                description=f'Se creó el grupo de usuarios "{group.name}" con nivel de permiso de {group.permissions.name}',
                 type_change=log)
             messages.success(request,'El grupo se creó con éxito.')
             return redirect('subusers_group')
@@ -363,7 +365,7 @@ def subprofile(request,id):
                     main_user = subprofile.profile.user,
                     user_changed = subuser,
                     user = request.user,
-                    description=f'Change in password',
+                    description=f'Se cambió la contraseña.',
                     type_change = log
                 )
                 messages.success(request,'La contraseña se cambió con exito.')

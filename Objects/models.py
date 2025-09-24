@@ -32,6 +32,11 @@ class ObjectsGroup(BaseAuditModel):
         Subprofile, 
         on_delete=models.CASCADE
         )
+    description = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True,
+    )
     
     def __str__(self):
         return f'{self.name}'
