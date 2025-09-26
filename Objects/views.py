@@ -27,7 +27,7 @@ def main(request):
         type = 'subprofile'
         permissions = profile.group.permissions.name
     
-    objects = Objects.objects.filter(user = profile.user if type == 'profile' else profile.profile.user)
+    objects = Objects.objects.filter(user = profile.user if type == 'profile' else profile.profile.user, is_active=True)
     if request.method == 'GET':
         return render(request, 'Objects/main.html',{
             'profile': profile,
@@ -108,7 +108,7 @@ def manage_object(request, id):
         return redirect('/authenticate_user/deactivate')
     
     try:
-        object = Objects.objects.get(id=id)
+        object = Objects.objects.get(id=id, is_active=True)
     except:
         messages.error(request,'No se encontró el objeto que intentas editar.')
         return redirect('main')
@@ -232,7 +232,7 @@ def manage_object_groups(request):
         messages.error(request,'Hubo un error al tratar de cargar el inventario.')
         return redirect('/authenticate_user/deactivate')
     
-    groups = ObjectsGroup.objects.filter(user = profile.user if type == 'profile' else profile.profile.user)
+    groups = ObjectsGroup.objects.filter(user = profile.user if type == 'profile' else profile.profile.user, is_active=True)
     forms = []
     for group in groups:
         form = ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance=group)
@@ -250,6 +250,21 @@ def manage_object_groups(request):
             'forms' : forms
         })
     else:
+        if request.POST.get('delete_group', False):
+            group = ObjectsGroup.objects.get(id = request.POST['id'])
+            if Objects.objects.filter(group=group, is_active=True).exists():
+                messages.error(request, 'No se puede eliminar el grupo porque hay objetos activos relacionados a él.')
+                return redirect('object_groups')
+            group.is_active = False
+            group.save()
+            GroupObjectsChanges.objects.create(
+                main_user = profile.user if type == 'profile' else profile.profile.user,
+                group_changed = group,
+                user = request.user,
+                type_change = TypeChanges.objects.get(value='Delete'),
+                description = f'Se eliminó el grupo de objetos {group.name}.',
+            )
+            return redirect('object_groups')
         if image:= request.FILES.get('image', False):
             group = ObjectsGroup.objects.get(id=request.POST['id'])
             group_image_before = group.image.name
@@ -292,7 +307,6 @@ def manage_object_groups(request):
                 messages.warning(request, 'No se realizaron cambios porque no había ningun campo editado.')
                 return redirect('object_groups')
             if not form.is_valid():
-                print(form.errors)
                 messages.error(request, 'Hubo un error en los datos ingresados del usuario.')
                 return render(request, 'Objects/object_groups.html',{
                     'profile': profile,
@@ -301,16 +315,16 @@ def manage_object_groups(request):
                     'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user,instance = None),
                     'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance = None),
                     'forms' : forms,
-                    'form_post' : form
+                    'form_post' : form,
+                    'group' : group,
                 })
-            last_group = model_to_dict(group)
             group = form.save()        
             GroupObjectsChanges.objects.create(
                 main_user = profile.user if type == 'profile' else profile.profile.user,
                 group_changed = group,
                 user = request.user,
                 type_change = TypeChanges.objects.get(value='Update'),
-                description = create_transaction_description(object=last_group,updated_data=group)
+                description =  create_transaction_description(object=form.initial,type='ObjectGroup',updated_data = group.__dict__ ),
             )
             messages.success(request, 'Grupo de objetos editado correctamente.')
             return redirect('object_groups')

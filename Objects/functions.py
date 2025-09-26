@@ -19,7 +19,7 @@ def create_transaction_description(object: object,type:str, **kwargs):
             'group' : ObjectsGroup.objects.get(id=updated.get('group_id',object['group'])).name,
             'in_charge' : Subprofile.objects.get(id=updated.get('in_charge_id', object['in_charge'])).__str__()
         }
-    elif type == 'ObjectsGroup':
+    elif type == 'ObjectGroup':
         initial = {
             'name': object['name'],
             'description': object['description'],
