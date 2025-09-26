@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Users.apps.UsersConfig',
     'Objects',
+    'Borrowings',
+    'LiveChat',
 ]
 
 MIDDLEWARE = [
