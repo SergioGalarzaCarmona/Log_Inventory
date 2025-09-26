@@ -101,3 +101,23 @@ document.querySelectorAll(".group-header").forEach(header => {
     header.classList.toggle("active");
   });
 });
+
+// Manage functionality of filter and search for object groups
+const filterInput = document.getElementById('search-input');
+
+filterInput.addEventListener('input', () => {
+    const objects = document.querySelectorAll('.group-title');
+    const filterText = filterInput.value.toLowerCase();
+
+    objects.forEach((object) => {
+        const objectFather = object.parentElement.parentElement;
+        const name = object.textContent.toLowerCase();
+
+        if (!name.includes(filterText)) {
+            objectFather.classList.add('hidden');
+        } else {
+            objectFather.classList.remove('hidden');
+        }
+    });
+});
+
