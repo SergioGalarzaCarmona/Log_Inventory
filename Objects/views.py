@@ -211,7 +211,7 @@ def edit_object(request, id):
             in_charge = request.user,
             stock_before = stock_before,
             stock_after = object.stock,
-            description = create_transaction_description(object=form.initial,updated_data = object.__dict__ ),
+            description = create_transaction_description(object=form.initial,type='Object',updated_data = object.__dict__ ),
             
         )
         messages.success(request, 'Objeto editado correctamente.')
