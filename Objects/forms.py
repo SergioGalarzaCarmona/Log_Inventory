@@ -181,7 +181,7 @@ class ObjectsGroupForm(forms.ModelForm):
     
     class Meta:
         model=ObjectsGroup
-        fields = ["name", "image", "in_charge"]
+        fields = ["name", "image", "in_charge", "description"]
         
     def __init__(self, *args,**kwargs):
         user = kwargs.pop('user',None)
@@ -189,6 +189,7 @@ class ObjectsGroupForm(forms.ModelForm):
         super().__init__(*args,**kwargs)
         if user: 
             self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile)
+            
             
     def clean_in_charge(self):
         in_charge = self.cleaned_data.get('in_charge')
