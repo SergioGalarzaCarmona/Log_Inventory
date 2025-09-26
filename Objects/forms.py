@@ -88,8 +88,8 @@ class ObjectForm(forms.ModelForm):
         self.user = user
         super().__init__(*args,**kwargs)
         if user: 
-            self.fields['group'].queryset = ObjectsGroup.objects.filter(user=user)
-            self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile)
+            self.fields['group'].queryset = ObjectsGroup.objects.filter(user=user, is_active=True)
+            self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile, is_active=True)
             self.fields['in_charge'].initial = self.instance.group.in_charge if not isinstance(self.instance,object) else None
         
     def clean_name(self):
@@ -188,7 +188,7 @@ class ObjectsGroupForm(forms.ModelForm):
         self.user = user
         super().__init__(*args,**kwargs)
         if user: 
-            self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile)
+            self.fields['in_charge'].queryset = Subprofile.objects.filter(profile=user.profile, is_active=True)
             
             
     def clean_in_charge(self):

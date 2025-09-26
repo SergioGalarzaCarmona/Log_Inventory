@@ -81,3 +81,23 @@ document.addEventListener("DOMContentLoaded", () => {
     
     toggleTableVisibility();
 });
+
+// Manage filtering by name for objects.
+const filterInput = document.getElementById('search-input');
+
+filterInput.addEventListener('input', () => {
+    const objects = document.querySelectorAll('.object-card__name');
+    const filterText = filterInput.value.toLowerCase();
+
+    objects.forEach((object) => {
+        const objectFather = object.parentElement.parentElement;
+        const name = object.textContent.toLowerCase();
+
+        if (!name.includes(filterText)) {
+            objectFather.classList.add('hidden');
+        } else {
+            objectFather.classList.remove('hidden');
+        }
+    });
+});
+
