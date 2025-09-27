@@ -301,6 +301,7 @@ dialog button:hover {
     border-collapse: collapse;
     border-radius: 15px;
     overflow: hidden;
+    background-color: #fff;
 }
 
 .subusers-table thead {
