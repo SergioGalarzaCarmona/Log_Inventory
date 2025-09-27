@@ -150,6 +150,14 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     display: flex;
 }
 
+.forms-container:has(#create-object:checked) ~ .groups, .forms-container:has(#create-group:checked) ~ .groups {
+    display: none;
+}
+
+main:has(#create-object:checked), main:has(#create-group:checked) {
+    overflow-y: hidden;
+}
+
 .objects-link__container{
     position: absolute;
 }
@@ -187,7 +195,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
                 -7px -7px 0px #335a94;
 }
 
-.forms-container form input, form select, textarea {
+.forms-container form input, form select, textarea, .group-container input[type="text"] {
     background-color: #eee;
     border: none;
     padding: 10px 15px;
@@ -224,7 +232,7 @@ textarea {
     margin-right: 10%;
 }
  
-.forms-container form input:focus, form select:focus, textarea:focus {
+.forms-container form input:focus, form select:focus, textarea:focus, .group-container input[type="text"]:focus {
     outline: var(--wood) 1px solid;
 }
 
@@ -401,6 +409,7 @@ dialog button:hover {
   color: #fff;
   padding: 0.75rem 1rem;
   cursor: pointer;
+  opacity: 0.8;
 }
 
 .group-header h3 {
@@ -447,7 +456,7 @@ dialog button:hover {
   align-items: center;
   gap: .5rem;
   padding: .75rem;
-  background: #f8f8f8;
+  background: #eee;
   border-radius: 8px;
   position: relative;
 }
@@ -470,11 +479,16 @@ dialog button:hover {
   position: absolute;
   top: 10px;
   right: 10px;
-  display: none;
+  opacity: 0;
+  transition: opacity .2s;
 }
 
 .group-image:hover .image-overlay {
-  display: block;
+  opacity: 1;
+}
+
+.image-input {
+    display: none;
 }
 
 .group-image .delete-image {
@@ -488,7 +502,7 @@ dialog button:hover {
 
 .group-info {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
   align-items: center;
 }
@@ -500,8 +514,7 @@ dialog button:hover {
   margin-bottom: .25rem;
 }
 
-.group-info input[type="text"],
-.group-info select {
+.group-info input[type="text"], .group-info select {
   width: 100%;
   padding: .5rem .75rem;
   border: 1px solid #ddd;
@@ -509,7 +522,15 @@ dialog button:hover {
   font-family: inherit;
 }
 
+.group-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .save-button {
+  width: calc(100% - 10% - 1rem);
   background: var(--fb-color);
   color: #fff;
   padding: .5rem 1.2rem;
@@ -525,11 +546,19 @@ dialog button:hover {
 }
 
 .delete-button {
+  width: 10%;
+  padding: .5rem;
   color: #c00;
   font-size: 1.5rem;
   cursor: pointer;
   background: transparent;
   border: none;
+  outline: solid 1px #c00;
+  border-radius: 6px;
+}
+
+.delete-button:hover {
+  background: rgba(255,0,0,0.1);
 }
 
 .group-description__container {
@@ -615,6 +644,15 @@ dialog button:hover {
 
     .forms-container form {
         height: auto;
+    }
+
+    .delete-button {
+        padding: 0;
+        outline: none;
+    }
+
+    .group-in-charge {
+        display: none;
     }
 }
 
