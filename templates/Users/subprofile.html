@@ -19,7 +19,7 @@
     <main>
         <div class="filter-bar"> 
             <div class="filter-bar__filter-container">
-                <div class="name">{{subprofile.user.username}}</div>
+                <div class="name">{{subprofile.user.first_name}} {{subprofile.user.last_name}}</div>
                 <div class="filter-bar__logo-container">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
@@ -57,9 +57,14 @@
                 <form method="POST">
                 {% csrf_token %}
                 <div>
-                    <label for="id_username">Nombre de Usuario:</label>
-                    {{form_post.errors.username}}
-                    {{form.username}}
+                    <label for="id_first_name">Nombre:</label>
+                    {{form_post.errors.first_name}}
+                    {{form.first_name}}
+                </div>
+                <div>
+                    <label for="id_last_name">Apellido:</label>
+                    {{form_post.errors.last_name}}
+                    {{form.last_name}}
                 </div>
                 <div>
                     <label for="id_email">Correo Electrónico:</label>
@@ -108,16 +113,21 @@
                     <input type="password" name="new_password2" placeholder="Confirmar Contraseña"  maxlength="30" minlength="8"  id="id_new_password2">
                 </div>
                 <div class="button-container">
-                    <input type="submit" value="delete" class="delete-buton material-symbols-outlined">
+                    <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined">
                     <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
                 </div>
 
                 {% endif %}
                 
             </form>
+
+            
             </div>
         </div>
-        
+        <form method="POST" hidden id="delete-form" >
+            {% csrf_token %}
+            <input type="checkbox" name="delete_subprofile" id="id_delete_subprofile" checked hidden>
+        </form>
         
 
     </main>

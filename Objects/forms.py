@@ -210,3 +210,35 @@ class ObjectsGroupForm(forms.ModelForm):
                                     code="unique")
             self.add_error('name', error)
         return name
+
+class ExportLogForm(forms.Form):
+    start_date = forms.DateField(
+        label="Fecha de inicio",
+        required=True,
+        widget=forms.DateInput(
+            attrs={
+                'type':'date'
+            }
+        )
+    )
+    
+    end_date = forms.DateField(
+        label="Fecha de fin",
+        required=True,
+        widget=forms.DateInput(
+            attrs={
+                'type':'date'
+            }
+        )
+    )
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        
+        if start_date and end_date:
+            if start_date > end_date:
+                error = ValidationError("La fecha de inicio no puede ser mayor a la fecha de fin.",
+                                        code="invalid_date_range")
+                self.add_error('start_date', error)

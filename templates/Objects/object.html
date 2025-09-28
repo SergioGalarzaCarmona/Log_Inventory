@@ -111,13 +111,16 @@
                 </div>
                 {% if permissions != 'Estudiante' %}
                 <div class="button-container">
-                    <input type="submit" value="delete" class="delete-buton material-symbols-outlined">
+                    <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined">
                     <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
                 </div>
                 {% endif %}
             </form>
-
             </div>
+            <form method="POST" id="delete-form" hidden>
+                {% csrf_token %}
+                <input type="checkbox" name="delete_object" id="id_delete_object" checked hidden>
+            </form>
         </div>
         
         {% if messages %}

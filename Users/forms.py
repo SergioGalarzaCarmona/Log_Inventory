@@ -220,19 +220,18 @@ class RegisterSubuser(UserCreationForm):
         return Subprofile.objects.create(user=user,profile=profile,group=group,image=image)
         
     
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        users = User.objects.filter(username = username ).exclude(pk = self.user_pk)
-        if len(users) != 0:
-            raise forms.ValidationError('El nombre de usuario ya está registrado.')
-        if len(username) < 8:
-            raise forms.ValidationError('El nombre de usuario debe tener al menos 8 caracteres.')
-        return username
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.filter(email=email).exists():
-            raise forms.ValidationError('El email ya está registrado.')
-        return email
+    def clean(self):
+        cleaned_data = super().clean()
+        first_name = cleaned_data.get("first_name")
+        last_name = cleaned_data.get("last_name")
+
+        if first_name and last_name:
+            exists = Subprofile.objects.filter(first_name=first_name, last_name=last_name)
+
+            if exists.exists():
+                self.add_error('first_name', "Este nombre ya está en uso.")
+        return cleaned_data
+    
     
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -417,22 +416,6 @@ class EditUserForm(forms.ModelForm):
             self.add_error('password', error)
         return password
 class EditSubprofileForm(forms.ModelForm):
-    username = forms.CharField(
-        max_length=30,
-        label='Nombre de Usuario', 
-        required=True, 
-        error_messages= {
-            'unique' : 'El nombre de usuario ya está registrado.',
-            'is_too_short': 'El nombre de usuario debe tener al menos 8 caracteres.',
-            'invalid': 'La contraseña no coincide.'
-        },
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Nombre de Usuario',
-                'class' : ''
-                }
-            )
-        )
     email = forms.EmailField(
         max_length=254,
         label='Correo Electrónico',
@@ -459,7 +442,7 @@ class EditSubprofileForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ['username', 'email', "group"]
+        fields = ['first_name', 'last_name', 'email', "group"]
     
     def __init__(self, *args, **kwargs):
         user_pk = kwargs.pop('user_pk')
@@ -473,18 +456,21 @@ class EditSubprofileForm(forms.ModelForm):
             self.fields['group'].disabled = True
         
         
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        users = User.objects.filter(username=username).exclude(pk=self.instance.pk)
-        if users.exists():
-            error = ValidationError(self.fields['username'].error_messages['unique'],
-                                    code='unique')
-            self.add_error('username', error)
-        if len(username) < 8:
-            error = ValidationError(self.fields['username'].error_messages['is_too_short'], 
-                                    code='is_too_short')
-            self.add_error('username', error)
-        return username
+    def clean(self):
+        cleaned_data = super().clean()
+        first_name = cleaned_data.get("first_name")
+        last_name = cleaned_data.get("last_name")
+
+        if first_name and last_name:
+            exists = Subprofile.objects.filter(first_name=first_name, last_name=last_name)
+
+            # exclude current instance when editing
+            if self.instance.pk:
+                exists = exists.exclude(pk=self.instance.subprofile.pk)
+                
+            if exists.exists():
+                self.add_error('first_name', "Este nombre ya está en uso.")
+        return cleaned_data
     
     def clean_email(self):
         email = self.cleaned_data['email']

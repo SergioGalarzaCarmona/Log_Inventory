@@ -8,7 +8,7 @@ from .functions import create_description
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView
-from django.urls import reverse_lazy
+from Objects.models import Objects
 ###################################
 ### ALL VIEWS HAVE DECORATOR TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
 ###################################
@@ -182,7 +182,7 @@ def manage_subusers(request):
             messages.warning(request,'No tienes permiso para ver esa página.')
             return redirect('/authenticate_user/deactivate')
     #Get all subusers of the profile(main account)
-    subusers = Subprofile.objects.filter(profile=profile_admin)
+    subusers = Subprofile.objects.filter(profile=profile_admin, is_active=True)
     if request.method == 'GET':
         return render(request, 'Users/subusers.html',{
         'form': RegisterSubuser(user_pk = request.user.pk),
@@ -254,9 +254,13 @@ def subprofile(request,id):
     #Get user 
     user = request.user
     if subuser != user:
-        #get subprofile from the subuser
-        subprofile = Subprofile.objects.get(user=subuser)
-        subuser_pk = subuser.pk
+        try:
+            #get subprofile from the subuser
+            subprofile = Subprofile.objects.get(user=subuser)
+            subuser_pk = subuser.pk
+        except ObjectDoesNotExist:
+            messages.error(request,'El usuario no existe.')
+            return redirect('main')
         #try get profile from the user, if raise a exception in the next try 
         try:
             profile = user.profile
@@ -298,6 +302,32 @@ def subprofile(request,id):
             'password_form' : SetPassword(user=subuser),
         })
     else:
+        if request.POST.get('delete_subprofile',False):
+            if permissions != 'admin':
+                messages.error(request,'No tienes permiso para eliminar este usuario.')
+                return redirect(f'/subprofile/{id}')
+            if subprofile.profile.user == subuser:
+                messages.error(request,'No puedes eliminar el usuario principal de la cuenta.')
+                return redirect(f'/subprofile/{id}')
+            if Objects.objects.filter(in_charge=subprofile,is_active=True).exists():
+                messages.error(request,'No se puede eliminar el usuario porque está a cargo de uno o más objetos activos. Cambia el encargado de esos objetos e inténtalo de nuevo.')
+                return redirect(f'/subprofile/{id}')
+            log = TypeChanges.objects.get(value='Delete')
+            UserChanges.objects.create(
+                main_user = subprofile.profile.user,
+                user_changed = subuser,
+                user = request.user,
+                description=f'Se eliminó el usuario "{subuser.username}" perteneciente al grupo "{subprofile.group.name}"',
+                type_change = log
+            )
+            subprofile.is_active = False
+            subprofile.save()
+            subuser.is_active = False
+            subuser.save()
+            messages.success(request,'El usuario se eliminó con éxito.')
+            return redirect('manage_subusers')
+        
+        
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
         change_password = request.POST.get("new_password2",'')

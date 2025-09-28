@@ -17,7 +17,7 @@
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
-   {% include 'sideBar.html' with path='users_log' profile=profile type=type permissions=permissions active_log="active" %}
+   {% include 'sideBar.html' with path='log' profile=profile type=type permissions=permissions active_log="active" %}
     <main> 
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
@@ -107,7 +107,38 @@
             {% endfor %}
           </div>
         </div>
+        <form method="POST" class="export-log-form">
+            {% csrf_token %}
+            {{ export_form.as_p }}
+            <div>
+              <label for="type_export">Exportar historial de:</label>
+              <select name="type_export" id="type_export">
+                <option value="users">Usuarios</option>
+                <option value="user_groups">Grupos de Usuarios</option>
+                <option value="objects">Objetos</option>
+                <option value="object_groups">Grupos de Objetos</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Exportar Historial</button>
+        </form>
     </main>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="message-{{message.tags}}">
+                    <div class="message-text">
+                        {{ message }}
+                    </div>
+                    <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                        <span class="material-symbols-outlined message-close-button">Close</span>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{% static 'SCRIPTS/logScript.js' %}"></script>
 </body>

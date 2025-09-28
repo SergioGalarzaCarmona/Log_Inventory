@@ -35,3 +35,15 @@ label_objectgroups_log.addEventListener("click", ()=> {
     objects_log.classList.add("hidden")
     object_groups_log.classList.remove("hidden")
 })
+
+// Handle all close button to alert messages
+const closeButtons = document.querySelectorAll('.message-close-button');
+
+closeButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const alert = button.closest('.message-error, .message-success, .message-warning'); 
+    if (alert) {
+      alert.classList.add('hidden');
+    }
+  });
+})
