@@ -1,16 +1,15 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from Users.models import Profile,Subprofile, TypeChanges
+from Users.models import Profile,Subprofile, TypeChanges, UserChanges, GroupChanges
 from .models import Objects,ObjectsGroup,Transaction,GroupObjectsChanges, TypeTransaction
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from Users.async_functions import redirect_async, render_async, get_users_log, get_user_groups_log
-from .async_functions import get_objects_log, get_object_groups_log
 from .functions import create_transaction_description
-from .forms import ObjectForm,ObjectsGroupForm
+from .forms import ObjectForm,ObjectsGroupForm,ExportLogForm
 from Users.forms import SetImageForm
-from django.forms.models import model_to_dict
+import openpyxl
 # Create your views here.
 
 @login_required
@@ -135,6 +134,22 @@ def manage_object(request, id):
             'image_form' : image_form,
         })
     else:
+        if request.POST.get('delete_object', False):
+            object.is_active = False
+            object.save()
+            Transaction.objects.create(
+                user = profile.user if type == 'profile' else profile.profile.user,
+                type = TypeTransaction.objects.get(name = 'Delete'),
+                object = object,
+                in_charge = request.user,
+                stock_before = object.stock,
+                stock_after = 0,
+                description = f'Se eliminó el objeto {object.name} que tenía un stock de {object.stock}.',
+            )
+            messages.success(request, 'El objeto se eliminó con éxito.')
+            return redirect('main')
+        
+        
         image = request.FILES.get('image',False)
         delete_image = request.POST.get('delete_image',False)
         
@@ -196,11 +211,10 @@ def manage_object(request, id):
                 'object_form' : form,
                 'image_form' : SetImageForm(),
             })
-        stock_before = object.stock
         object = form.save()
         if not 'stock' in form.changed_data:
             type_transaction = TypeTransaction.objects.get(name='Update')
-        if stock_before > object.stock:
+        if int(form.initial['stock']) > object.stock:
             type_transaction = TypeTransaction.objects.get(name='Substract')
         else:
             type_transaction = TypeTransaction.objects.get(name='Add')
@@ -209,7 +223,7 @@ def manage_object(request, id):
             type = type_transaction,
             object = object,
             in_charge = request.user,
-            stock_before = stock_before,
+            stock_before = int(form.initial['stock']),
             stock_after = object.stock,
             description = create_transaction_description(object=form.initial,type='Object',updated_data = object.__dict__ ),
             
@@ -330,42 +344,102 @@ def manage_object_groups(request):
             return redirect('object_groups')
 
 @login_required
-async def log(request):
+def log(request):
     user = request.user
     try:
-        profile_admin = profile = await Profile.objects.aget(user=user)
+        profile_admin = profile = Profile.objects.get(user=user)
         type = 'profile'
         permissions = 'admin'
     except ObjectDoesNotExist:
-        profile = await Subprofile.objects.aget(user=user)
-        profile_admin = await profile.profile
+        profile = Subprofile.objects.get(user=user)
+        profile_admin = profile.profile
         type = 'subprofile'
-        permissions = await profile.group.permissions.name
+        permissions = profile.group.permissions.name
         if permissions == 'Estudiante':
-            messages.warning(request,'No tienes permiso para ver esa página.')
-            return await redirect_async('/authenticate_user/deactivate')
+            messages.warning(request, 'No tienes permiso para ver esa página.')
+            return redirect('/authenticate_user/deactivate')
     except:
-        messages.error(request,'Hubo un error al tratar de cargar el inventario.')
-        return await redirect_async('/authenticate_user/deactivate')
-    query_users = get_users_log(profile_admin)
-    query_user_groups = get_user_groups_log(profile_admin)
-    query_objects = get_objects_log(profile_admin)
-    query_object_groups = get_object_groups_log(profile_admin)
-    
+        messages.error(request, 'Hubo un error al tratar de cargar el inventario.')
+        return redirect('/authenticate_user/deactivate')
+
+    query_users = UserChanges.objects.filter(main_user=profile_admin.user)
+    query_user_groups = GroupChanges.objects.filter(main_user=profile_admin.user)
+    query_objects = Transaction.objects.filter(user=profile_admin.user)
+    query_object_groups = GroupObjectsChanges.objects.filter(main_user=profile_admin.user)
+
     if request.method == 'GET':
-        return await render_async(request,'Objects/log.html',{
-            'type' : type,
-            'profile' : profile,
-            'permissions' : permissions,
-            'log_users' : await query_users,
-            'log_user_groups' : await query_user_groups,
-            'log_objects' : await query_objects,
-            'log_object_groups' : await query_object_groups
+        return render(request, 'Objects/log.html', {
+            'type': type,
+            'profile': profile,
+            'permissions': permissions,
+            'log_users': query_users,
+            'log_user_groups': query_user_groups,
+            'log_objects': query_objects,
+            'log_object_groups': query_object_groups,
+            'export_form': ExportLogForm(),
         })
     else:
-        return await render_async(request,'Objects/log.html',{
-            'type' : type,
-            'profile' : profile,
-            'permissions' : permissions,
-            'log_users' : query_users
-        })
+        form = ExportLogForm(request.POST)
+        if not form.is_valid():
+            messages.error(request, 'Hubo un error al tratar de exportar el inventario.')
+            return render(request, 'Objects/log.html', {
+                'type': type,
+                'profile': profile,
+                'permissions': permissions,
+                'log_users': query_users,
+                'log_user_groups': query_user_groups,
+                'log_objects': query_objects,
+                'log_object_groups': query_object_groups,
+                'export_form': form,
+            })
+        type = request.POST['type_export']
+        
+        if type not in ['users','user_groups','objects','object_groups']:
+            messages.error(request, 'Hubo un error al tratar de exportar el inventario.')
+            return redirect('log')
+
+        match type:
+            case 'users':
+                log = UserChanges.objects.filter(main_user=request.user,date__range = (request.POST['start_date'], request.POST['end_date']))
+                header_object = 'Usuario'  
+            case 'user_groups':
+                log = GroupChanges.objects.filter(main_user=request.user,date__range = (request.POST['start_date'], request.POST['end_date']))
+                header_object = 'Grupo de usuarios'
+            case 'objects':
+                log = Transaction.objects.filter(user=request.user,date__range = (request.POST['start_date'], request.POST['end_date']))
+                header_object = 'Objeto'
+            case 'object_groups':
+                log =  GroupObjectsChanges.objects.filter(main_user=request.user,date__range = (request.POST['start_date'], request.POST['end_date']))
+                header_object = 'Grupo de objetos'
+        
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Log_Inventory_Report"
+        
+        ws.append([ header_object, 'Tipo de cambio', 'Realizado por', 'Fecha y hora', 'Descripción'])
+
+        for entry in log:
+            match type:
+                case 'users':
+                    object_name = entry.user_changed.username
+                    type_change = entry.type_change.value
+                case 'user_groups':
+                    object_name = entry.group_changed.name
+                    type_change = entry.type_change.value
+                case 'objects':
+                    object_name = entry.object.name
+                    type_change = entry.type.name
+                case 'object_groups':
+                    object_name = entry.group_changed.name
+                    type_change = entry.type_change.value
+            ws.append([ object_name, type_change, entry.user.username, entry.date.strftime("%Y-%m-%d %H:%M:%S"), entry.description])
+        # Prepare response
+        response = HttpResponse(
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        response["Content-Disposition"] = 'attachment; filename="Log_Inventory_Report.xlsx"'
+
+        # Save workbook to response
+        wb.save(response)
+        return response
+        

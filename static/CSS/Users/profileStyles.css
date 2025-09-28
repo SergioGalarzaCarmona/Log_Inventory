@@ -242,8 +242,30 @@ form > div {
     outline: none;
 }
 
-#submit {
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
+}
+
+.delete-buton {
+    width: 10%;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    color: #e24;
+    font-size: 2rem;
+}
+
+.delete-buton:hover {
+    cursor: pointer;
+    outline: none;
+    filter: drop-shadow(0 0 5px #e24);
+}
+
+#submit {
+    width: 85%;
     background-color: var(--fb-color);
     color: #fff;
     padding: 10px 45px;
