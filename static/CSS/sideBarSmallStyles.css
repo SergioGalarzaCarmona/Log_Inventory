@@ -6,6 +6,10 @@ nav.sidebar__nav > ul {
     justify-content: space-evenly;
 }
 
+.sidebar__tools > .sidebar__item {
+    margin-bottom: 0;
+}
+
 .sidebar__item {
     margin-bottom: 5%;
 }
