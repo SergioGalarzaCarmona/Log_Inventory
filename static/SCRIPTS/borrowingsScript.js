@@ -1,22 +1,13 @@
 
 // This script handles both forms for creating a group or a borrowing.(view forms borrowingsGroupForm and borrowingsForm)
 
-const label_group = document.querySelector('.create-group-label');
 const label_borrowing = document.querySelector('.create-borrowing-label');
 
-const closeFormGroup = document.querySelector(".close-formGroup");
 const closeFormborrowing = document.querySelector(".close-formborrowing");
 
-const create_group = document.getElementById('create-group');
 const create_borrowing = document.getElementById('create-borrowing');
 const borrowingsTable = document.querySelector('.borrowings-table__container');
 
-label_group.addEventListener('click', function (){
-    create_borrowing.checked = false; 
-});
-label_borrowing.addEventListener('click', function (){
-    create_group.checked = false;
-});
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -24,18 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
     function toggleTableVisibility() {
         if (create_borrowing.checked) {
             borrowingsTable.classList.add("hidden");
-            closeFormGroup.classList.add("hidden");
             closeFormborrowing.classList.remove("hidden");
         } 
         else {
             borrowingsTable.classList.remove("hidden");
-            closeFormGroup.classList.add("hidden");
             closeFormborrowing.classList.add("hidden");
         }
     }
 
     create_borrowing.addEventListener("change", toggleTableVisibility);
-    create_group.addEventListener("change", toggleTableVisibility);
     
     toggleTableVisibility();
 });
@@ -57,17 +45,17 @@ closeButtons.forEach(button => {
 const filterBar = document.querySelector('.filter-bar__search');
 
 filterBar.addEventListener('input', () => {
-    const userRows = document.querySelectorAll('.username');
+    const objectRows = document.querySelectorAll('.object_name');
     const filterText = filterBar.value.toLowerCase();
 
-    userRows.forEach((user) => {
-        const userParentRow = user.parentElement;
-        const username = user.textContent.toLowerCase();
+    objectRows.forEach((object) => {
+        const objectParentRow = object.parentElement;
+        const objectName = object.textContent.toLowerCase();
 
-        if (!username.includes(filterText)) {
-            userParentRow.classList.add('hidden');
+        if (!objectName.includes(filterText)) {
+            objectParentRow.classList.add('hidden');
         } else {
-            userParentRow.classList.remove('hidden');
+            objectParentRow.classList.remove('hidden');
         }
     });
 });

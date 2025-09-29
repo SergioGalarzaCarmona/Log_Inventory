@@ -24,16 +24,17 @@ def manage_borrowings(request):
             messages.warning(request,'No tienes permiso para ver esa página.')
             return redirect('/authenticate_user/deactivate')
     
-    borrowings = Borrowings.objects.filter(in_charge__profile = profile_admin, completed = False)
+    borrowings = Borrowings.objects.filter(in_charge__profile=profile_admin, completed=False)
     if request.method == 'GET':
         return render(request, 'Borrowings/borrowings.html', {
             'profile': profile,
             'permissions': permissions,
             'type': type,
             'form' : BorrowingForm(user=profile_admin.user),
+            'borrowings': borrowings
         })
     else:
-        form = BorrowingForm(request.POST)
+        form = BorrowingForm(request.POST, user=profile_admin.user)
         if not form.is_valid():
             messages.error(request,'Los datos ingresados presentan algun error.')
             return render(request, 'Borrowings/borrowings.html',{
@@ -41,6 +42,7 @@ def manage_borrowings(request):
             'permissions': permissions,
             'type': type,
             'form' : form,
+            'borrowings': borrowings,
             })
         form.save()
         messages.success(request,'El préstamo se creo con éxito.')

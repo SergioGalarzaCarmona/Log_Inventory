@@ -83,9 +83,21 @@
                 </a>
             </li>
             <li class="sidebar__item">
+                <a href="{% url 'object_groups' %}" class="sidebar__item-link {{active_objects_groups}}">
+                    <span class="material-symbols-outlined">all_inbox</span>
+                    <p>Grupos de Objetos</p>
+                </a>
+            </li>
+            <li class="sidebar__item">
                 <a href="{% url 'manage_borrowings' %}" class="sidebar__item-link {{active_borrowings}}">
                     <span class="material-symbols-outlined">partner_exchange</span>
-                    <p>Prestamos</p>
+                    <p>Préstamos</p>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="#" class="sidebar__item-link">
+                    <span class="material-symbols-outlined">chat</span>
+                    <p>Chats</p>
                 </a>
             </li>
             {% if permissions == 'admin' or permissions == "Profesor" %}
@@ -99,6 +111,12 @@
                 <a href="{% url 'manage_subusers' %}" class="sidebar__item-link {{active_subusers}}">
                     <span class="material-symbols-outlined">manage_accounts</span>
                     <p>Usuarios</p>
+                </a>
+            </li>
+            <li class="sidebar__item">
+                <a href="{% url 'subusers_group' %}" class="sidebar__item-link {{active_subusers_groups}}">
+                    <span class="material-symbols-outlined">Groups</span>
+                    <p>Grupos de Usuarios</p>
                 </a>
             </li>
             {% endif %}

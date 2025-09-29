@@ -22,7 +22,7 @@
                 <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0" title="Ordenar a-z">
                 <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0" title="Ordenar z-a">
                 <div class="filter-bar__name col-md-4 col-8">
-                    <input type="text" class="filter-bar__search" placeholder="Buscar por nombre">
+                    <input type="text" class="filter-bar__search" placeholder="Buscar por objeto...">
                     <input value="search" type="submit" class="material-symbols-outlined">
                 </div>
                 <div class="filter-bar__logo-container col-md-5 col-0">
@@ -50,6 +50,7 @@
                         <th>Encargado</th>
                         <th>Cantidad</th>
                         <th>Fecha Límite</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
 
@@ -57,10 +58,11 @@
                     {% for borrowing in borrowings %}
                     <tr>
                         <td>{{forloop.counter}}</td>
-                        <td>{{borrowing.object.name}}</td>
-                        <td class="username">{{borrowing.in_charge.user.first_name}} {{borrowing.in_charge.user.last_name}}</td>
+                        <td class="object_name">{{borrowing.object.name}}</td>
+                        <td>{{borrowing.in_charge.user.first_name}} {{borrowing.in_charge.user.last_name}}</td>
                         <td>{{borrowing.stock}}</td>
                         <td>{{borrowing.date_limit}}</td>
+                        <td>{% if borrowing.completed %}Completado{% else %}Pendiente{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
