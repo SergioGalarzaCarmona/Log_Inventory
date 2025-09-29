@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Users.urls')),
     path('',include('Objects.urls')),
+    path('', include('Borrowings.urls')),
 ]
 
 if settings.DEBUG:
