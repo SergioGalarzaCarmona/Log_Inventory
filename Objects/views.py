@@ -48,7 +48,8 @@ def main(request):
                     'permissions' : permissions,
                     'objects' : objects,
                     'object_form' : form,
-                    'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user)
+                    'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user),
+                    'checked' : 'checked',
                 })
             object = form.save(commit = False)
             object.user = profile.user if type == 'profile' else profile.profile.user
@@ -75,7 +76,8 @@ def main(request):
                     'permissions' : permissions,
                     'objects' : objects,
                     'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user),
-                    'object_group_form' : form
+                    'object_group_form' : form,
+                    'checked_group' : 'checked',
                 })
             group = form.save(commit = False)
             group.user = profile.user if type == 'profile' else profile.profile.user

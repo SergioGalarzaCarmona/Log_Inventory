@@ -63,6 +63,18 @@
                     </label>
                 </div> 
             {% endif %}
+            {% elif path == 'manage_borrowings' %}
+            {% if permissions == 'admin' or permissions == "Profesor" %}
+            <li class="sidebar__tools">
+                <p>Herramientas<span class="material-symbols-outlined">build</span></p>
+                <div class="sidebar__item">
+                    <label for="create-borrowing" class="sidebar__item-link export-log-label">
+                        <span class="material-symbols-outlined">add</span>
+                        <p>Crear Préstamo</p>
+                    </label>
+                </div>
+            </li>
+            {% endif %}
             {% endif %}
             <li class="sidebar__item">
                 <a href="{% url 'main' %}" class="sidebar__item-link {{active_objects}}">
@@ -71,7 +83,7 @@
                 </a>
             </li>
             <li class="sidebar__item">
-                <a href="#" class="sidebar__item-link {{active_borrowings}}">
+                <a href="{% url 'manage_borrowings' %}" class="sidebar__item-link {{active_borrowings}}">
                     <span class="material-symbols-outlined">partner_exchange</span>
                     <p>Prestamos</p>
                 </a>

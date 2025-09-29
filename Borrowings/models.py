@@ -18,6 +18,9 @@ class Borrowings(models.Model):
     date_limit = models.DateTimeField()
     date_complete = models.DateTimeField()
     stock = models.IntegerField()
+    completed = models.BooleanField(
+        default=False
+    )
     
     def __str__(self):
         return f'{self.object.name} Borrowing'
