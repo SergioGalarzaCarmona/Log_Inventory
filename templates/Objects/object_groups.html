@@ -121,7 +121,7 @@
                 <form class="group-buttons" method="POST">
                     {% csrf_token %}
                     <input type="submit" value="delete" class="delete-button material-symbols-outlined" id="delete-button-{{form.instance.id}}" form="delete_group_{{form.instance.id}}">
-                    <input type="submit" value="Guardar" class="save-button">
+                    <input type="submit" value="Guardar" class="save-button" form="{{form.instance.id}}_form">
                 </form>
                 <form method="POST">
                     {% csrf_token %}

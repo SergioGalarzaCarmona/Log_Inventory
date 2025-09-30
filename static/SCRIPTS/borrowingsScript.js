@@ -87,3 +87,5 @@ function sortTable(order = "asc") {
 // Bind buttons
 document.querySelector(".filter-bar__a-z").addEventListener("click", ()=> sortTable("asc"));
 document.querySelector(".filter-bar__z-a").addEventListener("click", ()=> sortTable("desc"));
+
+

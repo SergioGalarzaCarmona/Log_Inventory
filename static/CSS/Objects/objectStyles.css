@@ -319,7 +319,7 @@ dialog {
     background: var(--sidebar-color);
     padding: 20px 30px;
     border-radius: 12px;
-    width: 350px;
+    width: 30%;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     animation: fadeIn 0.2s ease-in-out;

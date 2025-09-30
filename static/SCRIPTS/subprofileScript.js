@@ -39,21 +39,31 @@ profile_image_input.addEventListener('change', function () {
 })
 
 // This script handles the delete button functionality for subprofile images.
-const delete_button = document.getElementById('id_delete_button')
-delete_button.addEventListener('click',function () {
-    const checkbox = document.getElementById('id_delete_checkbox')
-    checkbox.checked = true
-    document.getElementById('delete_image').click()
-})
+document.addEventListener("DOMContentLoaded", () => {
+  const deleteBtn = document.getElementById("delete-button");
+  const modal = document.getElementById("deleteModal");
+  const cancelBtn = document.getElementById("cancelDelete");
+  const confirmBtn = document.getElementById("confirmDelete");
+  const deleteForm = document.getElementById("delete-form");
 
-// Handle all close button to alert messages
-const closeButtons = document.querySelectorAll('.message-close-button');
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      modal.style.display = "flex";
+    });
+  }
 
-closeButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const alert = button.closest('.message-error, .message-success, .message-warning'); 
-    if (alert) {
-      alert.classList.add('hidden');
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  confirmBtn.addEventListener("click", () => {
+    deleteForm.submit();
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
     }
   });
 });

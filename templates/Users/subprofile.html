@@ -113,14 +113,24 @@
                     <input type="password" name="new_password2" placeholder="Confirmar Contraseña"  maxlength="30" minlength="8"  id="id_new_password2">
                 </div>
                 <div class="button-container">
-                    <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined">
+                    <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined" id="delete-button">
                     <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
                 </div>
 
                 {% endif %}
                 
             </form>
-
+            <!-- Delete confirmation modal -->
+        	<div id="deleteModal" class="modal-overlay" style="display: none;">
+            	<div class="modal-content">
+            	    <h3>Estás seguro?</h3>
+            	    <p>Esto eliminará permanentemente el usuario.</p>
+            	    <div class="modal-buttons">
+            	        <button id="cancelDelete" class="btn-cancel">Cancelar</button>
+            	        <button id="confirmDelete" class="btn-delete">Borrar</button>
+            	    </div>
+            	</div>
+        	</div>
             
             </div>
         </div>

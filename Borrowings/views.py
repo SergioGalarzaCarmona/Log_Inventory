@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from Users.models import Profile, Subprofile
 from .forms import BorrowingForm
 from .models import Borrowings
+from Objects.models import Objects
 
 
 @login_required
@@ -25,13 +26,17 @@ def manage_borrowings(request):
             return redirect('/authenticate_user/deactivate')
     
     borrowings = Borrowings.objects.filter(in_charge__profile=profile_admin, completed=False)
+    subusers = Subprofile.objects.filter(profile=profile_admin)
+    objects = Objects.objects.filter(user=profile_admin.user)
     if request.method == 'GET':
         return render(request, 'Borrowings/borrowings.html', {
             'profile': profile,
             'permissions': permissions,
             'type': type,
             'form' : BorrowingForm(user=profile_admin.user),
-            'borrowings': borrowings
+            'borrowings': borrowings,
+            'subusers' : subusers,
+            'objects' : objects
         })
     else:
         form = BorrowingForm(request.POST, user=profile_admin.user)
@@ -43,6 +48,8 @@ def manage_borrowings(request):
             'type': type,
             'form' : form,
             'borrowings': borrowings,
+            'subusers' : subusers,
+            'objects' : objects
             })
         form.save()
         messages.success(request,'El préstamo se creo con éxito.')

@@ -40,6 +40,16 @@
                 {{form}}
                 <input type="submit" id="submit">
             </form>
+			<!-- Modal to create group if it ain't selected.-->
+            <div id="editBorrowingModal" class="modal-overlay" style="display: none;">
+                <div class="modal-content">
+                    <h3 class="modal-title"></h3>
+                    <div class="modal-buttons">
+                        <button id="cancelCreate" class="btn-cancel">No</button>
+                        <button id="confirmCreate" class="btn-confirm">Si</button>
+                    </div>
+                </div>
+            </div>
         </div> 
         <div class="borrowings-table__container">
             <table class="borrowings-table">
@@ -51,6 +61,7 @@
                         <th>Cantidad</th>
                         <th>Fecha Límite</th>
                         <th>Estado</th>
+                        <th>Edit</th>
                     </tr>
                 </thead>
 
@@ -63,6 +74,7 @@
                         <td>{{borrowing.stock}}</td>
                         <td>{{borrowing.date_limit}}</td>
                         <td>{% if borrowing.completed %}Completado{% else %}Pendiente{% endif %}</td>
+                        <td><button class="edit-button"><span class="material-symbols-outlined">edit</span></button></td>
                     </tr>
                     {% endfor %}
                 </tbody>

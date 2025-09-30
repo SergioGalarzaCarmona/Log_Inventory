@@ -205,7 +205,7 @@ class ObjectsGroupForm(forms.ModelForm):
             error = ValidationError(self.fields['name'].error_messages['invalid_lenght'],
                                     code="invalid_lenght")
             self.add_error('name',error)
-        if ObjectsGroup.objects.filter(name=name, user=self.user):
+        if ObjectsGroup.objects.filter(name=name, user=self.user).exclude(pk=self.instance.pk):
             error = ValidationError(self.fields['name'].error_messages['unique'],
                                     code="unique")
             self.add_error('name', error)
