@@ -44,9 +44,39 @@
             <div id="editBorrowingModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
                     <h3 class="modal-title"></h3>
+                    <div class="modal-form">
+                        <form id="edit-borrowing-form" enctype="multipart/form-data" method="POST">
+                            {% csrf_token %}
+                            <div>
+                                <label for="object_id">Objeto:</label>
+                                <select name="object" id="object_id">
+                                    <option value="">Seleccione un objeto</option>
+                                    {% for object in objects %}
+                                        <option value="{{ object.id }}">{{ object.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="in_charge_id">Encargado:</label>
+                                <select name="in_charge" id="in_charge_id">
+                                    <option value="">Seleccione un encargado</option>
+                                    {% for subuser in subusers %}
+                                        <option value="{{ subuser.id }}">{{ subuser.user.first_name }} {{ subuser.user.last_name }} - {{ subuser.group.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="stock_id">Cantidad:</label>
+                                <input type="number" name="stock" id="stock_id" min="1">
+                            </div>
+                            <div>
+                                <label for="date_limit_id">Fecha Límite:</label>
+                                <input type="datetime-local" name="date_limit" id="date_limit_id">
+                            </div>
+                    </div>
                     <div class="modal-buttons">
-                        <button id="cancelCreate" class="btn-cancel">No</button>
-                        <button id="confirmCreate" class="btn-confirm">Si</button>
+                        <button id="cancelCreate" class="btn-cancel">Cancelar</button>
+                        <button id="confirmCreate" class="btn-confirm">Guardar</button>
                     </div>
                 </div>
             </div>

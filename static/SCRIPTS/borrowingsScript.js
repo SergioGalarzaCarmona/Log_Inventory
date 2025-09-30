@@ -89,3 +89,32 @@ document.querySelector(".filter-bar__a-z").addEventListener("click", ()=> sortTa
 document.querySelector(".filter-bar__z-a").addEventListener("click", ()=> sortTable("desc"));
 
 
+// edit borrowing
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtn = document.querySelectorAll(".edit-button");
+  const modal = document.getElementById("editBorrowingModal");
+  const cancelEditBtn = document.getElementById("cancelEdit");
+  const confirmEditBtn = document.getElementById("confirmEdit");
+  if (editBtn) {
+    editBtn.forEach(button => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.style.display = "flex";
+      });
+    });
+  }
+
+  cancelEditBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  confirmEditBtn.addEventListener("click", () => {
+
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
