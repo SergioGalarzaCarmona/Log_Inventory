@@ -22,17 +22,44 @@
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
                 {% if type != "Estudiante" %}
-                <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersLog" id="subusersLog-label">manage_accounts</label></div>
-                <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersgroupsLog" id="subusersgroupsLog-label">groups</label></div>
-                {% endif %}
-                <div class="material-symbols-outlined col-md-1 col-3"><label id="objectsLog-label">view_object_track</label></div>
-                <div class="material-symbols-outlined col-md-1 col-3"><label id="objectgroupsLog-label">stack</label></div>
-                <div class="filter-bar__logo-container col-md-8 col-0">
-                    <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
+                <div class="filter-bar__buttons col-md-4 col-12">
+                    <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersLog" id="subusersLog-label">manage_accounts</label></div>
+                    <div class="material-symbols-outlined col-md-1 col-3"><label for="subusersgroupsLog" id="subusersgroupsLog-label">groups</label></div>
+                    {% endif %}
+                    <div class="material-symbols-outlined col-md-1 col-3"><label id="objectsLog-label">view_object_track</label></div>
+                    <div class="material-symbols-outlined col-md-1 col-3"><label id="objectgroupsLog-label">stack</label></div>
                 </div>
+                <div class="filter-bar__name col-md-4 col-0">
+                    <input type="text" placeholder="Buscar objeto por nombre..." id="search-input">
+                    <input value="search" type="submit" class="material-symbols-outlined">
+                </div>
+                <div class="filter-bar__logo-container col-md-4 col-0">
+                    <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
+                </div> 
             </div> 
         </div>
-        <!-- SUBUSERS LOG -->
+        <div class="form-container">
+          <nav>
+            <label for="export-log" class="material-symbols-outlined close-export-log">arrow_back</label>
+          </nav>
+          <input type="checkbox" id="export-log" class="filter-bar__checkbox">
+          <form method="POST" class="export-log-form">
+            {% csrf_token %}
+            {{ export_form }} 
+            <div>
+              <label for="type_export">Exportar historial de:</label>
+              <select name="type_export" id="type_export">
+                <option value="users">Usuarios</option>
+                <option value="user_groups">Grupos de Usuarios</option>
+                <option value="objects">Objetos</option>
+                <option value="object_groups">Grupos de Objetos</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Exportar Historial</button>
+          </form>
+        </div>
+        <div class="logs-container">
+          <!-- SUBUSERS LOG -->
         <input type="checkbox" id="subusersLog" class="filter-bar__checkbox">
         <div class="history-container subusersLog"> 
           <div class="history-title">
@@ -107,20 +134,7 @@
             {% endfor %}
           </div>
         </div>
-        <form method="POST" class="export-log-form">
-            {% csrf_token %}
-            {{ export_form.as_p }}
-            <div>
-              <label for="type_export">Exportar historial de:</label>
-              <select name="type_export" id="type_export">
-                <option value="users">Usuarios</option>
-                <option value="user_groups">Grupos de Usuarios</option>
-                <option value="objects">Objetos</option>
-                <option value="object_groups">Grupos de Objetos</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Exportar Historial</button>
-        </form>
+        </div>
     </main>
 
     {% if messages %}

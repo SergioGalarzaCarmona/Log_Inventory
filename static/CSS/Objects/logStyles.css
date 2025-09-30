@@ -46,7 +46,7 @@ main {
     height: 100dvh;
     width: clamp(calc(100dvw - 300px), 80dvw, calc(100dvw - 220px));
     background-color: var(--bg-color);
-    position: fixed;
+    position: fixed; 
     right: 0;
     overflow-y: auto;
     background-image: url(../../IMAGES/Escritorio.webp);
@@ -90,6 +90,31 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     cursor: pointer;
 }
 
+.filter-bar__filter-container > .filter-bar__buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.filter-bar__filter-container > .filter-bar__name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.filter-bar__name > input {
+    height: auto;
+}
+
+.filter-bar__name > input[type="text"] {
+    width: 80%;
+    outline: none;
+}
+
+.filter-bar__name > input[type="submit"] {
+    width: 20%;
+}
 
 .filter-bar__filter-container > .filter-bar__logo-container {
     height: 100%;
@@ -113,13 +138,20 @@ input[type="checkbox"] {
     display: none;
 }
 
+/* LOGS STYLES */
+
+.logs-container {
+    height: 100%;
+    width: 100%;
+}
+
 .history-container {
     margin: 4dvh auto;
     background-color: white;
     border: 1px solid var(--sidebar-color);
     border-radius: 12px;
     padding: 20px;
-    max-width: 800px;
+    max-width: clamp(60%, 800px, 95%);
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
@@ -254,9 +286,102 @@ input[type="checkbox"] {
   pointer-events: none;
 }
 
+/*EXPORT LOG FORM STYLES*/
+
+.close-export-log {
+    position: absolute;
+    top: calc(calc(2rem + 44.78px) + 10px);
+    margin-left: 15px;
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: filter .3s;
+    display: none;
+}
+
+.close-export-log:hover {
+    filter: drop-shadow(0 0 5px #fff);
+}
+
+.export-log-form {
+    display: none;
+}
+
+#export-log:checked ~ .export-log-form {
+    display: flex;
+}
+
+.form-container:has(#export-log:checked) .close-export-log {
+    display: block;
+}
+
+.form-container:has(#export-log:checked) + .logs-container {
+    display: none;
+}
+
+main:has(#export-log:checked) {
+    overflow-y: hidden;
+}
+
+.form-container form {
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 60dvh;
+    width: 30%;
+    padding: 0 40px;
+    border-radius: 20px;
+    margin: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 60dvh) / 2) 35%;
+    background-color: var(--sidebar-color);
+}
+
+.form-container button[type="submit"] {
+    background-color: var(--fb-color);
+    color: #fff;
+    padding: 7px 0;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: box-shadow .3s;
+    outline: none;
+} 
+
+.form-container button[type="submit"]:hover {
+    box-shadow: 7px 7px 0px rgb(100, 166, 231),
+                -7px -7px 0px #335a94;
+}
+
+.form-container form input, form select, button[type="submit"], form input[type="date"] {
+    background-color: #eee;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+form select {
+    cursor: pointer;
+}
+
+.forms-container form input:focus, form select:focus, input[type="date"]:focus {
+    outline: var(--wood) 1px solid;
+}
 
 
 @media (max-width: 768px) {
+    .filter-bar__filter-container > .filter-bar__name {
+        display: none;
+    }
+    
     .logo {
         display: none;
     }
