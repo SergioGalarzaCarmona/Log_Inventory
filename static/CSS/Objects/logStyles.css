@@ -95,6 +95,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+    text-align: center;
 }
 
 .filter-bar__filter-container > .filter-bar__name {
@@ -393,5 +394,12 @@ form select {
     .history-container {
         padding: 10px;
         margin-top: 2dvh;
+    }
+
+    .form-container form {
+        width: 80%;
+        margin: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 50dvh) / 2) 10%;
+        padding: 20px;
+        height: 50dvh;
     }
 }
