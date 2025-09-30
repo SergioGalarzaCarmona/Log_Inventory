@@ -47,3 +47,22 @@ closeButtons.forEach(button => {
     }
   });
 })
+
+// Manage filter bar by object 
+const filterBar = document.getElementById('search-input')
+
+filterBar.addEventListener('input', () => {
+    const Rows = document.querySelectorAll('.data_changed');
+    const filterText = filterBar.value.toLowerCase();
+
+    Rows.forEach((row) => {
+        const ParentRow = row.parentElement;
+        const rowName = row.textContent.toLowerCase();
+
+        if (!rowName.includes(filterText)) {
+            ParentRow.classList.add('hidden');
+        } else {
+            ParentRow.classList.remove('hidden');
+        }
+    });
+});

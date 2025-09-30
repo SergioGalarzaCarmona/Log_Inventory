@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/sideBarSmallStyles.css'%}">
-    <link rel="stylesheet" href="{%static '/CSS/Users/profileStyles.css'%}">
+    <link rel="stylesheet" href="{%static '/CSS/Objects/objectStyles.css'%}">
     <title>Objeto - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Visualización Objeto Log Inventory">
@@ -111,7 +111,7 @@
                 </div>
                 {% if permissions != 'Estudiante' %}
                 <div class="button-container">
-                    <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined">
+                    <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined" id="delete-button" title="Eliminar Objeto">
                     <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
                 </div>
                 {% endif %}
@@ -122,7 +122,17 @@
                 <input type="checkbox" name="delete_object" id="id_delete_object" checked hidden>
             </form>
         </div>
-        
+        <!-- Delete confirmation modal -->
+        <div id="deleteModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <h3>Estás seguro?</h3>
+                <p>Esto eliminará permanentemente el objeto.</p>
+                <div class="modal-buttons">
+                    <button id="cancelDelete" class="btn-cancel">Cancelar</button>
+                    <button id="confirmDelete" class="btn-delete">Borrar</button>
+                </div>
+            </div>
+        </div>
         {% if messages %}
             <div class="messages-container">
                 {% for message in messages %}

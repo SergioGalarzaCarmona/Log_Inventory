@@ -516,7 +516,7 @@ def manage_subusers_group(request):
             group = SubprofilesGroup.objects.get(pk = request.POST['id'])
             subprofiles = Subprofile.objects.filter(group=group)
             if subprofiles.count() > 0:
-                messages.error(request,'No se puede eliminar el grupo porque tiene subusuarios asociados.')
+                messages.error(request,'No se puede eliminar el grupo porque tiene usuarios asociados.')
                 return render(request,'Users/subprofiles_group.html',{
                     'type' : type,
                     'profile' : profile,

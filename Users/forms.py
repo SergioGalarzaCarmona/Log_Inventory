@@ -212,6 +212,14 @@ class RegisterSubuser(UserCreationForm):
             except Profile.DoesNotExist:
                 profile = None
             self.fields['group'].queryset = SubprofilesGroup.objects.filter(profile=profile, is_active=True) 
+        self.fields['first_name'].required = True
+        self.fields['first_name'].widget.attrs = {
+            'placeholder': 'Nombre',
+        }
+        self.fields['last_name'].required = True
+        self.fields['last_name'].widget.attrs = {
+            'placeholder': 'Apellido',
+        }
 
     def create_subprofile(self,user, group_id,image):
         main_user = User.objects.get(pk = self.user_pk)
@@ -454,6 +462,15 @@ class EditSubprofileForm(forms.ModelForm):
         self.fields['group'].initial = self.instance.subprofile.group
         if permissions != 'admin':
             self.fields['group'].disabled = True
+        self.fields['first_name'].required = True
+        self.fields['first_name'].widget.attrs = {
+            'placeholder': 'Nombre',
+        }
+        self.fields['last_name'].required = True
+        self.fields['last_name'].widget.attrs = {
+            'placeholder': 'Apellido',
+        }
+
         
         
     def clean(self):

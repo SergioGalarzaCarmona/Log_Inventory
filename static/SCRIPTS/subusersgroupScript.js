@@ -1,42 +1,73 @@
 // This script handles that the subuser always belongs to a group, and if the group isn't selected, it opens a dialog to create a new group(subusersGroupForm)
-function validateGroup(){
-    const subusersGroup = document.querySelector('.groups');
-    const select = document.getElementById('id_group');
-    const option = select.children[0]
-    option.value = 0
-    value = select.value;
-    if ( value == 0) {
-        const dialog = document.getElementById("group-dialog");
-        dialog.showModal()
-        document.getElementById("close-dialog").addEventListener("click", () => dialog.close())
-        document.getElementById('create').addEventListener("click", function (){
-            dialog.close()
-            document.getElementById('create-group').checked = true;
-            document.getElementById('create-subuser').checked = false;
-            groupsContainer.classList.add('hidden');
-            closeFormSubuser.classList.add("hidden");
-            closeFormGroup.classList.remove("hidden");
-        });
-    }
-    else {
-        document.getElementById('submit').click();
-    }
-}
-
-const select = document.getElementById('open-dialog');
-select.addEventListener('click', validateGroup)
-
-// This script handles the subprofiles group image upload and deletion functionality.(subprofiles group)
-document.querySelectorAll('input[type="file"]').forEach(input => {
-    input.addEventListener('change', ()=> {
-        id = input.id;
-        instance_id = id.split('_')[2];
-        const button_submit = document.getElementById(`id_submit_${instance_id}`);
-        if (button_submit) {
-            button_submit.click();
-        }
+document.addEventListener("DOMContentLoaded", () => {
+  const createBtn = document.getElementById("create-button");
+  const modal = document.getElementById("createGroupModal");
+  const cancelCreateBtn = document.getElementById("cancelCreate");
+  const confirmCreateBtn = document.getElementById("confirmCreate");
+  if (createBtn) {
+    createBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      modal.style.display = "flex";
     });
-})
+  }
+
+  cancelCreateBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  confirmCreateBtn.addEventListener("click", () => {
+    const create_group = document.getElementById("create-group");
+    const create_subuser = document.getElementById("create-subuser");
+    modal.style.display = "none";
+    create_subuser.checked = false;
+    create_group.checked = true;
+    create_group.dispatchEvent(new Event('change'));
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const deleteButtons = document.querySelectorAll(".delete-button");
+  const modal = document.getElementById("deleteModal");
+  const cancelBtn = document.getElementById("cancelDelete");
+  const confirmBtn = document.getElementById("confirmDelete");
+
+  let currentForm = null;
+
+  deleteButtons.forEach((deleteBtn) => {
+    deleteBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const formId = deleteBtn.getAttribute("form");
+      currentForm = document.getElementById(formId);
+      modal.style.display = "flex";
+    });
+  });
+
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    currentForm = null;
+  });
+
+  confirmBtn.addEventListener("click", () => {
+    if (currentForm) {
+      currentForm.submit();
+    }
+  });
+
+  // Optional: close modal if click outside
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+      currentForm = null;
+    }
+  });
+});
+
+
 
 // This script handles both forms for creating a group or a subuser.(view forms subusersGroupForm and subusersForm)
 

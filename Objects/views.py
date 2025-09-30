@@ -280,6 +280,7 @@ def manage_object_groups(request):
                 type_change = TypeChanges.objects.get(value='Delete'),
                 description = f'Se eliminó el grupo de objetos {group.name}.',
             )
+            messages.success(request,'El grupo de objetos se eliminó con éxito.')
             return redirect('object_groups')
         if image:= request.FILES.get('image', False):
             group = ObjectsGroup.objects.get(id=request.POST['id'])
