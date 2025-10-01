@@ -87,3 +87,28 @@ function sortTable(order = "asc") {
 // Bind buttons
 document.querySelector(".filter-bar__a-z").addEventListener("click", ()=> sortTable("asc"));
 document.querySelector(".filter-bar__z-a").addEventListener("click", ()=> sortTable("desc"));
+
+// Manage editing of borrowings
+document.addEventListener("DOMContentLoaded", () => {
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  const borrowingId = document.getElementById("borrowingId");
+  const objectSelect = document.getElementById("editObject");
+  const inChargeSelect = document.getElementById("editInCharge");
+  const stockInput = document.getElementById("editStock");
+  const dateLimitInput = document.getElementById("editDateLimit");
+  const statusCheck = document.getElementById("editStatus");
+
+  document.querySelectorAll(".edit-button").forEach(button => {
+    button.addEventListener("click", () => {
+      console.log(button.dataset)
+      borrowingId.value   = button.dataset.id;
+      objectSelect.value  = button.dataset.object;
+      inChargeSelect.value = button.dataset.inCharge;   // <-- camelCase from data-in-charge
+      stockInput.value    = button.dataset.stock;
+      dateLimitInput.value = button.dataset.dateLimit; // <-- camelCase from data-date-limit
+      statusCheck.checked = button.dataset.status === "True";
+
+    });
+  });
+  });
