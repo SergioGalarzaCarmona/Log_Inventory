@@ -195,12 +195,14 @@ textarea {
     resize: none;
 }
 
-.forms-container form.create-borrowing div:has(input[type="file"]) {
+.forms-container form.create-borrowing div:has(input[type="file"]),
+.forms-container form.edit-borrowing div:has(input[type="file"]){
     width: 45%;
 }
 
-.forms-container form.create-borrowing div:has(select) {
-    width: 45%;
+.forms-container form.create-borrowing div:has(select),
+.forms-container form.edit-borrowing div:has(select) {
+    width: 100%;
     margin-right: 10%;
 }
 
@@ -223,6 +225,9 @@ textarea {
     width: 100%;
 }
 
+#editStatus {
+    display: block;
+}
 .errorlist {
     list-style: none;
 }
@@ -232,6 +237,7 @@ textarea {
     font-size: .9rem;
 }
 
+/* TABLE */
 .borrowings-table__container {
     width: 96%;
     margin: 1.8% 2%;
@@ -291,6 +297,8 @@ textarea {
     border-bottom: none;
 }
 
+
+/* MESSAGES */
 .hidden {
     display: none;
 }

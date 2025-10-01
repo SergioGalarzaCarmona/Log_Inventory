@@ -33,53 +33,59 @@
         <div class="forms-container">
             <nav>
                 <label for="create-borrowing" class="material-symbols-outlined close-formBorrowing hidden">arrow_back</label>
+                <label for="edit-borrowing" class="material-symbols-outlined close-formEditBorrowing hidden">arrow_back</label>
             </nav>
             <input type="checkbox" {{checked}} id="create-borrowing">
-            <form class="create-borrowing" id='form-borrowing' enctype="multipart/form-data" method="POST">
+            <form class="create-borrowing" id='form-borrowing' method="POST">
                 {% csrf_token %}    
                 {{form}}
                 <input type="submit" id="submit">
             </form>
-			<!-- Modal to create group if it ain't selected.-->
-            <div id="editBorrowingModal" class="modal-overlay" style="display: none;">
-                <div class="modal-content">
-                    <h3 class="modal-title"></h3>
-                    <div class="modal-form">
-                        <form id="edit-borrowing-form" enctype="multipart/form-data" method="POST">
-                            {% csrf_token %}
-                            <div>
-                                <label for="object_id">Objeto:</label>
-                                <select name="object" id="object_id">
-                                    <option value="">Seleccione un objeto</option>
-                                    {% for object in objects %}
-                                        <option value="{{ object.id }}">{{ object.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div>
-                                <label for="in_charge_id">Encargado:</label>
-                                <select name="in_charge" id="in_charge_id">
-                                    <option value="">Seleccione un encargado</option>
-                                    {% for subuser in subusers %}
-                                        <option value="{{ subuser.id }}">{{ subuser.user.first_name }} {{ subuser.user.last_name }} - {{ subuser.group.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div>
-                                <label for="stock_id">Cantidad:</label>
-                                <input type="number" name="stock" id="stock_id" min="1">
-                            </div>
-                            <div>
-                                <label for="date_limit_id">Fecha Límite:</label>
-                                <input type="datetime-local" name="date_limit" id="date_limit_id">
-                            </div>
-                    </div>
-                    <div class="modal-buttons">
-                        <button id="cancelCreate" class="btn-cancel">Cancelar</button>
-                        <button id="confirmCreate" class="btn-confirm">Guardar</button>
-                    </div>
+            <input type="checkbox" id="edit-borrowing">
+            <form class="edit-borrowing" id="edit-borrowing-form" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="id" id="borrowingId">
+                <div>
+                    <label>Objeto:</label>
+                    <select name="object" id="editObject" required>
+                        <option value="" selected>---------</option>
+                        {% for obj in objects %}
+                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-            </div>
+              
+                <div>
+                    <label>Encargado:</label>
+                    <select name="in_charge" id="editInCharge" required>
+                        <option value="" selected>---------</option>
+                        {% for subuser in subusers %}
+                            <option value="{{ subuser.id }}">{{ subuser.user.first_name }} {{subuser.user.last_name}} - {{subuser.group.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div>
+                    <label>Cantidad:</label>
+                    <input type="number" name="stock" id="editStock" required>
+                </div>
+                
+                <div>
+                    <label>Fecha Límite:</label>
+                    <input type="datetime-local" name="date_limit" id="editDateLimit" required>
+                </div>
+              
+                <div>
+                    <label>Finalizar Préstamo</label>
+                    <input type="checkbox" name="status" id="editStatus">
+                </div>
+              
+                <div class="form-actions">
+                  <input type="submit" value="Guardar">
+                  <button type="button" id="cancelBtn">Cancelar</button>
+                </div>
+            </form>
+
         </div> 
         <div class="borrowings-table__container">
             <table class="borrowings-table">
@@ -91,7 +97,7 @@
                         <th>Cantidad</th>
                         <th>Fecha Límite</th>
                         <th>Estado</th>
-                        <th>Edit</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
 
@@ -104,7 +110,18 @@
                         <td>{{borrowing.stock}}</td>
                         <td>{{borrowing.date_limit}}</td>
                         <td>{% if borrowing.completed %}Completado{% else %}Pendiente{% endif %}</td>
-                        <td><button class="edit-button"><span class="material-symbols-outlined">edit</span></button></td>
+                        <td>
+                            <button 
+                                class="edit-button"
+                                data-id="{{ borrowing.id }}"
+                                data-object="{{ borrowing.object.id }}"
+                                data-in-charge="{{ borrowing.in_charge.id }}"
+                                data-stock="{{ borrowing.stock }}"
+                                data-date-limit="{{ borrowing.date_limit|date:'Y-m-d\\TH:i' }}"
+                                data-status="{{ borrowing.status }}">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
