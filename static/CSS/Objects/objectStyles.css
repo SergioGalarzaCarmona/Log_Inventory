@@ -482,18 +482,20 @@ dialog {
         align-items: center;
     }
 
+    .profile-container > .info-container, .profile-container > .profile-img-container {
+        width: 95%;
+    }
+
     .profile-img-container {
         position: absolute;
         top: 7.5%;
-        width: 90%;
         height: 25%;
         border-radius: 20px 20px 0 0;
     }
 
-    .profile-container form {
+    .profile-container .info-container {
         position: absolute;
         bottom: 17.5%;
-        width: 90%;
         height: 50%;
         border-radius: 0 0 20px 20px;
     }
