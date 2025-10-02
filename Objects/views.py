@@ -27,12 +27,14 @@ def main(request):
         permissions = profile.group.permissions.name
     
     objects = Objects.objects.filter(user = profile.user if type == 'profile' else profile.profile.user, is_active=True)
+    groups = ObjectsGroup.objects.filter(user = profile.user if type == 'profile' else profile.profile.user, is_active=True)
     if request.method == 'GET':
         return render(request, 'Objects/main.html',{
             'profile': profile,
             'type' : type,
             'permissions' : permissions,
             'objects' : objects,
+            'groups' : groups,
             'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user,instance = None),
             'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance = None)
         })
@@ -47,6 +49,7 @@ def main(request):
                     'type' : type,
                     'permissions' : permissions,
                     'objects' : objects,
+                    'groups' : groups,
                     'object_form' : form,
                     'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user),
                     'checked' : 'checked',
@@ -75,6 +78,7 @@ def main(request):
                     'type' : type,
                     'permissions' : permissions,
                     'objects' : objects,
+                    'groups' : groups,
                     'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user),
                     'object_group_form' : form,
                     'checked_group' : 'checked',

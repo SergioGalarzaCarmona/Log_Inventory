@@ -27,20 +27,37 @@ document.querySelectorAll('input[type="file"]').forEach((input) => {
 document.addEventListener("DOMContentLoaded", () => {
   const createBtn = document.getElementById("create-button");
   const modal = document.getElementById("createGroupModal");
-  const cancelCreateBtn = document.getElementById("cancelCreate");
-  const confirmCreateBtn = document.getElementById("confirmCreate");
+  const modalTitle = document.querySelector('.modal-title');
+  const modalText = document.querySelector('.modal-text');
+  const cancelBtn = document.getElementById("cancelCreate");
+  const confirmBtn = document.getElementById("confirmCreate");
   if (createBtn) {
     createBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      modal.style.display = "flex";
+      const group = document.getElementById('id_group')
+      const subuser= document.getElementById('id_in_charge')
+
+      group.addEventListener('change', () => {
+        const selectedOption = group.options[group.selectedIndex];
+        const inChargeId = selectedOption.dataset.incharge;
+        if (inChargeId) {
+          subuser.value = inChargeId
+        }
+      })
+      if (group.value === "") {
+        e.preventDefault();
+        modalTitle.textContent = "Deseas crear un grupo?"
+        modalText.textContent = "Para crear un objeto necesitas primero un grupo de objetos."
+        modal.style.display = "flex";
+
+      }
     });
   }
 
-  cancelCreateBtn.addEventListener("click", () => {
+  cancelBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
 
-  confirmCreateBtn.addEventListener("click", () => {
+  confirmBtn.addEventListener("click", () => {
     const create_group = document.getElementById("create-group");
     const create_object = document.getElementById("create-object");
     modal.style.display = "none";
@@ -56,15 +73,50 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Manage dialog to confirm object deletion
+document.addEventListener("DOMContentLoaded", () => {
+  const createBtn = document.getElementById("create-group-button");
+  const modal = document.getElementById("createGroupModal");
+  const modalTitle = document.querySelector('.modal-title');
+  const modalText = document.querySelector('.modal-text');
+  const cancelBtn = document.getElementById("cancelCreate");
+  const confirmBtn = document.getElementById("confirmCreate");
+  if (createBtn) {
+    const subuser = document.getElementById('id_in_charge')
+    createBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (subuser.value === "") {
+        modalTitle.textContent = "Deseas crear un usuario?"
+        modalText.textContent = "Para crear un grupo de objetos necesitas primero un usuario."
+        modal.style.display = "flex";
+      }
+    }
+  )};
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  confirmBtn.addEventListener("click", () => {
+    const linkButton = document.getElementById('link-button')
+    if (modalTitle.textContent === "Deseas crear un usuario?") {   
+    modal.style.display = "none";
+    linkButton.click()
+  }});
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+
 // Manage dialog to confirm group deletion
 document.addEventListener("DOMContentLoaded", () => {
-  const deleteButtons = document.querySelectorAll(".delete-button"); // all delete buttons
+  const deleteButtons = document.querySelectorAll(".delete-button");
   const modal = document.getElementById("deleteModal");
   const cancelBtn = document.getElementById("cancelDelete");
   const confirmBtn = document.getElementById("confirmDelete");
 
-  let currentForm = null; // will store the right form to submit
+  let currentForm = null;
 
   deleteButtons.forEach((deleteBtn) => {
     deleteBtn.addEventListener("click", (e) => {
