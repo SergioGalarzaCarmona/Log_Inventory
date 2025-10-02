@@ -41,7 +41,7 @@
             <form class="create-subuser" id='form-subuser' action="{% url 'manage_subusers' %}" enctype="multipart/form-data" method="POST">
                 {% csrf_token %}    
                 {{subuser_form}}
-                <input type="button" value="Crear Usuario" id="create-button">
+                <input type="submit" value="Crear Usuario" id="create-button">
             </form>
             <input type="checkbox" {{checked_group}} id="create-group">
             <form class="create-group" method="POST" action="{% url 'manage_subusers' %}" enctype="multipart/form-data">

@@ -39,20 +39,66 @@
             <input type="checkbox" {{checked}} id="create-object">
             <form class="create-object" id='form-object' enctype="multipart/form-data" action="{% url 'main' %}" method="POST">
                 {% csrf_token %}    
-                {{object_form}}
+                <div>
+                    {{ object_form.name.label_tag }}
+                    {{ object_form.name }}
+                    {% if object_form.errors.name %}
+                        {{object_form.errors.name}}
+                    {% endif %}
+                </div>
+            
+                <div>
+                    {{ object_form.stock.label_tag }}
+                    {{ object_form.stock }}
+                    {% if object_form.errors.stock %}
+                        {{object_form.errors.stock}}
+                    {% endif %}
+                </div>
+            
+                <div>
+                    {{ object_form.description.label_tag }}
+                    {{ object_form.description }}
+                </div>
+            
+                <div>
+                    {{object_form.group.label_tag}}
+                    <select name="group" required="" id="id_group">
+                        <option value="" selected="">---------</option>
+                        {% for group in groups %}
+                        <option value="{{group.id}}" data-incharge="{{group.in_charge.id}}">{{group.name}}</option>
+                        {% endfor %}
+                    </select>
+                    {% if object_form.errors.stock %}
+                        {{object_form.errors.stock}}
+                    {% endif %}
+                </div>
+            
+                <div>
+                    {{ object_form.in_charge.label_tag }}
+                    {{ object_form.in_charge }}
+                    {% if object_form.errors.in_charge %}
+                        {{object_form.errors.in_charge}}
+                    {% endif %}
+                </div>
+            
+                <div>
+                    {{ object_form.image.label_tag }}
+                    {{ object_form.image }}
+                </div>
                 <input type="submit" value="Crear Objeto" id="create-button">
             </form>
             <input type="checkbox" {{checked_group}} id="create-group">
             <form class="create-group" method="POST" enctype="multipart/form-data" action="{% url 'main' %}">
                 {% csrf_token %}
                 {{object_group_form}}
-                <input type="submit" value="Crear Grupo">
+                <input type="submit" value="Crear Grupo" id="create-group-button">
+                <a id="link-button" hidden href="{% url 'manage_subusers' %}"></a>
             </form>
 			<!-- Modal to create group if it ain't selected.-->
             <div id="createGroupModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
-                    <h3>Deseas crear un grupo?</h3>
-                    <p>Para crear un objeto necesitas primero un grupo de objetos.</p>
+                    <h3 class="modal-title"></h3>
+                    <p class="modal-text"></p>
                     <div class="modal-buttons">
                         <button id="cancelCreate" class="btn-cancel">No</button>
                         <button id="confirmCreate" class="btn-confirm">Si</button>

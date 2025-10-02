@@ -16,12 +16,29 @@ closeButtons.forEach((button) => {
 document.addEventListener("DOMContentLoaded", () => {
   const createBtn = document.getElementById("create-button");
   const modal = document.getElementById("createGroupModal");
+  const modalTitle = document.querySelector('.modal-title');
+  const modalText = document.querySelector('.modal-text');
   const cancelBtn = document.getElementById("cancelCreate");
   const confirmBtn = document.getElementById("confirmCreate");
   if (createBtn) {
     createBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      modal.style.display = "flex";
+      const group = document.getElementById('id_group')
+      const subuser= document.getElementById('id_in_charge')
+
+      group.addEventListener('change', () => {
+        const selectedOption = group.options[group.selectedIndex];
+        const inChargeId = selectedOption.dataset.incharge;
+        if (inChargeId) {
+          subuser.value = inChargeId
+        }
+      })
+      if (group.value === "") {
+        e.preventDefault();
+        modalTitle.textContent = "Deseas crear un grupo?"
+        modalText.textContent = "Para crear un objeto necesitas primero un grupo de objetos."
+        modal.style.display = "flex";
+
+      }
     });
   }
 
@@ -37,6 +54,42 @@ document.addEventListener("DOMContentLoaded", () => {
     create_group.checked = true;
     create_group.dispatchEvent(new Event('change'));
   });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const createBtn = document.getElementById("create-group-button");
+  const modal = document.getElementById("createGroupModal");
+  const modalTitle = document.querySelector('.modal-title');
+  const modalText = document.querySelector('.modal-text');
+  const cancelBtn = document.getElementById("cancelCreate");
+  const confirmBtn = document.getElementById("confirmCreate");
+  if (createBtn) {
+    const subuser = document.getElementById('id_in_charge')
+    createBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (subuser.value === "") {
+        modalTitle.textContent = "Deseas crear un usuario?"
+        modalText.textContent = "Para crear un grupo de objetos necesitas primero un usuario."
+        modal.style.display = "flex";
+      }
+    }
+  )};
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  confirmBtn.addEventListener("click", () => {
+    const linkButton = document.getElementById('link-button')
+    if (modalTitle.textContent === "Deseas crear un usuario?") {   
+    modal.style.display = "none";
+    linkButton.click()
+  }});
 
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {

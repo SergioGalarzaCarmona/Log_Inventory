@@ -6,8 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const confirmCreateBtn = document.getElementById("confirmCreate");
   if (createBtn) {
     createBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      modal.style.display = "flex";
+      const group = document.getElementById('id_group')
+      if (group.value === ""){
+        e.preventDefault();
+        modal.style.display = "flex";
+      }
     });
   }
 
