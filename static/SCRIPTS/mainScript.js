@@ -70,10 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelBtn = document.getElementById("cancelCreate");
   const confirmBtn = document.getElementById("confirmCreate");
   if (createBtn) {
-    const subuser = document.getElementById('id_in_charge')
+    const subuser = document.getElementById('in_charge_id')
     createBtn.addEventListener("click", (e) => {
-      e.preventDefault();
       if (subuser.value === "") {
+        e.preventDefault();
         modalTitle.textContent = "Deseas crear un usuario?"
         modalText.textContent = "Para crear un grupo de objetos necesitas primero un usuario."
         modal.style.display = "flex";

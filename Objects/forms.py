@@ -61,7 +61,6 @@ class ObjectForm(forms.ModelForm):
         label="Encargado",
         widget=forms.Select(
             attrs={
-                
             }
         ),
         error_messages={
@@ -171,7 +170,7 @@ class ObjectsGroupForm(forms.ModelForm):
         label="Encargado",
         widget=forms.Select(
             attrs={
-                
+                'id' : 'in_charge_id'
             }
         ),
         error_messages={
