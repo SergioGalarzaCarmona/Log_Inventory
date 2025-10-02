@@ -163,7 +163,8 @@ def manage_object(request, id):
             image_before = object.image.name
             if image_before == 'default_object.jpg':
                 image_before = 'Ninguna'
-            object_image = image_before.split('/')[1]
+            else:
+                image_before = image_before.split('/')[1]
             object.image = image
             object.save()
             Transaction.objects.create(
@@ -173,7 +174,7 @@ def manage_object(request, id):
                 in_charge = request.user,
                 stock_before = object.stock,
                 stock_after = object.stock,
-                description = f'Cambio en imagen, antes: {object_image} después: {image}.',
+                description = f'Cambio en imagen, antes: {image_before} después: {image}.',
             )
             messages.success(request, 'La imagen se cambió con éxito.')
             return redirect('main')
@@ -290,9 +291,10 @@ def manage_object_groups(request):
         if image:= request.FILES.get('image', False):
             group = ObjectsGroup.objects.get(id=request.POST['id'])
             group_image_before = group.image.name
-
             if group_image_before == 'default_object_group.jpg':
                 group_image_before = 'Ninguna'
+            else:
+                group_image_before = group.image.name.split('/')[1]
             group.image = image
             group.save()
             GroupObjectsChanges.objects.create(
@@ -371,10 +373,10 @@ def log(request):
         messages.error(request, 'Hubo un error al tratar de cargar el inventario.')
         return redirect('/authenticate_user/deactivate')
 
-    query_users = UserChanges.objects.filter(main_user=profile_admin.user)
-    query_user_groups = GroupChanges.objects.filter(main_user=profile_admin.user)
-    query_objects = Transaction.objects.filter(user=profile_admin.user)
-    query_object_groups = GroupObjectsChanges.objects.filter(main_user=profile_admin.user)
+    query_users = UserChanges.objects.filter(main_user=profile_admin.user).order_by("-date")
+    query_user_groups = GroupChanges.objects.filter(main_user=profile_admin.user).order_by("-date")
+    query_objects = Transaction.objects.filter(user=profile_admin.user).order_by("-date")
+    query_object_groups = GroupObjectsChanges.objects.filter(main_user=profile_admin.user).order_by("-date")
 
     if request.method == 'GET':
         return render(request, 'Objects/log.html', {

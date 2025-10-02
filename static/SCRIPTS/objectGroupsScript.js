@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelBtn = document.getElementById("cancelCreate");
   const confirmBtn = document.getElementById("confirmCreate");
   if (createBtn) {
-    const subuser = document.getElementById('id_in_charge')
+    const subuser = document.getElementById('in_charge_id')
     createBtn.addEventListener("click", (e) => {
       if (subuser.value === "") {
         e.preventDefault();
