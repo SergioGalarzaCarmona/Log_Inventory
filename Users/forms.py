@@ -234,7 +234,7 @@ class RegisterSubuser(UserCreationForm):
         last_name = cleaned_data.get("last_name")
 
         if first_name and last_name:
-            exists = Subprofile.objects.filter(first_name=first_name, last_name=last_name)
+            exists = Subprofile.objects.filter(user__first_name=first_name, user__last_name=last_name)
 
             if exists.exists():
                 self.add_error('first_name', "Este nombre ya está en uso.")

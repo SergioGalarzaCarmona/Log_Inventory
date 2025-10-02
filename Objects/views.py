@@ -267,7 +267,8 @@ def manage_object_groups(request):
             'permissions' : permissions,
             'object_form' : ObjectForm(user=profile.user if type == 'profile' else profile.profile.user,instance = None),
             'object_group_form' : ObjectsGroupForm(user=profile.user if type == 'profile' else profile.profile.user, instance = None),
-            'forms' : forms
+            'forms' : forms,
+            'groups' : groups,
         })
     else:
         if request.POST.get('delete_group', False):
@@ -338,6 +339,7 @@ def manage_object_groups(request):
                     'forms' : forms,
                     'form_post' : form,
                     'group' : group,
+                    'groups' : groups,
                 })
             group = form.save()        
             GroupObjectsChanges.objects.create(
