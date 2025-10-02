@@ -8,12 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{% static '/CSS/Borrowings/borrowingsStyles.css' %}">
-    <title>Manejo de Usuarios - Log Inventory</title>
+    <title>Prestamos - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
-    <meta name="description" content="Subusuarios Log Inventory">
+    <meta name="description" content="Prestamos Log Inventory">
     <meta name="author" content="Log Inventory"> 
-    <meta name="robots" content="noindex, nofollow">  
-</head>  
+    <meta name="robots" content="noindex, nofollow">   
+</head>   
 <body>
     {% include 'sideBar.html' with path='manage_borrowings' profile=profile type=type permissions=permissions active_borrowings="active"%}
     <main>
@@ -21,7 +21,7 @@
             <div class="filter-bar__filter-container row">
                 <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0" title="Ordenar a-z">
                 <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0" title="Ordenar z-a">
-                <div class="filter-bar__name col-md-4 col-8">
+                <div class="filter-bar__name col-md-4 col-12">
                     <input type="text" class="filter-bar__search" placeholder="Buscar por objeto...">
                     <input value="search" type="submit" class="material-symbols-outlined">
                 </div>
@@ -76,13 +76,12 @@
                 </div>
               
                 <div>
-                    <label>Finalizar Préstamo</label>
+                    <label>Finalizar Préstamo:</label>
                     <input type="checkbox" name="status" id="editStatus">
                 </div>
               
                 <div class="form-actions">
                   <input type="submit" value="Guardar">
-                  <button type="button" id="cancelBtn">Cancelar</button>
                 </div>
             </form>
 
@@ -93,9 +92,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Objeto</th>
-                        <th>Encargado</th>
-                        <th>Cantidad</th>
-                        <th>Fecha Límite</th>
+                        <th class="small-view">Encargado</th>
+                        <th class="small-view">Cantidad</th>
+                        <th class="small-view">Fecha Límite</th>
                         <th>Estado</th>
                         <th>Editar</th>
                     </tr>
@@ -106,9 +105,9 @@
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td class="object_name">{{borrowing.object.name}}</td>
-                        <td>{{borrowing.in_charge.user.first_name}} {{borrowing.in_charge.user.last_name}}</td>
-                        <td>{{borrowing.stock}}</td>
-                        <td>{{borrowing.date_limit}}</td>
+                        <td class="small-view">{{borrowing.in_charge.user.first_name}} {{borrowing.in_charge.user.last_name}}</td>
+                        <td class="small-view">{{borrowing.stock}}</td>
+                        <td class="small-view">{{borrowing.date_limit}}</td>
                         <td>{% if borrowing.completed %}Completado{% else %}Pendiente{% endif %}</td>
                         <td>
                             <button 
