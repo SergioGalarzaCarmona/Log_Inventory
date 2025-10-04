@@ -14,9 +14,19 @@ def manage_chats(request):
         type = "profile"
         permissions = "admin"
     except ObjectDoesNotExist:
-        subprofile = Subprofile.objects.get(user=user)
+        
+        profile = Subprofile.objects.get(user=user)
+        profile_admin = profile.profile
         type = "subprofile"
-        permissions = subprofile.group.permissions.name
+        permissions = profile.group.permissions.name
     except:
         logout(request)
         return redirect("authenticate", type="deactivate")
+    
+    chats = LiveChat.objects.filter(admin_user = profile_admin)
+    if request.method == 'GET':
+        return render('LiveChats/chatsStyles.html',{
+            'profile' : profile,
+            'type' : type,
+            'permissions' : permissions,
+        })

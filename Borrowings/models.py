@@ -5,7 +5,7 @@ from Users.models import Subprofile
 
 # Create your models here.
 class Borrowings(models.Model):
-    object = models.ForeignKey(Objects, on_delete=models.CASCADE)
+    object = models.ForeignKey(Objects, on_delete=models.CASCADE, related_name='borrowings')
     in_charge = models.ForeignKey(Subprofile, on_delete=models.CASCADE)
     date_init = models.DateTimeField(auto_now_add=True)
     date_limit = models.DateTimeField()

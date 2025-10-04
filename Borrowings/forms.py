@@ -2,6 +2,7 @@ from django import forms
 from .models import Borrowings
 from Objects.models import Objects
 from Users.models import Subprofile
+from django.core.exceptions import ValidationError
 
 
 class BorrowingForm(forms.ModelForm):
@@ -24,6 +25,9 @@ class BorrowingForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={"placeholder": "Cantidad a prestar", "class": "input-field"}
         ),
+        error_messages={
+            "invalid_stock": "La cantidad solicitada no se encuentra disponible"
+        },
     )
 
     class Meta:
@@ -41,3 +45,16 @@ class BorrowingForm(forms.ModelForm):
             self.fields["in_charge"].queryset = Subprofile.objects.filter(
                 profile=user.profile, is_active=True
             )
+
+    def clean_stock(self):
+        stock = self.cleaned_data.get("stock")
+        object = self.cleaned_data.get("object")
+        available = object.available_stock(
+            excluded_borrowing=self.instance if self.instance else None
+        )
+        if stock > available :
+            raise forms.ValidationError(f'Solo hay {object.available_stock()} unidades más disponibles.')
+        if stock <= 0:
+            raise forms.ValidationError('La cantidad debe ser mayor a 0')
+        return stock
+            

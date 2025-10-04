@@ -16,7 +16,7 @@ label, .sidebar__nav {
     margin: 0; 
     padding: 0; 
 }
- 
+
 .row {
     margin: 0;
 }
@@ -119,7 +119,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     margin: 2.5px 0;
 }
 
-.close-formCreate, .close-formEdit {
+.close-formBorrowing {
     position: absolute;
     top: calc(calc(2rem + 44.78px) + 10px);
     margin-left: 15px;
@@ -130,15 +130,20 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     transition: filter .3s;
 }
 
-.close-formCreate:hover, .close-formEdit:hover {
+.close-formBorrowing:hover{
     filter: drop-shadow(0 0 5px #fff);
 }
 
-#create-borrowing:checked ~ .create-borrowing, #edit-borrowing:checked ~ .edit-borrowing {
+.create-borrowing {
+    display: none;
+}
+
+#create-borrowing:checked ~ .create-borrowing {
     display: flex;
 }
 
 .forms-container form {
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: row;
@@ -207,13 +212,11 @@ textarea {
     display: flex;
     justify-content: start;
     align-items: center;
-    font-size: 1.2rem;
 }
 
 .edit-borrowing div input[type="checkbox"] {
     width: 15px;
     height: 15px;
-    border: none;
 }
 
 .forms-container form.create-borrowing div:has(select), .forms-container form.edit-borrowing div:has(select) {
@@ -530,7 +533,7 @@ textarea {
         margin: 1% 0;
     }
 
-    .close-formCreate {
+    .close-formBorrowing {
         position: absolute;
         top: calc(calc(2rem + 44.78px) + 10px);
         margin-left: 5%;

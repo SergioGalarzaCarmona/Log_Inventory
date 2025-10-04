@@ -118,7 +118,11 @@
                         <h3 class="object-card__name">{{ object.name }}</h3>
                         <div class="object-card__info">
                             <p class="object-card__group">Grupo: <strong>{{ object.group.name }}</strong></p>
-                            <p class="object-card__quantity">Cantidad: <strong>{{ object.stock }}</strong></p>
+                            {% if object.available_stock != None %}
+                            <p class="object-card__quantity">Cantidad Disponible: <strong>{{object.available_stock}}</strong></p>
+                            {% endif %}
+                            <p class="object-card__quantity">Cantidad Total: <strong>{{ object.stock }}</strong></p>
+
                         </div>
                     </div>
                 </div>

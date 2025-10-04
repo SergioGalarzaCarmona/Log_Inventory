@@ -23,7 +23,7 @@ def manage_borrowings(request):
         # if the permissions of the subprofile is 'Estudiante', return a 403 error
         if permissions == "Estudiante":
             messages.warning(request, "No tienes permiso para ver esa página.")
-            return redirect("/authenticate_user/deactivate")
+            return redirect("authenticate", type="deactivate")
 
     borrowings = Borrowings.objects.filter(
         in_charge__profile=profile_admin, completed=False
@@ -38,7 +38,7 @@ def manage_borrowings(request):
                 "profile": profile,
                 "permissions": permissions,
                 "type": type,
-                "form": BorrowingForm(user=profile_admin.user),
+                "create_form": BorrowingForm(user=profile_admin.user),
                 "borrowings": borrowings,
                 "subusers": subusers,
                 "objects": objects,
@@ -52,7 +52,7 @@ def manage_borrowings(request):
         form = BorrowingForm(
             request.POST,
             user=profile_admin.user,
-            instance=borrowing if borrowing else None,
+            instance=borrowing,
         )
         if request.POST.get("status", False):
             instance = form.save(commit=False)
@@ -72,12 +72,14 @@ def manage_borrowings(request):
                     "profile": profile,
                     "permissions": permissions,
                     "type": type,
-                    "form": form,
+                    "create_form": form if not form.instance.pk else BorrowingForm(user=profile_admin.user),
+                    **({"checked_create" : 'checked'} if not form.instance.pk else {}),
+                    **({"edit_form": form, "checked_edit" : 'checked', 'id' : id} if form.instance.pk else {}),
                     "borrowings": borrowings,
                     "subusers": subusers,
                     "objects": objects,
-                },
-            )
+                }  
+                ) 
         form.save()
         messages.success(
             request,

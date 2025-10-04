@@ -1,24 +1,56 @@
 // This script handles both forms for creating a group or a borrowing.(view forms borrowingsGroupForm and borrowingsForm)
 
-const label_borrowing = document.querySelector(".create-borrowing-label");
-
-const closeFormborrowing = document.querySelector(".close-formborrowing");
-
-const create_borrowing = document.getElementById("create-borrowing");
+// Arrows
+const closeFormCreate = document.querySelector(".close-formCreate");
+const closeFormEdit = document.querySelector('.close-formEdit')
+// Labels
+const labelCreate = document.querySelector('.create-borrowing-label')
+const labelsEdit = document.querySelectorAll('.edit-button')
+// Checkbox
+const createBorrowing = document.getElementById("create-borrowing");
+const editBorrowing = document.getElementById("edit-borrowing");
+// Forms
+const createForm = document.getElementById('create-borrowing-form')
+const editForm = document.getElementById('edit-borrowing-form')
+// Table
 const borrowingsTable = document.querySelector(".borrowings-table__container");
+
+labelCreate.addEventListener('click', ()=>{
+  editBorrowing.checked = false
+})
+
+labelsEdit.forEach((label)=>{
+  label.addEventListener('click', ()=>{
+    createBorrowing.checked = false
+  })
+})
 
 document.addEventListener("DOMContentLoaded", () => {
   function toggleTableVisibility() {
-    if (create_borrowing.checked) {
+    if (createBorrowing.checked) {
       borrowingsTable.classList.add("hidden");
-      closeFormborrowing.classList.remove("hidden");
-    } else {
+      closeFormEdit.classList.add("hidden")
+      editForm.classList.add("hidden")
+      closeFormCreate.classList.remove("hidden");
+      createForm.classList.remove("hidden")
+    } else if (editBorrowing.checked) {
+      borrowingsTable.classList.add("hidden");
+      closeFormCreate.classList.add("hidden");
+      createForm.classList.add("hidden")
+      closeFormEdit.classList.remove("hidden")
+      editForm.classList.remove("hidden")
+    } 
+    else {
       borrowingsTable.classList.remove("hidden");
-      closeFormborrowing.classList.add("hidden");
+      closeFormCreate.classList.add("hidden");
+      createForm.classList.add("hidden")
+      closeFormEdit.classList.add("hidden")
+      editForm.classList.add("hidden")
     }
-  }
+  } 
 
-  create_borrowing.addEventListener("change", toggleTableVisibility);
+  createBorrowing.addEventListener("change", toggleTableVisibility);
+  editBorrowing.addEventListener("change", toggleTableVisibility);
 
   toggleTableVisibility();
 });
@@ -99,15 +131,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const stockInput = document.getElementById("editStock");
   const dateLimitInput = document.getElementById("editDateLimit");
   const statusCheck = document.getElementById("editStatus");
-
+  
   document.querySelectorAll(".edit-button").forEach((button) => {
     button.addEventListener("click", () => {
-      console.log(button.dataset);
       borrowingId.value = button.dataset.id;
       objectSelect.value = button.dataset.object;
-      inChargeSelect.value = button.dataset.inCharge; // <-- camelCase from data-in-charge
+      inChargeSelect.value = button.dataset.inCharge;
       stockInput.value = button.dataset.stock;
-      dateLimitInput.value = button.dataset.dateLimit; // <-- camelCase from data-date-limit
+      dateLimitInput.value = button.dataset.dateLimit;
       statusCheck.checked = button.dataset.status === "True";
     });
   });

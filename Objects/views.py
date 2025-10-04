@@ -37,6 +37,17 @@ def main(request):
     objects = Objects.objects.filter(
         user=profile.user if type == "profile" else profile.profile.user, is_active=True
     )
+    from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Q
+
+    objects = objects.annotate(  # only objects that have borrowings
+        borrowed_stock=Sum(
+            "borrowings__stock",  # stock field from Borrowings
+            filter=Q(borrowings__completed=False),  # only uncompleted borrowings
+        ),
+        available_stock=ExpressionWrapper(
+            F("stock") - F("borrowed_stock"), output_field=IntegerField()
+        ),
+    )
     groups = ObjectsGroup.objects.filter(
         user=profile.user if type == "profile" else profile.profile.user, is_active=True
     )

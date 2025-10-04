@@ -44,6 +44,19 @@ class Objects(BaseAuditModel):
     description = models.TextField()
     in_charge = models.ForeignKey(Subprofile, on_delete=models.CASCADE)
 
+    def available_stock(self, excluded_borrowing=None):
+        from django.db.models import Sum, Q
+
+        borrowed = (
+            self.borrowings.filter(
+                Q(completed=False) & ~Q(id=excluded_borrowing.id)
+                if excluded_borrowing
+                else Q(completed=False)
+            ).aggregate(total=Sum("stock"))
+        )["total"] or 0
+
+        return self.stock - borrowed
+
     def __str__(self):
         return f"{self.name}"
 
