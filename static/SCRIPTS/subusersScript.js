@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const confirmCreateBtn = document.getElementById("confirmCreate");
   if (createBtn) {
     createBtn.addEventListener("click", (e) => {
-      const group = document.getElementById('id_group')
-      if (group.value === ""){
+      const group = document.getElementById("id_group");
+      if (group.value === "") {
         e.preventDefault();
         modal.style.display = "flex";
       }
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.style.display = "none";
     create_subuser.checked = false;
     create_group.checked = true;
-    create_group.dispatchEvent(new Event('change'));
+    create_group.dispatchEvent(new Event("change"));
   });
 
   modal.addEventListener("click", (e) => {
