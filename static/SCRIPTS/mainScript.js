@@ -160,3 +160,38 @@ filterInput.addEventListener("input", () => {
     }
   });
 });
+
+// Order a-z z-a
+document.addEventListener("DOMContentLoaded", () => {
+  const objectsContainer = document.querySelector(".objects-area");
+  const btnAZ = document.querySelector(".filter-bar__a-z");
+  const btnZA = document.querySelector(".filter-bar__z-a");
+
+  function sortObjects(order = "asc") {
+    // Get all object cards
+    const objects = Array.from(objectsContainer.querySelectorAll(".object-card"));
+
+    // Sort by the <h3 class="object-card__name"> text
+    objects.sort((a, b) => {
+      const nameA = a
+        .querySelector(".object-card__info-container .object-card__name")
+        .textContent.toLowerCase()
+        .trim();
+      const nameB = b
+        .querySelector(".object-card__info-container .object-card__name")
+        .textContent.toLowerCase()
+        .trim();
+
+      return order === "asc"
+        ? nameA.localeCompare(nameB)
+        : nameB.localeCompare(nameA);
+    });
+
+    // Reinsert the cards into the DOM in sorted order
+    objects.forEach((object) => objectsContainer.appendChild(object));
+  }
+
+  // Bind events
+  btnAZ.addEventListener("click", () => sortObjects("asc"));
+  btnZA.addEventListener("click", () => sortObjects("desc"));
+});
