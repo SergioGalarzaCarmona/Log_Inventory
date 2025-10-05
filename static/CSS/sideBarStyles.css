@@ -107,6 +107,25 @@
     text-decoration: none;
 }
 
+.delete-options {
+    position: absolute;
+    right: 10%;
+}
+
+.delete-options > input {
+    color: #e24;
+    background-color: transparent;
+    border: none;
+}
+
+.delete-options > input:hover {
+    filter: drop-shadow(0 0 3px #e24);
+}
+
+.delete-options > label:hover {
+    filter: drop-shadow(0 0 3px #000);
+}
+
 .sidebar__profile { 
     position: relative;
     top: 20px;

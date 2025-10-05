@@ -11,7 +11,7 @@
     <title>Work space - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Work space Log Inventory">
-    <meta name="author" content="Log Inventory">
+    <meta name="author" content="Log Inventory"> 
     <meta name="robots" content="noindex, nofollow"> 
 </head>
 <body>
@@ -105,12 +105,13 @@
                 </div>
             </div>
         </div>  
-         
-
         <div class="objects-area">
+            <input type="checkbox" class="delete hidden" id="delete">
             {% for object in objects %}
-                <div class="object-card" onclick="window.location.href='{{object.id}}'">
-                    <div class="overlay"></div>
+                <div class="object-card">
+                    <input name="delete" type="checkbox" class="delete-checkbox hidden">
+                    <div class="overlay-select"></div>
+                    <div class="overlay" onclick="window.location.href='{{object.id}}'"></div>
                     <div class="object-card__image-container">
                         <img src="{{ object.image.url }}" alt="Imagen del objeto {{ object.name }}">
                     </div>
@@ -144,5 +145,6 @@
     </main>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{% static '/SCRIPTS/mainScript.js' %}"></script>
+    <script src="{% static '/SCRIPTS/deleteScript.js' %}"></script>
 </body>
 </html>

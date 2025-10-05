@@ -23,10 +23,14 @@
                     </label>
                 </div>  
                 <div class="sidebar__item">
-                    <a href="#" class="sidebar__item-link">
+                    <label for="delete" class="sidebar__item-link delete-object-label">
                         <span class="material-symbols-outlined">delete</span>
                         <p>Eliminar</p>
-                    </a>
+                        <div class="delete-options hidden">
+                            <input type="submit" form="delete-form" value="check" id="delete-button" class="material-symbols-outlined">
+                            <label for="delete" class="cancel-delete material-symbols-outlined">close</label>
+                        </div>
+                    </label>
                 </div>
             </li>
             {% endif %}
@@ -46,12 +50,16 @@
                     </label>
                 </div> 
                 <div class="sidebar__item">
-                    <label href="#" class="sidebar__item-link">
+                    <label for="delete" class="sidebar__item-link delete-object-label">
                         <span class="material-symbols-outlined">delete</span>
                         <p>Eliminar</p>
+                        <div class="delete-options hidden">
+                            <input type="submit" form="delete-form" value="delete" id="delete-button" class="material-symbols-outlined">
+                            <label for="delete" class="cancel-delete material-symbols-outlined">close</label>
+                        </div>
                     </label>
                 </div>
-            </li>
+            </li> 
             {% elif path == "log"  %}
             {% if permissions == 'admin' or permissions == "Profesor"  %}
             <li class="sidebar__tools">

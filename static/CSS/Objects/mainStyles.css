@@ -158,6 +158,45 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     box-shadow: 0 8px 16px #0003;
 }
 
+.delete:checked ~ .object-card > .overlay {
+    display: none;
+    pointer-events: none;
+}
+
+.delete:checked ~ .object-card:hover {
+    transform: none;
+    cursor: default;
+    box-shadow: 0 4px 8px #0002;
+}
+
+.overlay-select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 13px;
+    opacity: 0;
+    display: none;
+}
+
+.delete-checkbox:checked ~ .overlay-select {
+    display: block;
+    opacity: 0.35;
+    background-color: rgba(166, 210, 247);
+}
+
+.object-card > .delete-checkbox {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    z-index: 10;
+    cursor: pointer;
+}
+
 .overlay {
     position: absolute;
     top: 0;
@@ -357,7 +396,7 @@ textarea {
 
 
 /* MESSAGES STYLES */
-.hidden {
+.hidden, .object-card > .delete-checkbox.hidden {
     display: none;
 }
 
@@ -519,7 +558,7 @@ textarea {
         display: none;
     }
     .modal-content {
-        width: 80%;
+        width: 80%; 
     }
 }
 
