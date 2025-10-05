@@ -332,10 +332,16 @@ textarea {
     font-size: 1rem;
 }
 
+.subusers-table thead th:first-child {
+    text-align: center;
+}
+
 .subusers-table tbody tr {
     background-color: #fff;
     transition: background-color 0.2s;
 }
+
+
 
 .subusers-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
@@ -346,6 +352,10 @@ textarea {
     cursor: pointer;
 }
 
+.subusers-table tr:has(.delete-checkbox:checked) {
+    background-color: rgba(166, 210, 247, 0.5);
+}  
+
 .subusers-table td {
     padding: 12px;
     border-bottom: 1px solid #ddd;
@@ -355,13 +365,27 @@ textarea {
     text-align: center;
     font-weight: 600;
     color: var(--fb-color);
+    position: relative;
+}
+
+.subusers-table td input[type="checkbox"].delete-checkbox {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.delete-checkbox {
+    width: 20px;
+    height: 20px;
 }
 
 .subusers-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.hidden {
+.hidden, .subusers-table td input[type="checkbox"].delete-checkbox.hidden {
     display: none;
 }
 

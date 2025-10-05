@@ -12,4 +12,9 @@ nav.sidebar__nav > ul {
 
 .sidebar__item {
     margin-bottom: 5%;
+} 
+
+.sidebar__profile ul li:first-child a {
+    padding-top: 0.22rem;
+    padding-bottom: 0.2rem;
 }
