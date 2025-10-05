@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from Users.models import Profile, Subprofile, TypeChanges, UserChanges, GroupChanges
+from Users.models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
 from .models import (
     Objects,
     ObjectsGroup,
@@ -673,7 +673,17 @@ def delete(request):
                     if saved:
                         messages.success(request,'Los usuarios fueron eliminados con éxito.' if not message else message)
                 case "user_group":
-                    pass
+                    url = "subusers_group"
+                    subuser_group = SubprofilesGroup.objects.get(id=id)
+                    if Subprofile.objects.filter(group=subuser_group).exists():
+                        messages.error(request,f'El grupo {subuser_group.name} no se pudo borrar porque tiene objetos asociados')
+                        message = 'Los demás grupos fueron eliminados con éxito.'
+                    else:
+                        subuser_group.is_active=False
+                        subuser_group.save()
+                        saved = True
+                    if saved:
+                        messages.success(request,'Los grupos fueron eliminados con éxito.' if not message else message)
                 case "object":
                     url = "main"
                     object = Objects.objects.get(id=id)

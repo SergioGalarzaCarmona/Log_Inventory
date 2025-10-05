@@ -82,11 +82,21 @@ const create_group = document.getElementById("create-group");
 const create_subuser = document.getElementById("create-subuser");
 const groupsContainer = document.querySelector(".groups");
 
-label_group.addEventListener("click", function () {
-  create_subuser.checked = false;
+label_group.addEventListener("click", e => {
+  if (deleteCheckbox.checked) {
+    e.preventDefault()
+  }
+  else {
+    create_subuser.checked = false;
+  }
 });
-label_subuser.addEventListener("click", function () {
-  create_group.checked = false;
+label_subuser.addEventListener("click",  e => {
+  if (deleteCheckbox.checked) {
+    e.preventDefault()
+  }
+  else {
+    create_group.checked = false;
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -108,6 +118,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   create_subuser.addEventListener("change", toggleTableVisibility);
   create_group.addEventListener("change", toggleTableVisibility);
+
+  deleteLabel.addEventListener('click', ()=> {
+    create_subuser.checked = false
+    create_group.checked = false
+    toggleTableVisibility()
+  })
 
   toggleTableVisibility();
 });
