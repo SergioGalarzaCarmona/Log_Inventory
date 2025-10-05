@@ -1,3 +1,4 @@
+const deleteLabel = document.querySelector('.delete-object-label')
 const deleteCheckbox = document.querySelector('.delete');
 const deleteSelector = document.querySelectorAll('.delete-checkbox');
 const deleteOptions = document.querySelector('.delete-options');
