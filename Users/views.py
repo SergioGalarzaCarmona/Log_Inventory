@@ -25,7 +25,7 @@ from .functions import create_description
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView
-from Objects.models import Objects
+from Objects.models import Objects, ObjectsGroup
 
 ###################################
 ### ALL VIEWS HAVE DECORATOR TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
@@ -398,10 +398,10 @@ def subprofile(request, id):
                     request, "No puedes eliminar el usuario principal de la cuenta."
                 )
                 return redirect("subprofile", id=id)
-            if Objects.objects.filter(in_charge=subprofile, is_active=True).exists():
+            if Objects.objects.filter(in_charge=subprofile, is_active=True).exists() or ObjectsGroup.objects.filter(in_charge=subprofile, is_active=True).exists:
                 messages.error(
                     request,
-                    "No se puede eliminar el usuario porque está a cargo de uno o más objetos activos. Cambia el encargado de esos objetos e inténtalo de nuevo.",
+                    "No se puede eliminar el usuario porque tiene objetos o grupos de objetos a cargo. Cambia el encargado de esos objetos e inténtalo de nuevo.",
                 )
                 return redirect("subprofile", id=id)
             log = TypeChanges.objects.get(value="Delete")

@@ -163,6 +163,9 @@ class RegisterSubuser(UserCreationForm):
         widget=forms.EmailInput(
             attrs={"placeholder": "Correo Electrónico", "class": ""}
         ),
+        error_messages={
+            'invalid_email' : 'El email ya está registrado.'
+        }
     )
 
     password1 = forms.CharField(
@@ -240,6 +243,15 @@ class RegisterSubuser(UserCreationForm):
             if exists.exists():
                 self.add_error("first_name", "Este nombre ya está en uso.")
         return cleaned_data
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if Subprofile.objects.filter(user__email=email).exists():
+            error = ValidationError(
+                self.fields["email"].error_messages["invalid_email"],
+                code="invalid_email",
+            )
+            self.add_error("email", error)
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
