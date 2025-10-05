@@ -8,12 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/Objects/objectsGroupStyles.css'%}">
-    <title>Work space - Log Inventory</title>
+    <title>Grupos de Objetos - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Grupos de Objetos Log Inventory">
     <meta name="author" content="Log Inventory">
     <meta name="robots" content="noindex, nofollow"> 
-</head>
+</head> 
 <body>
     {% include 'sideBar.html' with path='main' profile=profile type=type permissions=permissions active_objects_groups="active"%}
     <main> 
@@ -118,9 +118,11 @@
         	</div>
         </div>  
         <div class="groups">
+            <input type="checkbox" class="delete hidden" id="delete">
             {% for form in forms %}
             <div class="group-container">
                 <div class="group-header">
+                    <input name="object_group-{{group.id}}" type="checkbox" class="delete-checkbox hidden">
                     <span class="material-symbols-outlined toggle-icon">expand_more</span>
                     <h3 class="group-title">{{form.instance.name}}</h3>
                     <p class="group-in-charge">Encargado: {{form.instance.in_charge}}</p>
@@ -200,7 +202,8 @@
             </div>
         {% endif %}
     </main>
-    <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
+    <script src="{% static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{% static '/SCRIPTS/objectGroupsScript.js' %}"></script>
+    <script src="{% static '/SCRIPTS/deleteScript.js' %}"></script>
 </body>
 </html>
