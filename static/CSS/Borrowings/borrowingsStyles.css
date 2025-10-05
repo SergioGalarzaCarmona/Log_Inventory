@@ -282,6 +282,10 @@ textarea {
     font-size: 1rem;
 }
 
+.borrowings-table thead th:first-child, .borrowings-table thead th:last-child {
+    text-align: center;
+}
+
 .borrowings-table tbody tr {
     background-color: #fff;
     transition: background-color 0.2s;

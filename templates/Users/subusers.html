@@ -60,6 +60,7 @@
             </div>
         </div> 
         <div class="subusers-table__container">
+            <input type="checkbox" class="delete hidden" id="delete">
             <table class="subusers-table">
                 <thead>
                     <tr>
@@ -69,11 +70,13 @@
                         <th>Correo</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {% for subuser in subusers %}
                     <tr onclick="window.location.href='/subprofile/{{ subuser.user.id }}';" >
-                        <td>{{forloop.counter}}</td>
+                        <td>
+                            <p class="user-counter">{{forloop.counter}}</p>
+                            <input name="user-{{subuser.id}}" type="checkbox" class="delete-checkbox hidden">
+                        </td>
                         <td class="username">{{subuser.user.first_name}} {{subuser.user.last_name}}</td>
                         <td>{{subuser.group.name}}</td>
                         <td>{{subuser.user.email}}</td>
@@ -101,5 +104,6 @@
     {% endif %}
     <script src="{%static '/SCRIPTS/subusersScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
+    <script src="{% static '/SCRIPTS/deleteScript.js' %}"></script>
 </body>
 </html>
