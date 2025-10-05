@@ -94,6 +94,7 @@
                 <input type="submit" value="Crear Grupo" id="create-group-button">
                 <a id="link-button" hidden href="{% url 'manage_subusers' %}"></a>
             </form>
+            <form action="{% url 'delete' %}" method="POST" id="delete-form" hidden>{% csrf_token %}</form>
             <div id="createGroupModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
                     <h3 class="modal-title"></h3>
@@ -104,12 +105,22 @@
                     </div>
                 </div>
             </div>
+            <div id="deleteModal" class="modal-overlay" style="display: none;">
+                <div class="modal-content">
+                    <h3 class="modal-title">Estás seguro?</h3>
+                    <p class="modal-text">Se eliminarán todos los objetos selccionados</p>
+                    <div class="modal-buttons">
+                        <button id="cancelDelete" class="btn-cancel">No</button>
+                        <button id="confirmDelete" class="btn-delete">Si</button>
+                    </div>
+                </div>
+            </div>
         </div>  
         <div class="objects-area">
             <input type="checkbox" class="delete hidden" id="delete">
             {% for object in objects %}
                 <div class="object-card">
-                    <input name="delete" type="checkbox" class="delete-checkbox hidden">
+                    <input name="object-{{object.id}}" type="checkbox" class="delete-checkbox hidden" form="delete-form">
                     <div class="overlay-select"></div>
                     <div class="overlay" onclick="window.location.href='{{object.id}}'"></div>
                     <div class="object-card__image-container">
@@ -121,6 +132,8 @@
                             <p class="object-card__group">Grupo: <strong>{{ object.group.name }}</strong></p>
                             {% if object.available_stock != None %}
                             <p class="object-card__quantity">Cantidad Disponible: <strong>{{object.available_stock}}</strong></p>
+                            {% else %}
+                            <p class="object-card__quantity">Cantidad Disponible: <strong>{{object.stock}}</strong></p>
                             {% endif %}
                             <p class="object-card__quantity">Cantidad Total: <strong>{{ object.stock }}</strong></p>
 

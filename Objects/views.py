@@ -645,3 +645,26 @@ def log(request):
         # Save workbook to response
         wb.save(response)
         return response
+
+@login_required
+def delete(request):
+    if request.method != "POST":
+        return redirect('main')
+    
+    post_data = request.POST.copy()
+    for input in post_data:
+        if input != "csrfmiddlewaretoken":
+            type,id = input.split('-')
+            match type:
+                case "user":
+                    pass
+                case "user_group":
+                    pass
+                case "object":
+                    url = "main"
+                    object = Objects.objects.get(id=id)
+                    object.is_active=False
+                    object.save()
+                case "object_group":
+                    pass
+    return redirect(f'{url}')
