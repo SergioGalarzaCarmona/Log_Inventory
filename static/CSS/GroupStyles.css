@@ -48,7 +48,7 @@ main {
     background-color: var(--bg-color);
     position: fixed;
     right: 0;
-    background-image: url(../../IMAGES/Escritorio.webp);
+    background-image: url(../IMAGES/Escritorio.webp);
     background-size: cover;
     overflow-y: auto;
 }
@@ -127,7 +127,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 /*Forms Styles*/
-.close-formObject, .close-formGroup {
+.close-formObject, .close-formGroup, .close-formSubuser {
     position: absolute;
     top: calc(calc(2rem + 44.78px) + 10px);
     margin-left: 15px;
@@ -138,23 +138,23 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     transition: filter .3s;
 }
 
-.close-formObject:hover, .close-formGroup:hover {
+.close-formObject:hover, .close-formGroup:hover, .close-formSubuser:hover {
     filter: drop-shadow(0 0 5px #fff);
 }
 
-.create-object, .create-group{
+.create-object, .create-group, .create-subuser, .create-group {
     display: none;
 }
 
-#create-object:checked ~ .create-object, #create-group:checked ~ .create-group {
+#create-object:checked ~ .create-object, #create-group:checked ~ .create-group, #create-subuser:checked ~ .create-subuser {
     display: flex;
 }
 
-.forms-container:has(#create-object:checked) ~ .groups, .forms-container:has(#create-group:checked) ~ .groups {
+.forms-container:has(#create-object:checked) ~ .groups, .forms-container:has(#create-group:checked) ~ .groups, .forms-container:has(#create-subuser:checked) ~ .groups {
     display: none;
 }
 
-main:has(#create-object:checked), main:has(#create-group:checked) {
+main:has(#create-object:checked), main:has(#create-group:checked), main:has(#create-subuser:checked) {
     overflow-y: hidden;
 }
 
@@ -175,6 +175,7 @@ main:has(#create-object:checked), main:has(#create-group:checked) {
     margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 82.5dvh) / 2);
     background-color: var(--sidebar-color);
 }
+
 
 .forms-container input[type="submit"], .forms-container input[type="button"] {
     background-color: var(--fb-color);

@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.querySelectorAll(".group-header").forEach((header) => {
-    header.addEventListener("click", () => {
+    header.addEventListener("click", () => { 
       if (!deleteCheckbox.checked) {
         const container = header.parentElement;
         container.classList.toggle("open");

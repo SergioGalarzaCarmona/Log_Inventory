@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         modal.style.display = "flex";
       }
-    });
+    }); 
   }
 
   cancelCreateBtn.addEventListener("click", () => {
@@ -181,4 +181,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Bind buttons
   btnAZ.addEventListener("click", () => sortGroups("asc"));
   btnZA.addEventListener("click", () => sortGroups("desc"));
+});
+
+
+document.querySelectorAll(".group-header").forEach((header) => {
+    header.addEventListener("click", () => { 
+      if (!deleteCheckbox.checked) {
+        const container = header.parentElement;
+        container.classList.toggle("open");
+        header.classList.toggle("active");
+      }
+    });
 });
