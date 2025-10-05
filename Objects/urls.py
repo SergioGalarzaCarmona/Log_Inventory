@@ -4,8 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('work_space/', main, name='main'),
-    path('work_space/<int:id>', manage_object, name='edit_object' ),
-    path('object_groups/', manage_object_groups, name='object_groups' ),
-    path('log/',log, name='log'),
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("work_space/", main, name="main"),
+    path("work_space/<int:id>", manage_object, name="edit_object"),
+    path("object_groups/", manage_object_groups, name="object_groups"),
+    path("log/", log, name="log"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

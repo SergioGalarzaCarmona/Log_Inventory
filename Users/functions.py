@@ -1,27 +1,40 @@
 def _setup_tables():
-    
-    from .models import Permissions,PermissionsGroup, TypeChanges
+
+    from .models import Permissions, PermissionsGroup, TypeChanges
     from Objects.models import TypeTransaction
-    
+
     # TYPE TRASACTION TABLE
-    REQUIRED = ['Create','Delete','Add','Substract','Update']
+    REQUIRED = ["Create", "Delete", "Add", "Substract", "Update"]
     for name in REQUIRED:
         TypeTransaction.objects.get_or_create(name=name)
     TypeTransaction.objects.exclude(name__in=REQUIRED).delete()
-    
-    
+
     # PERMISSIONS TABLE
-    REQUIRED = ["Create_Objects","Delete_Objects","Update_Objects","View_Objects","Update_Users","Update_Log","View_Objects_Log","View_Users_Log"]
+    REQUIRED = [
+        "Create_Objects",
+        "Delete_Objects",
+        "Update_Objects",
+        "View_Objects",
+        "Update_Users",
+        "Update_Log",
+        "View_Objects_Log",
+        "View_Users_Log",
+    ]
     for name in REQUIRED:
         Permissions.objects.get_or_create(name=name)
     Permissions.objects.exclude(name__in=REQUIRED).delete()
-    
-    
+
     # PERMISSIONS GROUP TABLE
     REQUIRED_GROUPS = ["Profesor", "Estudiante"]
     REQUIRED_TEACHER_PERMISSIONS = [
-        "Create_Objects", "Delete_Objects", "Update_Objects", "View_Objects",
-        "Update_Users", "Update_Log", "View_Objects_Log", "View_Users_Log"
+        "Create_Objects",
+        "Delete_Objects",
+        "Update_Objects",
+        "View_Objects",
+        "Update_Users",
+        "Update_Log",
+        "View_Objects_Log",
+        "View_Users_Log",
     ]
     REQUIRED_STUDENT_PERMISSIONS = ["View_Objects", "View_Objects_Log"]
 
@@ -42,29 +55,27 @@ def _setup_tables():
         to_remove = group.permissions_id.exclude(name__in=required)
         group.permissions_id.remove(*to_remove)
 
-
     # TYPE CHANGES TABLE
-    REQUIRED = ['Create','Update','Delete']
-    
+    REQUIRED = ["Create", "Update", "Delete"]
+
     for value in REQUIRED:
         TypeChanges.objects.get_or_create(value=value)
     TypeChanges.objects.exclude(value__in=REQUIRED).delete()
-    
 
-def create_description(object : object,type : str,**kwargs):
-    if type == 'Subuser':
-        initial =  {
-            'username' : object.username,
-            'email' : object.email,
-            'group' : object.subprofile.group.name,
-        }
-    if type == 'SubuserGroup':
+
+def create_description(object: object, type: str, **kwargs):
+    if type == "Subuser":
         initial = {
-            'name' : object.name,
-            'permissions' : str(object.permissions.pk)
+            "username": object.username,
+            "email": object.email,
+            "group": object.subprofile.group.name,
         }
-    return ', \n'.join([
-        f'Cambio en {key}, antes: {initial[key]}, después: {kwargs[key]}' 
-        for key in kwargs.keys() 
-        if initial[key] != kwargs[key]]
-        )
+    if type == "SubuserGroup":
+        initial = {"name": object.name, "permissions": str(object.permissions.pk)}
+    return ", \n".join(
+        [
+            f"Cambio en {key}, antes: {initial[key]}, después: {kwargs[key]}"
+            for key in kwargs.keys()
+            if initial[key] != kwargs[key]
+        ]
+    )
