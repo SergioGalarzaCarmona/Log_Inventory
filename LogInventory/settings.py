@@ -154,8 +154,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'log.inventory2406@gmail.com'
-EMAIL_HOST_PASSWORD = 'gqsy kzga ycqj cpeq'
-
+EMAIL_HOST_PASSWORD = 'bqvp xrku umwg siov'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
   
 

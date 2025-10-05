@@ -27,6 +27,16 @@ from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView
 from Objects.models import Objects, ObjectsGroup
 
+
+# Email imports
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from .functions import account_activation_token
+
 ###################################
 ### ALL VIEWS HAVE DECORATOR TO CREATE NEEDED ROWS IN PARAMETERIZED TABLES ###
 ###################################
@@ -96,10 +106,49 @@ def signUp(request):
     image = request.FILES.get("image", "default.jpg")
     # with user and image create a profile
     form.create_profile(user, image)
-    # login the user
-    login(request, user)
-    return redirect("main")
+    user.is_active = False
+    user.save()
 
+    current_site = get_current_site(request)
+    subject = "Activa tu cuenta"
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = account_activation_token.make_token(user)
+    activation_link = f"http://{current_site.domain}{reverse('activate', kwargs={'uidb64': uid, 'token': token})}"
+    message = render_to_string(
+        "activation_email.html",
+        {
+            "user": user,
+            "activation_link": activation_link,
+        },
+    )
+    send_mail(
+        subject,
+        message,
+        None,
+        [user.email],
+        fail_silently=False,
+    )
+    messages.warning(
+        request,
+        "Se te mandó un correo de verificación, para iniciar sesión primero verifica tu cuenta",
+    )
+    return redirect("authenticate", type="deactivate")
+
+def activate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    
+    if user and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, "Tú cuenta ha sido validada exitosamente!")
+        return redirect("authenticate", type="deactivate")
+    else:
+        messages.error(request, "Link de activación expirado o inválida.")
+        return redirect("authenticate", type="activate")
 
 # View to manage log in ang register of users
 def authenticate_user(request, type):
@@ -323,7 +372,7 @@ def subprofile(request, id):
         subuser = User.objects.get(id=id)
     except:
         messages.error(request, "El usuario no existe.")
-        return redirect("authenticate", type='deactivate')
+        return redirect("authenticate", type="deactivate")
     # Get user
     user = request.user
     if subuser != user:
@@ -398,7 +447,12 @@ def subprofile(request, id):
                     request, "No puedes eliminar el usuario principal de la cuenta."
                 )
                 return redirect("subprofile", id=id)
-            if Objects.objects.filter(in_charge=subprofile, is_active=True).exists() or ObjectsGroup.objects.filter(in_charge=subprofile, is_active=True).exists:
+            if (
+                Objects.objects.filter(in_charge=subprofile, is_active=True).exists()
+                or ObjectsGroup.objects.filter(
+                    in_charge=subprofile, is_active=True
+                ).exists
+            ):
                 messages.error(
                     request,
                     "No se puede eliminar el usuario porque tiene objetos o grupos de objetos a cargo. Cambia el encargado de esos objetos e inténtalo de nuevo.",
@@ -524,7 +578,9 @@ def subprofile(request, id):
 
             user = User.objects.get(pk=subuser_pk)
             User.objects.filter(pk=subuser_pk).update(
-                first_name=data["first_name"],last_name=data['last_name'], email=data["email"]
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                email=data["email"],
             )
             try:
                 Subprofile.objects.filter(user=user).update(group=data["group"])
@@ -539,7 +595,7 @@ def subprofile(request, id):
                     object=user,
                     type="Subuser",
                     first_name=data["first_name"],
-                    last_name=data['last_name'],
+                    last_name=data["last_name"],
                     email=data["email"],
                     group=user.subprofile.group.name,
                 ),
@@ -624,7 +680,7 @@ def manage_subusers_group(request):
                     request,
                     f"No se puede borrar la imagen del grupo {group.name} porque no tiene image.",
                 )
-                return redirect('subusers_group')
+                return redirect("subusers_group")
             group.image = "default_group.jpg"
             group.save()
             log = TypeChanges.objects.get(value="Update")
