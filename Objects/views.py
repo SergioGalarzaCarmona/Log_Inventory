@@ -10,6 +10,7 @@ from .models import (
     GroupObjectsChanges,
     TypeTransaction,
 )
+from Borrowings.models import Borrowings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from .functions import create_transaction_description
@@ -508,9 +509,6 @@ def log(request):
         profile_admin = profile.profile
         type = "subprofile"
         permissions = profile.group.permissions.name
-        if permissions == "Estudiante":
-            messages.warning(request, "No tienes permiso para ver esa página.")
-            return redirect("authenticate", type="deactivate")
     except:
         messages.error(request, "Hubo un error al tratar de cargar el inventario.")
         return redirect("authenticate", type="deactivate")
@@ -670,8 +668,6 @@ def delete(request):
                         subprofile.save()
                         subuser.save()
                         saved = True
-                    if saved:
-                        messages.success(request,'Los usuarios fueron eliminados con éxito.' if not message else message)
                 case "user_group":
                     url = "subusers_group"
                     subuser_group = SubprofilesGroup.objects.get(id=id)
@@ -682,14 +678,15 @@ def delete(request):
                         subuser_group.is_active=False
                         subuser_group.save()
                         saved = True
-                    if saved:
-                        messages.success(request,'Los grupos fueron eliminados con éxito.' if not message else message)
                 case "object":
                     url = "main"
                     object = Objects.objects.get(id=id)
-                    object.is_active=False
-                    object.save()
-                    messages.success(request,'Log objetos se eliminaron con éxito.')
+                    if Borrowings.objects.filter(object=object, completed=False).exists():
+                        messages.error(request,'El objeto no se puede eliminar porque tiene préstamos activos.')
+                        message = 'Los demas objetos se eliminaron con éxito.'
+                    else:
+                        object.is_active=False
+                        object.save()
                 case "object_group":
                     url = "object_groups"
                     object_group = ObjectsGroup.objects.get(id=id)
@@ -700,6 +697,6 @@ def delete(request):
                         object_group.is_active=False
                         object_group.save()
                         saved = True
-                    if saved:
-                        messages.success(request,'Los grupos fueron eliminados con éxito.' if not message else message)
+    if saved:
+        messages.success(request,'Los elementos seleccionados se eliminaron correctamente.' if not message else message)
     return redirect(f'{url}')
