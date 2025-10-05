@@ -453,7 +453,7 @@ class EditSubprofileForm(forms.ModelForm):
 
         if first_name and last_name:
             exists = Subprofile.objects.filter(
-                first_name=first_name, last_name=last_name
+                user__first_name=first_name, user__last_name=last_name
             )
 
             # exclude current instance when editing
