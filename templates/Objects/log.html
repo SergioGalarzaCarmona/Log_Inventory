@@ -58,6 +58,9 @@
           </form>
         </div>
         <div class="logs-container">
+
+
+          {% if permissinos != "Estudiante" %}
           <!-- SUBUSERS LOG -->
         <input type="checkbox" id="subusersLog" class="filter-bar__checkbox">
         <div class="history-container subusersLog"> 
@@ -95,7 +98,7 @@
             {% endfor %}
           </div>
         </div>
-
+        {% endif %}
         <!-- OBJECTS LOG -->
         <input type="checkbox" id="objectsLog" class="filter-bar__checkbox">
         <div class="history-container objectsLog hidden">

@@ -7,6 +7,7 @@ from .views import (
     manage_subusers,
     subprofile,
     manage_subusers_group,
+    activate,
     UserPasswordChangeView,
 )
 from django.conf import settings
@@ -68,4 +69,5 @@ urlpatterns = [
     path("manage_subusers/", manage_subusers, name="manage_subusers"),
     path("subprofile/<int:id>", subprofile, name="subprofile"),
     path("subusers_group/", manage_subusers_group, name="subusers_group"),
+    path("activate/<uidb64>/<token>/", activate, name="activate"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
