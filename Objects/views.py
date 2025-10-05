@@ -657,7 +657,13 @@ def delete(request):
             type,id = input.split('-')
             match type:
                 case "user":
-                    pass
+                    url = "manage_subusers"
+                    subprofile = Subprofile.objects.get(id=id)
+                    subuser = subprofile.user
+                    subprofile.is_active=False
+                    subuser.is_active = False
+                    subprofile.save()
+                    subuser.save()
                 case "user_group":
                     pass
                 case "object":

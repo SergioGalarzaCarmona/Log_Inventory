@@ -100,53 +100,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const deleteBtn = document.getElementById("delete-button");
-  const form = document.getElementById('delete-form')
-  const modal = document.getElementById("deleteModal");
-  const cancelBtn = modal.querySelector("#cancelDelete");
-  const confirmBtn = modal.querySelector("#confirmDelete");
-  
-
-  function getDeleteCheckboxes() {
-    const deleteCheckboxes = document.querySelectorAll('.delete-checkbox');
-    const checkedArray = []
-    deleteCheckboxes.forEach(checkbox => {
-      if (checkbox.checked) {
-        checkedArray.push(checkbox)
-      }
-    })
-    return checkedArray
-  }
-  
-  if (deleteBtn) {
-    deleteBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (getDeleteCheckboxes().length != 0) {
-        modal.style.display = "flex";
-      }
-    });
-  }
-  cancelBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  confirmBtn.addEventListener("click", () => {
-    form.submit()
-  });
-
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-});
-
 // This script handles both forms for creating a group or object.(view Main)
 
 const label_group = document.querySelector(".create-group-label");
 const label_object = document.querySelector(".create-object-label");
-const deleteLabel = document.querySelector('.delete-object-label')
 
 const closeFormGroup = document.querySelector(".close-formGroup");
 const closeFormObject = document.querySelector(".close-formObject");
