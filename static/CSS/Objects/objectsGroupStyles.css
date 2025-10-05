@@ -327,7 +327,7 @@ textarea {
 
 
 /* MESSAGES STYLES */
-.hidden {
+.hidden, .group-header > input[type="checkbox"].delete-checkbox.hidden {
     display: none;
 }
 
@@ -428,11 +428,26 @@ textarea {
   opacity: 0.8;
 }
 
+input[type="checkbox"].delete-checkbox {
+    display: block;
+    height: 1rem;
+    width: 1rem;
+    margin: .25rem 1rem .25rem .25rem;
+}
+
 .group-header h3 {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
   flex: 1;
+}
+
+.group-container .group-header:has(input[type="checkbox"].delete-checkbox:checked) {
+    background-color: rgba(66, 162, 241, 0.9);
+}
+
+.delete:checked ~ .group-container .group-header .toggle-icon{
+    display: none;
 }
 
 .group-header .toggle-icon {

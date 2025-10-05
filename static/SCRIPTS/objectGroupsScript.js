@@ -190,12 +190,15 @@ document.addEventListener("DOMContentLoaded", () => {
   toggleTableVisibility();
 });
 
+
 document.querySelectorAll(".group-header").forEach((header) => {
-  header.addEventListener("click", () => {
-    const container = header.parentElement;
-    container.classList.toggle("open");
-    header.classList.toggle("active");
-  });
+    header.addEventListener("click", () => {
+      if (!deleteCheckbox.checked) {
+        const container = header.parentElement;
+        container.classList.toggle("open");
+        header.classList.toggle("active");
+      }
+    });
 });
 
 // Manage functionality of filter and search for object groups
