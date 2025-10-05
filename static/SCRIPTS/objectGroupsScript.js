@@ -216,3 +216,32 @@ filterInput.addEventListener("input", () => {
     }
   });
 });
+
+// filter a-z z-a
+document.addEventListener("DOMContentLoaded", () => {
+  const groupsContainer = document.querySelector(".groups");
+  const btnAZ = document.querySelector(".filter-bar__a-z");
+  const btnZA = document.querySelector(".filter-bar__z-a");
+
+  function sortGroups(order = "asc") {
+    // Get all group containers
+    const groups = Array.from(groupsContainer.querySelectorAll(".group-container"));
+
+    // Sort by the group title
+    groups.sort((a, b) => {
+      const nameA = a.querySelector(".group-title").textContent.toLowerCase().trim();
+      const nameB = b.querySelector(".group-title").textContent.toLowerCase().trim();
+
+      return order === "asc"
+        ? nameA.localeCompare(nameB)
+        : nameB.localeCompare(nameA);
+    });
+
+    // Reinsert groups in the sorted order
+    groups.forEach(group => groupsContainer.appendChild(group));
+  }
+
+  // Bind sorting buttons
+  if (btnAZ) btnAZ.addEventListener("click", () => sortGroups("asc"));
+  if (btnZA) btnZA.addEventListener("click", () => sortGroups("desc"));
+});
