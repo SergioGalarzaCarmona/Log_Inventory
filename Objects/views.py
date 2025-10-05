@@ -645,3 +645,51 @@ def log(request):
         # Save workbook to response
         wb.save(response)
         return response
+
+@login_required
+def delete(request):
+    if request.method != "POST":
+        return redirect('main')
+    
+    post_data = request.POST.copy()
+    for input in post_data:
+        if input != "csrfmiddlewaretoken":
+            type,id = input.split('-')
+            saved = False
+            match type:
+                case "user":
+                    url = "manage_subusers"
+                    subprofile = Subprofile.objects.get(id=id)
+                    if Objects.objects.filter(in_charge = subprofile).exists() or ObjectsGroup.objects.filter(in_charge = subprofile):
+                        messages.error(request,f'El usuario {subprofile.__str__()} no se pudo eliminar porque tiene objetos o grupos bajo su cargo.')
+                        message = 'Los demas usuarios se eliminaron con éxito.'
+                    else:
+                        subuser = subprofile.user
+                        subprofile.is_active=False
+                        subuser.is_active = False
+                        subprofile.save()
+                        subuser.save()
+                        saved = True
+                    if saved:
+                        messages.success(request,'Los usuarios fueron eliminados con éxito.' if not message else message)
+                case "user_group":
+                    pass
+                case "object":
+                    url = "main"
+                    object = Objects.objects.get(id=id)
+                    object.is_active=False
+                    object.save()
+                    messages.success(request,'Log objetos se eliminaron con éxito.')
+                case "object_group":
+                    url = "object_groups"
+                    object_group = ObjectsGroup.objects.get(id=id)
+                    if Objects.objects.filter(group=object_group).exists():
+                        messages.error(request,f'El grupo {object_group.name} no se pudo borrar porque tiene objetos asociados')
+                        message = 'Los demás grupos fueron eliminados con éxito.'
+                    else:
+                        object_group.is_active=False
+                        object_group.save()
+                        saved = True
+                    if saved:
+                        messages.success(request,'Los grupos fueron eliminados con éxito.' if not message else message)
+    return redirect(f'{url}')

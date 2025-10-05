@@ -108,16 +108,31 @@ const label_object = document.querySelector(".create-object-label");
 const closeFormGroup = document.querySelector(".close-formGroup");
 const closeFormObject = document.querySelector(".close-formObject");
 
+// FORMS
+const formObject = document.querySelector('.create-object')
+const formGroup = document.querySelector('.create-group')
+
 const create_group = document.getElementById("create-group");
 const create_object = document.getElementById("create-object");
 const objects = document.querySelector(".objects-area");
 
-label_group.addEventListener("click", function () {
-  create_object.checked = false;
+label_group.addEventListener("click", e => {
+  if (deleteCheckbox.checked) {
+    e.preventDefault()
+  }
+  else {
+    create_object.checked = false;
+  }
 });
-label_object.addEventListener("click", function () {
-  create_group.checked = false;
+label_object.addEventListener("click", e => {
+  if (deleteCheckbox.checked) {
+    e.preventDefault()
+  }
+  else {
+    create_group.checked = false;
+  }
 });
+
 
 document.addEventListener("DOMContentLoaded", () => {
   function toggleTableVisibility() {
@@ -139,8 +154,17 @@ document.addEventListener("DOMContentLoaded", () => {
   create_object.addEventListener("change", toggleTableVisibility);
   create_group.addEventListener("change", toggleTableVisibility);
 
+
+  deleteLabel.addEventListener('click', ()=>{
+    create_object.checked = false
+    create_group.checked = false
+    toggleTableVisibility();
+  });
   toggleTableVisibility();
 });
+
+
+
 
 // Manage filtering by name for objects.
 const filterInput = document.getElementById("search-input");
@@ -161,7 +185,6 @@ filterInput.addEventListener("input", () => {
   });
 });
 
-// Order a-z z-a
 document.addEventListener("DOMContentLoaded", () => {
   const objectsContainer = document.querySelector(".objects-area");
   const btnAZ = document.querySelector(".filter-bar__a-z");

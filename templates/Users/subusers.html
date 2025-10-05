@@ -38,7 +38,7 @@
             </nav>
             <input type="checkbox" {{checked}} id="create-subuser">
             <form class="create-subuser" id='form-subuser' enctype="multipart/form-data" method="POST">
-                {% csrf_token %}    
+                {% csrf_token %}
                 {{form}}
                 <input type="submit" value="Crear Usuario" id="create-button">
             </form>
@@ -48,6 +48,7 @@
                 {{group_form}}
                 <input type="submit" value="Crear Grupo">
             </form>
+            <form action="{% url 'delete' %}" method="POST" hidden id="delete-form">{% csrf_token %}</form>
             <div id="createGroupModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
                     <h3>Deseas crear un grupo?</h3>
@@ -55,6 +56,16 @@
                     <div class="modal-buttons">
                         <button id="cancelCreate" class="btn-cancel">No</button>
                         <button id="confirmCreate" class="btn-confirm">Si</button>
+                    </div>
+                </div>
+            </div>
+            <div id="deleteModal" class="modal-overlay" style="display: none;">
+                <div class="modal-content">
+                    <h3 class="modal-title">Estás seguro?</h3>
+                    <p class="modal-text">Se eliminarán todos los usuarios seleccionados</p>
+                    <div class="modal-buttons">
+                        <button id="cancelDelete" class="btn-cancel">No</button>
+                        <button id="confirmDelete" class="btn-delete">Borrar</button>
                     </div>
                 </div>
             </div>
@@ -72,10 +83,10 @@
                 </thead>
                 <tbody>
                     {% for subuser in subusers %}
-                    <tr onclick="window.location.href='/subprofile/{{ subuser.user.id }}';" >
+                    <tr class="table-row" onclick="window.location.href='/subprofile/{{ subuser.user.id }}';" >
                         <td>
                             <p class="user-counter">{{forloop.counter}}</p>
-                            <input name="user-{{subuser.id}}" type="checkbox" class="delete-checkbox hidden">
+                            <input name="user-{{subuser.id}}" type="checkbox" class="delete-checkbox hidden" form=delete-form>
                         </td>
                         <td class="username">{{subuser.user.first_name}} {{subuser.user.last_name}}</td>
                         <td>{{subuser.group.name}}</td>

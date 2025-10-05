@@ -66,7 +66,8 @@ def _setup_tables():
 def create_description(object: object, type: str, **kwargs):
     if type == "Subuser":
         initial = {
-            "username": object.username,
+            "first_name": object.first_name,
+            "last_name": object.last_name,
             "email": object.email,
             "group": object.subprofile.group.name,
         }
