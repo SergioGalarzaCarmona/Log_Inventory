@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/Objects/mainStyles.css'%}">
+    {% if permissions == "Estudiante" %}
+    <link rel="stylesheet" href="{%static '/CSS/sideBarSmallStyles.css'%}">
+    {% endif %}
     <title>Espacio de Trabajo - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Espacio de Trabajo Log Inventory">
@@ -154,7 +157,6 @@
                         <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
                             <span class="material-symbols-outlined message-close-button">Close</span>
                         </div>
-                      </div>
                     </div>
                 {% endfor %}
             </div>

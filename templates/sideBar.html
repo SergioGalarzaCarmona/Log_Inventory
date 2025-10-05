@@ -6,7 +6,7 @@
     </form>
     <nav class="sidebar__nav">
         <ul> 
-            {% if path == 'main' %} 
+            {% if path == 'main'%} 
             {% if permissions == 'admin' or permissions == "Profesor"  %}
             <li class="sidebar__tools">
                 <p>Herramientas<span class="material-symbols-outlined">build</span></p>
@@ -108,13 +108,13 @@
                     <p>Chats</p>
                 </a>
             </li>
-            {% if permissions == 'admin' or permissions == "Profesor" %}
             <li class="sidebar__item">
                 <a href="{% url 'log' %}" class="sidebar__item-link {{active_log}}">
                     <span class="material-symbols-outlined">event_note</span>
                     <p>Historial</p>
                 </a>
             </li>
+            {% if permissions == 'admin' or permissions == "Profesor" %}
             <li class="sidebar__item">
                 <a href="{% url 'manage_subusers' %}" class="sidebar__item-link {{active_subusers}}">
                     <span class="material-symbols-outlined">manage_accounts</span>

@@ -26,11 +26,13 @@
             </div>
         </div> 
         <nav>
+            {% if permissions != "Estudiante" %}
             <div class="subusers-link__container"> 
                 <a title="Volver a Usuarios" class="subusers-link" href="{% url 'manage_subusers' %}">
                     <span class="material-symbols-outlined">arrow_back</span>
                 </a>
             </div>
+            {% endif %}
         </nav>
         <div class="profile-container">
             <div class="profile-img-container">

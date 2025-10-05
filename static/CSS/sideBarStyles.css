@@ -258,6 +258,12 @@ input[type="checkbox"]:checked ~ label::before, input[type="checkbox"]:checked ~
 }
 
 
+@media (max-width: 768px) {
+    .sidebar__tools > .sidebar__item:last-child {
+        display: none;
+    }
+}
+
 @media (max-width: 600px) {
     .sidebar {
         padding: 0;

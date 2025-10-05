@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{% static '/CSS/Borrowings/borrowingsStyles.css' %}">
+    {% if permissions == "Estudiante" %}
+    <link rel="stylesheet" href="{%static '/CSS/sideBarSmallStyles.css'%}">
+    {% endif %}
     <title>Prestamos - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Prestamos Log Inventory">
@@ -98,12 +101,15 @@
                         <th class="small-view">Cantidad</th>
                         <th class="small-view">Fecha Límite</th>
                         <th>Estado</th>
+                        {% if permissions != "Estudiante" %}
                         <th>Editar</th>
+                        {% endif %}
                     </tr>
                 </thead>
 
                 <tbody>
                     {% for borrowing in borrowings %}
+                    {% if borrowing.in_charge == user.subprofile %}
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td class="object_name">{{borrowing.object.name}}</td>
@@ -111,6 +117,7 @@
                         <td class="small-view">{{borrowing.stock}}</td>
                         <td class="small-view">{{borrowing.date_limit}}</td>
                         <td>{% if borrowing.completed %}Completado{% else %}Pendiente{% endif %}</td>
+                        {% if permissions != "Estudiante" %}
                         <td>
                             <label 
                                 class="edit-button"
@@ -124,7 +131,9 @@
                                 <span class="material-symbols-outlined">edit</span>
                             </label>
                         </td>
+                        {% endif %}
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
 

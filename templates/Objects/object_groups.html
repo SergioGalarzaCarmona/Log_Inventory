@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
     <link rel="stylesheet" href="{%static '/CSS/GroupStyles.css'%}">
+    {% if permissions == "Estudiante" %}
+    <link rel="stylesheet" href="{%static '/CSS/sideBarSmallStyles.css'%}">
+    {% endif %}
     <title>Grupos de Objetos - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
     <meta name="description" content="Grupos de Objetos Log Inventory">
