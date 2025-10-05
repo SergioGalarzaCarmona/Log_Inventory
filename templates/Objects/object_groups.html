@@ -94,6 +94,7 @@
                 <input type="submit" value="Crear Grupo" id="create-group-button">
                 <a id="link-button" hidden href="{% url 'manage_subusers' %}"></a>
             </form>
+            <form action="{% url 'delete' %}" hidden id="delete-form" method="POST">{% csrf_token %}</form>
 			<!-- Modal to create group if it ain't selected.-->
             <div id="createGroupModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
@@ -122,7 +123,7 @@
             {% for form in forms %}
             <div class="group-container">
                 <div class="group-header">
-                    <input name="object_group-{{group.id}}" type="checkbox" class="delete-checkbox hidden">
+                    <input name="object_group-{{form.instance.id}}" type="checkbox" class="delete-checkbox hidden" form="delete-form">
                     <span class="material-symbols-outlined toggle-icon">expand_more</span>
                     <h3 class="group-title">{{form.instance.name}}</h3>
                     <p class="group-in-charge">Encargado: {{form.instance.in_charge}}</p>

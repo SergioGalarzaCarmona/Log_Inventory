@@ -623,6 +623,7 @@ def manage_subusers_group(request):
                     request,
                     f"No se puede borrar la imagen del grupo {group.name} porque no tiene image.",
                 )
+                return redirect('subusers_group')
             group.image = "default_group.jpg"
             group.save()
             log = TypeChanges.objects.get(value="Update")
