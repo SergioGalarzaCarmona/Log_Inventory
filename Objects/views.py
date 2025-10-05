@@ -660,7 +660,7 @@ def delete(request):
                 case "user":
                     url = "manage_subusers"
                     subprofile = Subprofile.objects.get(id=id)
-                    if Objects.objects.filter(in_charge = subprofile).exists() or ObjectsGroup.objects.filter(in_charge = subprofile):
+                    if Objects.objects.filter(in_charge = subprofile, is_active=True).exists() or ObjectsGroup.objects.filter(in_charge = subprofile, is_active=True):
                         messages.error(request,f'El usuario {subprofile.__str__()} no se pudo eliminar porque tiene objetos o grupos bajo su cargo.')
                         message = 'Los demas usuarios se eliminaron con éxito.'
                     else:
@@ -675,7 +675,7 @@ def delete(request):
                 case "user_group":
                     url = "subusers_group"
                     subuser_group = SubprofilesGroup.objects.get(id=id)
-                    if Subprofile.objects.filter(group=subuser_group).exists():
+                    if Subprofile.objects.filter(group=subuser_group, is_active=True).exists():
                         messages.error(request,f'El grupo {subuser_group.name} no se pudo borrar porque tiene objetos asociados')
                         message = 'Los demás grupos fueron eliminados con éxito.'
                     else:
@@ -693,7 +693,7 @@ def delete(request):
                 case "object_group":
                     url = "object_groups"
                     object_group = ObjectsGroup.objects.get(id=id)
-                    if Objects.objects.filter(group=object_group).exists():
+                    if Objects.objects.filter(group=object_group, is_active=True).exists():
                         messages.error(request,f'El grupo {object_group.name} no se pudo borrar porque tiene objetos asociados')
                         message = 'Los demás grupos fueron eliminados con éxito.'
                     else:

@@ -20,10 +20,6 @@ def manage_borrowings(request):
         profile_admin = profile.profile
         permissions = profile.group.permissions.name
         type = "subprofile"
-        # if the permissions of the subprofile is 'Estudiante', return a 403 error
-        if permissions == "Estudiante":
-            messages.warning(request, "No tienes permiso para ver esa página.")
-            return redirect("authenticate", type="deactivate")
 
     borrowings = Borrowings.objects.filter(
         in_charge__profile=profile_admin, completed=False
