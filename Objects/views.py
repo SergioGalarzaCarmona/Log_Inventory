@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from Users.models import Profile, Subprofile, TypeChanges, UserChanges, GroupChanges
+from Users.models import Profile, Subprofile, SubprofilesGroup, TypeChanges, UserChanges, GroupChanges
 from .models import (
     Objects,
     ObjectsGroup,
@@ -655,22 +655,51 @@ def delete(request):
     for input in post_data:
         if input != "csrfmiddlewaretoken":
             type,id = input.split('-')
+            saved = False
             match type:
                 case "user":
                     url = "manage_subusers"
                     subprofile = Subprofile.objects.get(id=id)
-                    subuser = subprofile.user
-                    subprofile.is_active=False
-                    subuser.is_active = False
-                    subprofile.save()
-                    subuser.save()
+                    if Objects.objects.filter(in_charge = subprofile).exists() or ObjectsGroup.objects.filter(in_charge = subprofile):
+                        messages.error(request,f'El usuario {subprofile.__str__()} no se pudo eliminar porque tiene objetos o grupos bajo su cargo.')
+                        message = 'Los demas usuarios se eliminaron con éxito.'
+                    else:
+                        subuser = subprofile.user
+                        subprofile.is_active=False
+                        subuser.is_active = False
+                        subprofile.save()
+                        subuser.save()
+                        saved = True
+                    if saved:
+                        messages.success(request,'Los usuarios fueron eliminados con éxito.' if not message else message)
                 case "user_group":
-                    pass
+                    url = "subusers_group"
+                    subuser_group = SubprofilesGroup.objects.get(id=id)
+                    if Subprofile.objects.filter(group=subuser_group).exists():
+                        messages.error(request,f'El grupo {subuser_group.name} no se pudo borrar porque tiene objetos asociados')
+                        message = 'Los demás grupos fueron eliminados con éxito.'
+                    else:
+                        subuser_group.is_active=False
+                        subuser_group.save()
+                        saved = True
+                    if saved:
+                        messages.success(request,'Los grupos fueron eliminados con éxito.' if not message else message)
                 case "object":
                     url = "main"
                     object = Objects.objects.get(id=id)
                     object.is_active=False
                     object.save()
+                    messages.success(request,'Log objetos se eliminaron con éxito.')
                 case "object_group":
-                    pass
+                    url = "object_groups"
+                    object_group = ObjectsGroup.objects.get(id=id)
+                    if Objects.objects.filter(group=object_group).exists():
+                        messages.error(request,f'El grupo {object_group.name} no se pudo borrar porque tiene objetos asociados')
+                        message = 'Los demás grupos fueron eliminados con éxito.'
+                    else:
+                        object_group.is_active=False
+                        object_group.save()
+                        saved = True
+                    if saved:
+                        messages.success(request,'Los grupos fueron eliminados con éxito.' if not message else message)
     return redirect(f'{url}')

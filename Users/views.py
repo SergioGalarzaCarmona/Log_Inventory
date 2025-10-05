@@ -524,7 +524,7 @@ def subprofile(request, id):
 
             user = User.objects.get(pk=subuser_pk)
             User.objects.filter(pk=subuser_pk).update(
-                username=data["username"], email=data["email"]
+                first_name=data["first_name"],last_name=data['last_name'], email=data["email"]
             )
             try:
                 Subprofile.objects.filter(user=user).update(group=data["group"])
@@ -538,7 +538,8 @@ def subprofile(request, id):
                 description=create_description(
                     object=user,
                     type="Subuser",
-                    username=data["username"],
+                    first_name=data["first_name"],
+                    last_name=data['last_name'],
                     email=data["email"],
                     group=user.subprofile.group.name,
                 ),
@@ -623,6 +624,7 @@ def manage_subusers_group(request):
                     request,
                     f"No se puede borrar la imagen del grupo {group.name} porque no tiene image.",
                 )
+                return redirect('subusers_group')
             group.image = "default_group.jpg"
             group.save()
             log = TypeChanges.objects.get(value="Update")
