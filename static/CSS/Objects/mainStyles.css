@@ -1,5 +1,9 @@
 * {
     box-sizing: border-box;
+    user-select: none; 
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none; 
 }
 
 body, div, ul, li, a, h1, h2, h3, h4, p {
@@ -623,6 +627,10 @@ textarea {
     .object-card {
         width: 85dvw;
         height: 17.5dvh;
+    }
+
+    .object-card__quantity {
+        display: none;
     }
 }
 

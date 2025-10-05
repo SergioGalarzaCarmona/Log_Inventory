@@ -1,3 +1,10 @@
+* {
+    user-select: none; 
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none; 
+}
+
 .sidebar {
     background-color: var(--sidebar-color);
     position: fixed;

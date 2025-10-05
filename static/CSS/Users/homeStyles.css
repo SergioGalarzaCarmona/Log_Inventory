@@ -1,6 +1,10 @@
 * {
     box-sizing: border-box;
     overflow-x: hidden;
+    user-select: none; 
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none; 
 }
 
 body, div, ul, li, a, h1, h2, p {
