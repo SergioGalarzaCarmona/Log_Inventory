@@ -27,14 +27,14 @@
                 </button>
                 <div class="collapse navbar-collapse navbar__nav" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active text-white" aria-current="page" href="#">Inicio</a>
-                        </li>
                         <li class="nav-item"> 
                             <a class="nav-link text-white" href="#">Sobre Nosotros</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="#">Servicio</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link active text-white" aria-current="page" href="#">Manual</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="#">Contacto</a>
@@ -56,30 +56,55 @@
         <section class="about">
             <h2 class="about__title">Sobre nosotros</h2>
             <p class="about__description">
-                El equipo de Log Inventory está conformado por estudiantes de <a href="https://iegabo.edu.co/" target="_blank">La I.E Gabo</a>, hemos desarrollado este proyecto por iniciativa propia con el objetivo de facilitar la gestión de inventarios en instituciones educativas sin la posibilidad de acceder a un software de esta clase, nuestro software es gratuito y de código abierto.
-                A pesar de nuestra inexperiencia, hemos dado lo mejor de nosotros a Log Inventory, esperamos ayudar a muchas personas e instituciones. Si desean aportar de alguna manera al proyecto por favor <a href="#">contáctenos</a>, por otro lado esperamos que Log Inventory sea fuente de inspiración para los que incursionen en el mundo de la programación y los que desean cambiar la realidad de su comunidad.
+                El equipo de Log Inventory está conformado por estudiantes de <a href="https://iegabo.edu.co/" target="_blank">La I.E Gabo</a> y aprendices del <a href="https://www.sena.edu.co/es-co/Paginas/default.aspx" target="_blank">SENA</a>, hemos desarrollado este proyecto por iniciativa propia con el objetivo de facilitar la gestión de inventarios en instituciones educativas sin la posibilidad de acceder a un software de esta clase, nuestro software es gratuito y de código abierto.
+                A pesar de nuestra inexperiencia, hemos dado lo mejor de nosotros a Log Inventory, esperamos ayudar a muchas personas e instituciones. Si desean aportar de alguna manera al proyecto por favor <a href="#">contáctenos</a>; por otro lado esperamos que Log Inventory sea fuente de inspiración para los que incursionen en el mundo de la programación y los que desean cambiar la realidad de su comunidad.
             </p>
         </section>
-        <section class="services">
-            <h2 class="services__title">¿Qué herramientas ofrecemos?</h2>
-            <ul class="services__list">
-                <li class="services__item">
-                    <h3>Control de activos</h3>
-                    <p>Una vez hayas iniciado sesión podrás gestionar el stock de tus activos, crear objetos y grupos en los que clasificarlos, además de definir el encargado de cada objeto y grupo.</p>
-                </li>
-                <li class="services__item">
-                    <h3>Gestión de Usuarios</h3>
-                    <p>Además de la cuenta principal, tendrás la posibilidad de crear usuarios que puedan observar los recursos de la institución y ser encargados de objetos, aunque obviamente tendrán restricciones para modificar el stock y otras funcones.</p>
-                </li>
-                <li class="services__item">
-                    <h3>Préstamos de activos</h3>
-                    <p>Cuando se desee hacer un prestamo de algún objeto, se podrá crear un registro de este con sus características e involucrados.</p>
-                </li>
-                <li class="services__item">
-                    <h3>Reportes de activos</h3>
-                    <p>En cualquier momento puedes descargar un reporte con todos los movimientos de estock y prestamos, los cuales también pueden ser consultados sin descargarse en sus respectivas secciones de historial y prestamos. </p>
-                </li>
-            </ul>
+        <section class="preview">
+            <h2 class="preview__title">Nuestros Servicios</h2>
+            <div class="preview__grid">
+              <!-- Vista General -->
+              <div class="preview__item">
+                  <img src="{%static '/IMAGES/dashboard.webp'%}" alt="Vista General Log Inventory">
+                  <h3>Vista General</h3>
+                  <p>Accede a todas las herramientas de gestión de manera rápida e intuitiva.</p>
+              </div>
+              
+               <!-- Gestión de Objetos -->
+              <div class="preview__item">
+                  <img src="{%static '/IMAGES/objetos.webp'%}" alt="Gestión de objetos en Log Inventory">
+                  <h3>Gestión de Objetos</h3>
+                  <p>Administra los recursos físicos de la institución, con control de disponibilidad, stock, grupos asignados, responsables, modificaciones y más.</p>
+              </div>
+              
+              <!-- Gestión de Usuarios -->
+              <div class="preview__item">
+                  <img src="{%static '/IMAGES/usuarios.webp'%}" alt="Gestión de usuarios en Log Inventory">
+                  <h3>Gestión de Usuarios</h3>
+                  <p>Crea y organiza usuarios dentro de grupos, con roles definidos y acceso limitado según sus funciones.</p>
+              </div>
+            
+              <!-- Historial -->
+              <div class="preview__item">
+                  <img src="{%static '/IMAGES/historial.webp'%}" alt="Historial en Log Inventory">
+                  <h3>Historial de Objetos</h3>
+                  <p>Consulta todos los movimientos de stock, préstamos, creación, modificación, y eliminación de elementos registrados en la plataforma, con fechas y responsables.</p>
+              </div>
+ 
+               <!-- Gestión de Prestamos -->
+              <div class="preview__item">
+                  <img src="{%static '/IMAGES/prestamos.webp'%}" alt="Gestión de prestamos en Log Inventory">
+                  <h3>Gestión de Prestamos</h3>
+                  <p>Administra los préstamos de recursos físicos de la institución, con control de disponibilidad, fechas y usuarios responsables.</p>
+              </div>
+
+              <!-- Gestión de Cuenta -->
+              <div class="preview__item">
+                  <img src="{%static '/IMAGES/cuenta.webp'%}" alt="Gestión de cuenta en Log Inventory">
+                  <h3>Gestión de Cuenta</h3>
+                  <p>Edita fácilmente tu información de usuario y mantén tu cuenta actualizada de manera segura.</p>
+              </div>
+          </div>
         </section>
         <section class="contact">
             <h2 class="contact__title">Contacto</h2>
@@ -87,6 +112,10 @@
                 <p>Correo Electrónico: <a href="mailto:log.inventory2406@gmail.com">log.inventory2406@gmail.com</a></p>
                 <p>Teléfono: +57 3128107264</p>
             </div>
+        </section>
+        <section class="logos">
+            <img src="{%static '/IMAGES/Gabo.webp'%}" alt="Logo I.E Gabo" class="logos__image">
+            <img src="{%static '/IMAGES/SENA.webp'%}" alt="Logo SENA" class="logos__image">
         </section>
     </main>
     <footer class="text-center text-lg-start">
