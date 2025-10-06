@@ -342,6 +342,13 @@ main:has(#export-log:checked) {
     background-color: var(--sidebar-color);
 }
 
+form div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+}
+
 .form-container button[type="submit"] {
     background-color: var(--fb-color);
     color: #fff;
@@ -363,13 +370,13 @@ main:has(#export-log:checked) {
 }
 
 .form-container form input, form select, button[type="submit"], form input[type="date"] {
+    width: 100%;
     background-color: #eee;
     border: none;
     padding: 10px 15px;
     font-size: 13px;
     font-family: inherit;
     border-radius: 8px;
-    width: 100%;
     outline: none;
 }
 
@@ -404,3 +411,4 @@ form select {
         height: 50dvh;
     }
 }
+

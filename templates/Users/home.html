@@ -28,16 +28,16 @@
                 <div class="collapse navbar-collapse navbar__nav" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item"> 
-                            <a class="nav-link text-white" href="#">Sobre Nosotros</a>
+                            <a class="nav-link text-white" href="#about">Sobre Nosotros</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Servicio</a>
+                            <a class="nav-link text-white" href="#services">Servicio</a>
                         </li>
                          <li class="nav-item">
-                            <a class="nav-link active text-white" aria-current="page" href="#">Manual</a>
+                            <a class="nav-link active text-white" aria-current="page" href="#manual">Manual</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Contacto</a>
+                            <a class="nav-link text-white" href="#contact">Contacto</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'authenticate' type='deactivate' %}">Iniciar Sesión</a>
@@ -53,14 +53,14 @@
         </section>
     </header>
     <main>
-        <section class="about">
+        <section class="about" id="about">
             <h2 class="about__title">Sobre nosotros</h2>
             <p class="about__description">
                 El equipo de Log Inventory está conformado por estudiantes de <a href="https://iegabo.edu.co/" target="_blank">La I.E Gabo</a> y aprendices del <a href="https://www.sena.edu.co/es-co/Paginas/default.aspx" target="_blank">SENA</a>, hemos desarrollado este proyecto por iniciativa propia con el objetivo de facilitar la gestión de inventarios en instituciones educativas sin la posibilidad de acceder a un software de esta clase, nuestro software es gratuito y de código abierto.
-                A pesar de nuestra inexperiencia, hemos dado lo mejor de nosotros a Log Inventory, esperamos ayudar a muchas personas e instituciones. Si desean aportar de alguna manera al proyecto por favor <a href="#">contáctenos</a>; por otro lado esperamos que Log Inventory sea fuente de inspiración para los que incursionen en el mundo de la programación y los que desean cambiar la realidad de su comunidad.
+                A pesar de nuestra inexperiencia, hemos dado lo mejor de nosotros a Log Inventory, esperamos ayudar a muchas personas e instituciones. Si desean aportar de alguna manera al proyecto por favor contáctenos; por otro lado esperamos que Log Inventory sea fuente de inspiración para los que incursionen en el mundo de la programación y los que desean cambiar la realidad de su comunidad.
             </p>
         </section>
-        <section class="preview">
+        <section class="preview" id="services">
             <h2 class="preview__title">Nuestros Servicios</h2>
             <div class="preview__grid">
               <!-- Vista General -->
@@ -106,13 +106,20 @@
               </div>
           </div>
         </section>
-        <section class="contact">
-            <h2 class="contact__title">Contacto</h2>
-            <div class="contact__info">
-                <p>Correo Electrónico: <a href="mailto:log.inventory2406@gmail.com">log.inventory2406@gmail.com</a></p>
-                <p>Teléfono: +57 3128107264</p>
-            </div>
-        </section>
+        <div class="additional-info">
+            <section class="contact" id="contact">
+                <h2 class="contact__title">Contacto</h2>
+                <div class="contact__info">
+                    <p>Correo Electrónico: <a href="mailto:log.inventory2406@gmail.com">log.inventory2406@gmail.com</a></p>
+                    <p>Teléfono: +57 3128107264</p>
+                </div>
+            </section>
+            <section class="manual" id="manual">
+                <h2 class="manual__title">Manual de Usuario</h2>
+                <p class="manual__description">Descarga nuestro manual de usuario para obtener una guía completa sobre cómo utilizar todas las funcionalidades de Log Inventory.</p>
+                <a href="{%static '/DOCUMENTS/Manual_de_usuario_Log_Inventory.pdf'%}" download class="manual__button">Descargar Manual</a>
+            </section>
+        </div>
         <section class="logos">
             <img src="{%static '/IMAGES/Gabo.webp'%}" alt="Logo I.E Gabo" class="logos__image">
             <img src="{%static '/IMAGES/SENA.webp'%}" alt="Logo SENA" class="logos__image">
