@@ -6,31 +6,33 @@ const cancelDeleteButton = document.querySelector(".cancel-delete");
 const userCounter = document.querySelectorAll(".user-counter");
 
 document.addEventListener("DOMContentLoaded", () => {
-  function toggleDeleteOptions() {
-    deleteOptions.classList.toggle("hidden", !deleteCheckbox.checked);
-    deleteSelector.forEach((element) => {
-      element.classList.toggle("hidden", !deleteCheckbox.checked);
-    });
-    userCounter.forEach((element) => {
-      element.classList.toggle("hidden", deleteCheckbox.checked);
-    });
-  }
-
-  deleteCheckbox.addEventListener("change", () => {
-    if (!deleteCheckbox.checked) {
+  if (deleteOptions) {
+    function toggleDeleteOptions() {
+      deleteOptions.classList.toggle("hidden", !deleteCheckbox.checked);
       deleteSelector.forEach((element) => {
-        element.checked = false;
+        element.classList.toggle("hidden", !deleteCheckbox.checked);
       });
-      toggleDeleteOptions();
-    } else {
-      document.querySelectorAll(".table-row").forEach((row) => {
-        row.removeAttribute("onclick");
+      userCounter.forEach((element) => {
+        element.classList.toggle("hidden", deleteCheckbox.checked);
       });
-      toggleDeleteOptions();
     }
-  });
 
-  toggleDeleteOptions();
+    deleteCheckbox.addEventListener("change", () => {
+      if (!deleteCheckbox.checked) {
+        deleteSelector.forEach((element) => {
+          element.checked = false;
+        });
+        toggleDeleteOptions();
+      } else {
+        document.querySelectorAll(".table-row").forEach((row) => {
+          row.removeAttribute("onclick");
+        });
+        toggleDeleteOptions();
+      }
+    });
+
+    toggleDeleteOptions();
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {

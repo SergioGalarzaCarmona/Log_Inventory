@@ -95,7 +95,7 @@ def signUp(request):
             request,
             "Users/authenticate.html",
             {
-                "form": RegisterUser(request.POST, request.FILES),
+                "form": form,
                 "class": "active",
                 "class_h2": class_h2,
             },
@@ -329,6 +329,24 @@ def manage_subusers(request):
                 user=request.user,
                 description=f'Se creó el usuario "{subuser.username}" perteneciente al grupo "{subuser.subprofile.group.name}"',
                 type_change=log,
+            )
+            current_site = get_current_site(request)
+            subject = "Bienvenido a Log Inventory"
+            link = f"http://{current_site.domain}"
+            message = render_to_string(
+                "activation_email.html",
+                {
+                    "user": subuser,
+                    'link' : link,
+                    'main_account' : profile_admin.user.username                    
+                },
+            )
+            send_mail(
+                subject,
+                message,
+                None,
+                [subuser.email],
+                fail_silently=False,
             )
             messages.success(request, "El usuario se creó con éxito.")
             return redirect("manage_subusers")

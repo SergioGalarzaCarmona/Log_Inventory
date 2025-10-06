@@ -160,7 +160,8 @@ const create_group = document.getElementById("create-group");
 const create_object = document.getElementById("create-object");
 const object_groups = document.querySelector(".groups");
 
-label_group.addEventListener("click", e=> {
+if (label_group){
+  label_group.addEventListener("click", e=> {
   if (deleteCheckbox.checked) {
     e.preventDefault()
   } 
@@ -168,7 +169,10 @@ label_group.addEventListener("click", e=> {
     create_object.checked = false;
   }
 });
-label_object.addEventListener("click", e => {
+}
+
+if (label_object) {
+  label_object.addEventListener("click", e => {
   if (deleteCheckbox.checked) {
     e.preventDefault()
   }
@@ -176,6 +180,8 @@ label_object.addEventListener("click", e => {
     create_group.checked = false;
   }
 });
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   function toggleTableVisibility() {
@@ -197,13 +203,16 @@ document.addEventListener("DOMContentLoaded", () => {
   create_object.addEventListener("change", toggleTableVisibility);
   create_group.addEventListener("change", toggleTableVisibility);
 
-  deleteLabel.addEventListener('click', ()=> {
+  if (deleteLabel) {
+    deleteLabel.addEventListener('click', ()=> {
     create_object.checked = false;
     create_group.checked = false;
     toggleTableVisibility();
   })
 
   toggleTableVisibility();
+  }
+
 });
 
 

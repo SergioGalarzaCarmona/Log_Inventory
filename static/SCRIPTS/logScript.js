@@ -8,30 +8,39 @@ const groups_log = document.querySelector(".subusersgroupsLog");
 const objects_log = document.querySelector(".objectsLog");
 const object_groups_log = document.querySelector(".objectgroupsLog");
 
-label_users_log.addEventListener("click", () => {
+if (label_users_log){
+  label_users_log.addEventListener("click", () => {
   users_log.classList.remove("hidden");
   groups_log.classList.add("hidden");
   objects_log.classList.add("hidden");
   object_groups_log.classList.add("hidden");
 });
+}
 
-label_groups_log.addEventListener("click", () => {
+if (label_groups_log) {
+  label_groups_log.addEventListener("click", () => {
   users_log.classList.add("hidden");
   groups_log.classList.remove("hidden");
   objects_log.classList.add("hidden");
   object_groups_log.classList.add("hidden");
 });
+}
+
 
 label_objects_log.addEventListener("click", () => {
-  users_log.classList.add("hidden");
-  groups_log.classList.add("hidden");
+  if (users_log) {
+    users_log.classList.add("hidden");
+    groups_log.classList.add("hidden");
+  }
   objects_log.classList.remove("hidden");
   object_groups_log.classList.add("hidden");
 });
 
 label_objectgroups_log.addEventListener("click", () => {
-  users_log.classList.add("hidden");
-  groups_log.classList.add("hidden");
+  if (users_log) {
+    users_log.classList.add("hidden");
+    groups_log.classList.add("hidden");
+  }
   objects_log.classList.add("hidden");
   object_groups_log.classList.remove("hidden");
 });

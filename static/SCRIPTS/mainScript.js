@@ -109,30 +109,32 @@ const closeFormGroup = document.querySelector(".close-formGroup");
 const closeFormObject = document.querySelector(".close-formObject");
 
 // FORMS
-const formObject = document.querySelector('.create-object')
-const formGroup = document.querySelector('.create-group')
+const formObject = document.querySelector(".create-object");
+const formGroup = document.querySelector(".create-group");
 
 const create_group = document.getElementById("create-group");
 const create_object = document.getElementById("create-object");
 const objects = document.querySelector(".objects-area");
 
-label_group.addEventListener("click", e => {
-  if (deleteCheckbox.checked) {
-    e.preventDefault()
-  }
-  else {
-    create_object.checked = false;
-  }
-});
-label_object.addEventListener("click", e => {
-  if (deleteCheckbox.checked) {
-    e.preventDefault()
-  }
-  else {
-    create_group.checked = false;
-  }
-});
+if (label_group) {
+  label_group.addEventListener("click", (e) => {
+    if (deleteCheckbox.checked) {
+      e.preventDefault();
+    } else {
+      create_object.checked = false;
+    }
+  });
+}
 
+if (label_object) {
+  label_object.addEventListener("click", (e) => {
+    if (deleteCheckbox.checked) {
+      e.preventDefault();
+    } else {
+      create_group.checked = false;
+    }
+  });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   function toggleTableVisibility() {
@@ -154,17 +156,16 @@ document.addEventListener("DOMContentLoaded", () => {
   create_object.addEventListener("change", toggleTableVisibility);
   create_group.addEventListener("change", toggleTableVisibility);
 
+  if (deleteLabel) {
+    deleteLabel.addEventListener("click", () => {
+      create_object.checked = false;
+      create_group.checked = false;
+      toggleTableVisibility();
+    });
+  }
 
-  deleteLabel.addEventListener('click', ()=>{
-    create_object.checked = false
-    create_group.checked = false
-    toggleTableVisibility();
-  });
   toggleTableVisibility();
 });
-
-
-
 
 // Manage filtering by name for objects.
 const filterInput = document.getElementById("search-input");
@@ -192,7 +193,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function sortObjects(order = "asc") {
     // Get all object cards
-    const objects = Array.from(objectsContainer.querySelectorAll(".object-card"));
+    const objects = Array.from(
+      objectsContainer.querySelectorAll(".object-card")
+    );
 
     // Sort by the <h3 class="object-card__name"> text
     objects.sort((a, b) => {

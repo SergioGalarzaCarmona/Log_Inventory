@@ -383,9 +383,6 @@ form select {
 
 
 @media (max-width: 768px) {
-    .filter-bar__filter-container > .filter-bar__name {
-        display: none;
-    }
     
     .logo {
         display: none;
