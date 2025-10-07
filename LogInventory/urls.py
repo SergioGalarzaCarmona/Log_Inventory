@@ -24,8 +24,9 @@ from django.views.static import serve
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Users.urls')),
-    path('',include('Objects.urls')),
+    path('', include('Objects.urls')),
     path('', include('Borrowings.urls')),
+    path('', include('LiveChats.urls')),
 ]
 
 if settings.DEBUG:

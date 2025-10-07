@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Objects',
     'Borrowings',
     'LiveChats',
+    "channels",
 ]
 
 MIDDLEWARE = [

@@ -241,7 +241,7 @@ class RegisterSubuser(UserCreationForm):
             )
 
             if exists.exists():
-                self.add_error("first_name", "Este nombre ya está en uso.")
+                self.add_error("first_name","Este nombre (nombre y apellido) ya está en uso.")
         return cleaned_data
 
     def clean_email(self):
@@ -473,7 +473,7 @@ class EditSubprofileForm(forms.ModelForm):
                 exists = exists.exclude(pk=self.instance.subprofile.pk)
 
             if exists.exists():
-                self.add_error("first_name", "Este nombre ya está en uso.")
+                self.add_error("first_name", "Este nombre (nombre y apellido) ya está en uso.")
         return cleaned_data
 
     def clean_email(self):

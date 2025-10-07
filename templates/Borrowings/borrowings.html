@@ -109,7 +109,6 @@
 
                 <tbody>
                     {% for borrowing in borrowings %}
-                    {% if borrowing.in_charge == user.subprofile %}
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td class="object_name">{{borrowing.object.name}}</td>
@@ -133,7 +132,6 @@
                         </td>
                         {% endif %}
                     </tr>
-                    {% endif %}
                     {% endfor %}
                 </tbody>
 

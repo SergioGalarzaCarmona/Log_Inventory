@@ -21,9 +21,14 @@ def manage_borrowings(request):
         permissions = profile.group.permissions.name
         type = "subprofile"
 
-    borrowings = Borrowings.objects.filter(
-        in_charge__profile=profile_admin, completed=False
-    )
+    if permissions != "Estudiante":
+        borrowings = Borrowings.objects.filter(
+            in_charge__profile=profile_admin, completed=False
+        )
+    else:
+        borrowings = Borrowings.objects.filter(
+            in_charge = profile, completed=False
+        )
     subusers = Subprofile.objects.filter(profile=profile_admin, is_active=True)
     objects = Objects.objects.filter(user=profile_admin.user, is_active=True)
     if request.method == "GET":
