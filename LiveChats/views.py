@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from Users.models import Profile, Subprofile
+from Users.models import Profile, Subprofile, User
 from .models import LiveChat
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
@@ -25,7 +25,12 @@ def manage_chats(request):
     except:
         logout(request)
         return redirect("authenticate", type="deactivate")
-    subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True)
+    if permissions != 'Estudiante': 
+        subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True)
+        if permissions == "Profesor":
+            subprofiles.exclude(pk=profile.id)
+    else:
+        subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True, group__permissions__name = "Profesor")
     if request.method == "GET":
         return render(
             request,
@@ -35,6 +40,7 @@ def manage_chats(request):
                 "type": type,
                 "permissions": permissions,
                 "subusers": subprofiles,
+                "profile_admin" : profile_admin,
             },
         )
 
@@ -56,8 +62,19 @@ def live_chat(request, id):
         logout(request)
         return redirect("authenticate", type="deactivate")
 
-    subprofiles = Subprofile.objects.filter(profile = profile_admin, is_active = True)
-    requested_user = Subprofile.objects.filter(id=id).first().user
+    if permissions != 'Estudiante': 
+        subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True)
+        if permissions == "Profesor":
+            subprofiles.exclude(pk=profile.id)
+    else:
+        subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True, group__permissions__name = "Profesor")
+    requested_user = User.objects.filter(id=id).first()
+    try:
+        requested_profile = requested_user.profile
+        receiver = requested_user.username
+    except:
+        requested_subprofile = requested_user.subprofile
+        receiver = f'{requested_user.first_name} {requested_user.last_name} '
     if requested_user != None:
         chat = LiveChat.objects.filter(users__in=[user, requested_user]) \
             .annotate(num_users=Count("users")) \
@@ -79,7 +96,9 @@ def live_chat(request, id):
                 "type": type,
                 "permissions": permissions,
                 "subusers": subprofiles,
-                'chat' : chat
+                'chat' : chat,
+                "profile_admin" : profile_admin,
+                'receiver' : receiver
             })
     
         
