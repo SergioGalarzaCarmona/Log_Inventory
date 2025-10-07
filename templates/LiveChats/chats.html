@@ -1,139 +1,65 @@
-{% load static %}
+{%load static%}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="{%static '/CSS/sideBarStyles.css'%}">
-    <link rel="stylesheet" href="{% static '/CSS/ChatLives/chatsStyles.css' %}">
-    <title>Chats - Log Inventory</title>
+    <link rel="stylesheet" href="{%static '/CSS/LiveChats/chatsStyles.css'%}">
+    {% if permissions == "Estudiante" %}
+    <link rel="stylesheet" href="{%static '/CSS/sideBarSmallStyles.css'%}">
+    {% endif %}
+    <title>Espacio de Trabajo - Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp'%}" type="image/webp">
-    <meta name="description" content="Prestamos Log Inventory">
+    <meta name="description" content="Espacio de Trabajo Log Inventory">
     <meta name="author" content="Log Inventory"> 
-    <meta name="robots" content="noindex, nofollow">   
-</head>   
+    <meta name="robots" content="noindex, nofollow"> 
+</head>
 <body>
     {% include 'sideBar.html' with path='manage_chats' profile=profile type=type permissions=permissions active_chats="active"%}
-    <main>
+    <main> 
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
-                <input type="submit" value="sort" class="filter-bar__a-z material-symbols-outlined col-md-1 col-0" title="Ordenar a-z">
-                <input type="submit" value="sort" class="filter-bar__z-a material-symbols-outlined col-md-1 col-0" title="Ordenar z-a">
-                <div class="filter-bar__name col-md-4 col-12">
-                    <input type="text" class="filter-bar__search" placeholder="Buscar por nombre...">
-                    <input value="search" type="submit" class="material-symbols-outlined">
+                <div class="filter-bar__select-container col-md-4">
+                    <select id="chatSelect" class="filter-bar__select-chat">
+                      <option value="" selected disabled>Seleccionar chat...</option>
+                      {% for subuser in subusers %}
+                        <option value="{% url 'live_chat' subuser.id %}">{{ subuser.user.first_name }} {{subuser.user.last_name}} - {{subuser.group.name}}</option>
+                      {% endfor %}
+                    </select>
                 </div>
-                <div class="filter-bar__logo-container col-md-5 col-0">
+                <div class="filter-bar__name col-md-4 col-8">
+                
+                </div>
+                <div class="filter-bar__logo-container col-md-4 col-0">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="logo" class="logo">
                 </div>
             </div>
         </div>
         <div class="forms-container">
-            <nav>
-                <label for="create-borrowing" class="material-symbols-outlined close-formBorrowing hidden">arrow_back</label>
-                <label for="edit-borrowing" class="material-symbols-outlined close-formEditBorrowing hidden">arrow_back</label>
-            </nav>
-            <input type="checkbox" {{checked}} id="create-borrowing">
-            <form class="create-borrowing" id='form-borrowing' method="POST">
-                {% csrf_token %}    
-                {{form}}
-                <input type="submit" id="submit">
-            </form>
-            <input type="checkbox" id="edit-borrowing">
-            <form class="edit-borrowing" id="edit-borrowing-form" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="id" id="borrowingId">
-                <div>
-                    <label>Objeto:</label>
-                    <select name="object" id="editObject" required>
-                        <option value="" selected>---------</option>
-                        {% for obj in objects %}
-                            <option value="{{ obj.id }}">{{ obj.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-              
-                <div>
-                    <label>Encargado:</label>
-                    <select name="in_charge" id="editInCharge" required>
-                        <option value="" selected>---------</option>
-                        {% for subuser in subusers %}
-                            <option value="{{ subuser.id }}">{{ subuser.user.first_name }} {{subuser.user.last_name}} - {{subuser.group.name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div>
-                    <label>Cantidad:</label>
-                    <input type="number" name="stock" id="editStock" required>
-                </div>
-                
-                <div>
-                    <label>Fecha Límite:</label>
-                    <input type="datetime-local" name="date_limit" id="editDateLimit" required>
-                </div>
-              
-                <div>
-                    <label>Finalizar Préstamo:</label>
-                    <input type="checkbox" name="status" id="editStatus">
-                </div>
-              
-                <div class="form-actions">
-                  <input type="submit" value="Guardar">
-                </div>
-            </form>
-
-        </div> 
-        <div class="borrowings-table__container">
-            <table class="borrowings-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Chat con</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for chat in chats %}
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td class="object_name">{{chat.subuser}}</td>
-                        <td class="small-view">{{chat.subuser.user.first_name}} {{chat.subuser.user.last_name}} - {{chat.subuser.group.name}}</td>
-                        <td>
-                            <button 
-                                class="edit-button"
-                                data-id="{{ chat.id }}"
-                                data-admin-user="{{ chat.admin_user.id }}"
-                                data-subuser="{{ chat.in_subuser.id }}">
-                                <span class="material-symbols-outlined">edit</span>
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
+        </div>  
+        <div class="chat-area">
+            <input type="text" {%  %}>
         </div>
-
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message-{{message.tags}}">
+                        <div class="message-text">
+                            {{ message }}
+                        </div>
+                        <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
+                            <span class="material-symbols-outlined message-close-button">Close</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </main>
-    {% if messages %}
-    <div class="messages-container">
-        {% for message in messages %}
-        <div class="message-{{message.tags}}">
-            <div class="message-text">
-                {{ message }}
-            </div>
-            <div class="message-close-button" id="message-close-button" role="button" aria-label="Cerrar">
-                <span class="material-symbols-outlined message-close-button">Close</span>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    <script src="{%static '/SCRIPTS/borrowingsScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
+    <script src="{%static '/SCRIPTS/chatsScript.js'%}"></script>
+    
 </body>
 </html>
