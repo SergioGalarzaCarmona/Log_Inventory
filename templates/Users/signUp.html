@@ -3,21 +3,25 @@
     {% csrf_token %}
     <div>
         {{ form.username.label_tag}}
+        {{ form.errors.username}}
         {{ form.username }}
     </div>
 
     <div>
         {{ form.email.label_tag }}
+        {{ form.errors.email}}
         {{ form.email }}
     </div>
 
     <div>
         {{ form.password1.label_tag }}
+        {{ form.errors.password1}}
         {{ form.password1 }}
     </div>
 
     <div>
         {{ form.password2.label_tag }}
+        {{ form.errors.password2}}
         {{ form.password2 }}
     </div>
 
