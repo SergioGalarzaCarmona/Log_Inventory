@@ -654,6 +654,7 @@ def delete(request):
         if input != "csrfmiddlewaretoken":
             type,id = input.split('-')
             saved = False
+            message = False
             match type:
                 case "user":
                     url = "manage_subusers"
