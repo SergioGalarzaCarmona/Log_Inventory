@@ -86,16 +86,20 @@
     const receiver = "{{ receiver }}"
     if (chatId) {
         const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${chatId}/`);
-    }
-
-    socket.onmessage = function(e) {
+        socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const log = document.querySelector("#chat-log");
 
         const div = document.createElement("div");
         div.classList.add("message");
-        div.classList.add('bg-success')
-        div.innerHTML = `<span class= "sender">${data.sender}</span>: <span class="text">${data.message}</span> <span class="time">${data.time}</span>`;
+        if (receiver == data.sender) {
+            div.classList.add('bg-light')
+        } else {
+            div.classList.add('bg-success')
+        }
+
+        let time = `{% now "d-m-Y H:i" %}`
+        div.innerHTML = `<span class= "sender">${data.sender}</span>: <span class="text">${data.message}</span> <span class="time">${time}</span>`;
         log.appendChild(div);
     };
 
@@ -112,6 +116,9 @@
             input.value = "";
         } 
     })
+}
+
+    
     </script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/chatsScript.js'%}"></script>
