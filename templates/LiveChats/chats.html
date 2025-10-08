@@ -98,7 +98,8 @@
             div.classList.add('bg-success')
         }
 
-        div.innerHTML = `<span class= "sender">${data.sender}</span>: <span class="text">${data.message}</span> <span class="time">${data.time}</span>`;
+        let time = `{% now "d-m-Y H:i" %}`
+        div.innerHTML = `<span class= "sender">${data.sender}</span>: <span class="text">${data.message}</span> <span class="time">${time}</span>`;
         log.appendChild(div);
     };
 
