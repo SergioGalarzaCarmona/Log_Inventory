@@ -129,6 +129,10 @@ h1 {
     overflow: hidden;
 }
 
+.hero__button.login {
+    display: none;
+}
+
 .hero__button:hover {
     outline: none;
 }
@@ -343,6 +347,14 @@ footer {
 
     .hero {
         gap: 8dvh;
+    }
+
+    .hero__button {
+        display: none;
+    }
+
+    .hero__button.login {
+        display: block;
     }
 
     .hero__description {

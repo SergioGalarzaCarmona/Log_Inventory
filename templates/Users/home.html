@@ -50,6 +50,8 @@
             <h1 class="hero__title">¡Gestiona tu inventario!</h1>
             <p class="hero__description">Log Inventory es un software de inventario online gratuito, desarrollado con un enfoque accesible para instituciones educativas, ¡únetenos y disfruta de nuestras herramientas!</p>
             <button class="hero__button"><span></span><a href="{% url 'authenticate' type='active' %}">Registrarse</a></button>
+            <button class="hero__button login"><span></span><a href="{% url 'authenticate' type='deactivate' %}">Iniciar Sesión</a></button>
+        </section>
         </section>
     </header>
     <main>
@@ -138,7 +140,7 @@
         <!-- Copyright -->
         <div class="text-center text-white p-3" style="background-color: rgba(0, 0, 0, 0.2);">
             © 2024 Copyright: Log Inventory
-        </div>
+        </div> 
         <!-- Copyright -->
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
