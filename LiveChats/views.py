@@ -80,11 +80,10 @@ def live_chat(request, id):
             .annotate(num_users=Count("users")) \
             .filter(num_users=2) \
             .first() 
-        messages.success(request, 'Chat abierto con éxito.')
         if chat == None:    
             chat = LiveChat.objects.create(admin_user = profile_admin)
             chat.users.add(user, requested_user)
-            messages.success(request, 'Chat creado con éxito.')
+    messages.success(request, 'Chat abierto con éxito.')
             
     
     

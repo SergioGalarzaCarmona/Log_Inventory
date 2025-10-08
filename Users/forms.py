@@ -252,6 +252,7 @@ class RegisterSubuser(UserCreationForm):
                 code="invalid_email",
             )
             self.add_error("email", error)
+        return email
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -484,6 +485,7 @@ class EditSubprofileForm(forms.ModelForm):
                 self.fields["email"].error_messages["unique"], code="unique"
             )
             self.add_error("email", error)
+        return email
 
 
 class EditSubprofileGroupForm(forms.ModelForm):

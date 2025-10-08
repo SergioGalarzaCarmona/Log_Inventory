@@ -11,7 +11,7 @@
     {% if permissions == "Estudiante" %}
     <link rel="stylesheet" href="{% static '/CSS/sideBarSmallStyles.css' %}">
     {% endif %}
-    <title>Chat {{ chat.id }} - Log Inventory</title>
+    <title>Chat - Log Inventory</title>
     <link rel="icon" href="{% static '/IMAGES/LogoMini.webp' %}" type="image/webp">
 </head>   
 
@@ -50,10 +50,10 @@
         <div class="chat-container container mt-4">
             <div id="chat-log" class="chat-log">
                 {% for message in chat.messages.all %}
-                    <div class="message {% if message.sender == profile %}me{% else %}other{% endif %}">
-                        <span class="sender">{{ message.sender.username }}:</span>
+                    <div class="message {% if message.sender.username == user.username %}bg-success{% else %} bg-light {% endif %}">
+                        <span class="sender">{{ message.sender }}:</span>
                         <span class="text">{{ message.text }}</span>
-                        <span class="time">{{ message.created_at|date:"H:i" }}</span>
+                        <span class="time">{{ message.created_at|date:"d-m-Y H:i"}}</span>
                     </div>
                 {% endfor %}
             </div>
@@ -82,32 +82,42 @@
 
     <!-- Scripts -->
     <script>
-        const chatId = "{{ chat.id }}";
-        const chatSocket = new WebSocket(
-            "ws://" + window.location.host + "/ws/chat/" + chatId + "/"
-        );
+    const chatId = "{{ chat.id }}";
+    const receiver = "{{ receiver }}"
+    if (chatId) {
+        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${chatId}/`);
+        socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const log = document.querySelector("#chat-log");
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            const log = document.querySelector("#chat-log");
+        const div = document.createElement("div");
+        div.classList.add("message");
+        if (receiver == data.sender) {
+            div.classList.add('bg-light')
+        } else {
+            div.classList.add('bg-success')
+        }
 
-            const div = document.createElement("div");
-            div.classList.add("message");
-            div.innerHTML = `<b>${data.sender}</b>: ${data.message} <span>${data.time}</span>`;
-            log.appendChild(div);
-        };
+        div.innerHTML = `<span class= "sender">${data.sender}</span>: <span class="text">${data.message}</span> <span class="time">${data.time}</span>`;
+        log.appendChild(div);
+    };
 
-        document.querySelector("#chat-message-submit").onclick = function(e) {
+    document.querySelector("#chat-message-submit").onclick = function() {
+        const input = document.querySelector("#chat-message-input");
+        socket.send(JSON.stringify({'message': input.value}));
+        input.value = "";
+    };
+    
+    document.querySelector('#chat-message-input').addEventListener('keypress', e => {
+        if (e.key === 'Enter') {
             const input = document.querySelector("#chat-message-input");
-            const message = input.value.trim();
-            if (message) {
-                chatSocket.send(JSON.stringify({
-                    "message": message,
-                    "sender": "{{ profile.id }}"
-                }));
-                input.value = "";
-            }
-        };
+            socket.send(JSON.stringify({'message': input.value}));
+            input.value = "";
+        }
+    })
+}
+
+    
     </script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/chatsScript.js'%}"></script>
