@@ -21,7 +21,7 @@
     <main> 
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
-                <div class="filter-bar__select-container col-md-4 col-12">
+                <div class="filter-bar__select-container col-md-3 col-6">
                     <select id="chatSelect" class="filter-bar__select-chat">
                       <option value="" selected disabled>Seleccionar chat...</option>
                       {% if permissions == "Estudiante" %}
@@ -36,12 +36,12 @@
                       {% endfor %}
                     </select>
                 </div>
-                <div class="filter-bar__name col-md-4 col-8">
+                <div class="filter-bar__name col-md-3 col-6">
                     {% if receiver %}
-                    <h5 class="text-center text-white">Chat con {{ receiver }}</h5>
+                    <p class="text-center text-white">Chat: {{ receiver }}</p>
                     {% endif %}
                 </div>
-                <div class="filter-bar__logo-container col-md-4 col-0">
+                <div class="filter-bar__logo-container col-md-6 col-0">
                     <img src="{% static '/IMAGES/logo_transparente_blanco.webp' %}" alt="logo" class="logo">
                 </div>
             </div>
@@ -110,7 +110,7 @@
             const input = document.querySelector("#chat-message-input");
             socket.send(JSON.stringify({'message': input.value}));
             input.value = "";
-        }
+        } 
     })
     </script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>

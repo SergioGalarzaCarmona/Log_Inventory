@@ -12,7 +12,7 @@ body, div, ul, li, a, h1, h2, h3, h4, p {
 }
 
 label, .sidebar__nav {
-    user-select: none;
+    user-select: none; 
 }
 
 .container {
@@ -79,7 +79,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 .filter-bar__filter-container  > div, .filter-bar__filter-container > input  {
-    color: var(--bg-color);
     display: grid;
     place-content: center;
 }
@@ -93,27 +92,17 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     color: #D2B48C;
 }
 
-.filter-bar__z-a {
-    transform: rotate(180deg);
-}
-
 .filter-bar__filter-container > .filter-bar__name {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: clamp(0.75rem, 1.5dvw, 1.5rem);
 }
 
 .filter-bar__name > input {
     height: auto;
-}
-
-.filter-bar__name > input[type="text"] {
-    width: 80%;
-    outline: none;
-}
-
-.filter-bar__name > input[type="submit"] {
-    width: 20%;
 }
 
 .filter-bar__filter-container > .filter-bar__logo-container {
@@ -123,7 +112,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     align-items: center;
     padding-right: .75rem;
 }
- 
+
 .logo {
     height: clamp(15px, calc(10dvh - 5px), 75px);
     width: clamp(42px, calc(28dvh - 5px), 210px);
@@ -135,13 +124,6 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     justify-content: center;
 }
 
-.filter-bar__select-container select {
-    background-color: transparent;
-    border-radius: 5px ;
-    border-color: #fff;
-    width: 100%;
-    height: 100%;
-}
 
 /* MESSAGES STYLES */
 .hidden {
@@ -249,34 +231,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     .sidebar__form {
         display: none;
     }
-    .modal-content {
-        width: 80%; 
-    }
 }
-
-@media (max-height: 840px) and (max-width: 1024px) {
-
-    .forms-container form {
-        height: 80dvh;
-        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 75dvh) / 2);
-    } 
-    .modal-content {
-        width: 65%;
-    }
-}
-
-@media (min-height: 1024px) and (max-width: 1024px) {
-    .forms-container form{
-        width: 70%;
-        margin-left: 15%;
-        height: 60dvh;
-        margin-top: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 60dvh) / 2);
-    }
-
-    textarea {
-        height: 20dvh;
-    }
-} 
 
 @media (min-width: 576px) {
     .container, .container-sm {
