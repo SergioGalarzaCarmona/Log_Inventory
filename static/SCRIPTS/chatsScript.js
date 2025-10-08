@@ -23,3 +23,9 @@ closeButtons.forEach((button) => {
     }
   });
 });
+
+window.onload = function() {
+  const chatLog = document.getElementById('chat-log');
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+
