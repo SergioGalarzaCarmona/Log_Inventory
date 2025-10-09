@@ -1,53 +1,41 @@
+version: "3.9"
+
 services:
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             daphne -b 0.0.0.0 -p 8000 LogInventory.asgi:application"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=LogInventory.settings
+      - PYTHONUNBUFFERED=1
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+
   db:
     image: postgres:15
+    restart: always
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - backend
 
   redis:
     image: redis:7
-    networks:
-      - backend
-
-  web:
-    build: .
-    command: daphne -b 0.0.0.0 -p 8000 LogInventory.asgi:application
-    volumes:
-      - .:/app
-      - static_volume:/app/static
-      - media_volume:/app/media
-    env_file: .env
-    depends_on:
-      - db
-      - redis
-    expose:
-      - 8000
-    networks:
-      - backend
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - static_volume:/vol/static
-      - media_volume:/vol/media
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - web
-    networks:
-      - backend
-
+    restart: always
+  
 volumes:
   postgres_data:
-  static_volume:
-  media_volume:
-
-networks:
-  backend:
+  media_data:

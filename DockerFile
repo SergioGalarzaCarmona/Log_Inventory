@@ -14,8 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el resto del proyecto
 COPY . .
 
-# Recoger archivos estáticos
-RUN python manage.py collectstatic --noinput
 
 # Comando para ejecutar la app
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
