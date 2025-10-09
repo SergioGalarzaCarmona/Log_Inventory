@@ -16,6 +16,10 @@ RUN python manage.py collectstatic --noinput
 # Exponemos el puerto para Django
 EXPOSE 8000
 
+#What database are ready
+COPY wait-for-db.sh /wait-for-db.sh
+RUN chmod +x /wait-for-db.sh
+
 # Comando para iniciar el servidor ASGI
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
  
