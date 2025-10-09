@@ -17,7 +17,7 @@ services:
 
   web:
     build: .
-    command: /wait-for-db.sh daphne -b 0.0.0.0 -p 8000 LogInventory.asgi:application
+    command: daphne -b 0.0.0.0 -p 8000 LogInventory.asgi:application
     volumes:
       - .:/app
       - static_volume:/app/static

@@ -18,4 +18,4 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 # Comando para ejecutar la app
-CMD ["/wait-for-db.sh", "daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
