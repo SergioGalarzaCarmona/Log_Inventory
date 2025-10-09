@@ -1,19 +1,12 @@
-# Imagen base
 FROM python:3.11-slim
 
-# Crear directorio de la app
 WORKDIR /app
 
-# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements si lo tienes
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el resto del proyecto
 COPY . .
 
-
-# Comando para ejecutar la app
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
+CMD sh -c "python manage.py migrate && python manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p 8000 LogInventory.asgi:application"
