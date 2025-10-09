@@ -9,8 +9,8 @@ services:
              daphne -b 0.0.0.0 -p 8000 LogInventory.asgi:application"
     volumes:
       - .:/app
-      - static_data:/app/staticfiles 
-      - media_data:/app/media 
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
     expose:
       - "8000"
     depends_on:
