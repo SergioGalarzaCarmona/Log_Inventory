@@ -10,6 +10,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Recopila los archivos estáticos durante la construcción de la imagen
+RUN python manage.py collectstatic --noinput
+
 # Exponemos el puerto para Django
 EXPOSE 8000
 
