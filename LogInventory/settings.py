@@ -44,9 +44,11 @@ INSTALLED_APPS = [
     'Borrowings',
     'LiveChats',
     "channels",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -84,24 +86,24 @@ ASGI_APPLICATION = 'LogInventory.asgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
 }
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default":
-       {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": 'loginventory_5wwj',
-            "USER": 'loginventory_5wwj_user',
-            "PASSWORD": 'QKAIbYbIBIprvKJ7PhX1boWIWcZeDnxs',
-            "HOST": 'dpg-d38ch7nfte5s73bvf2rg-a.oregon-postgres.render.com',
-            "PORT": 5432,
-            'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
+    "default": 
+        {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT", 5432),
         }
 }
 

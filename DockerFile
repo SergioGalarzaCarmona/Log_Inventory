@@ -1,0 +1,17 @@
+# Imagen base
+FROM python:3.11
+
+# Directorio dentro del contenedor
+WORKDIR /app
+
+# Copiamos los archivos
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Exponemos el puerto para Django
+EXPOSE 8000
+
+# Comando para iniciar el servidor ASGI
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
