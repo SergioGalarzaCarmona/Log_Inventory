@@ -14,10 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el resto del proyecto
 COPY . .
 
-# Copiar script para esperar DB
-COPY wait-for-db.sh /wait-for-db.sh
-RUN chmod +x /wait-for-db.sh
-
 # Recoger archivos estáticos
 RUN python manage.py collectstatic --noinput
 
