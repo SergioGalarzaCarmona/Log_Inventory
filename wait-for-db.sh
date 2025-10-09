@@ -1,12 +1,11 @@
 #!/bin/sh
+set -e
 
-# Espera a que el servicio de base de datos responda
-echo "Esperando a que la base de datos esté disponible..."
-
-while ! nc -z db 5432; do
-  sleep 1
+host="db"
+until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$host" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\q'; do
+  >&2 echo "Postgres no está listo aún - esperando..."
+  sleep 2
 done
 
-echo "Base de datos lista, iniciando servidor Django..."
-
+>&2 echo "Postgres está listo - arrancando Django"
 exec "$@"

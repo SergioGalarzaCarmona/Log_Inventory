@@ -1,25 +1,25 @@
 # Imagen base
-FROM python:3.11
+FROM python:3.11-slim
 
-# Directorio dentro del contenedor
+# Crear directorio de la app
 WORKDIR /app
 
-# Copiamos los archivos
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements si lo tienes
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copiar el resto del proyecto
 COPY . .
 
-# Recopila los archivos estáticos durante la construcción de la imagen
-RUN python manage.py collectstatic --noinput
-
-# Exponemos el puerto para Django
-EXPOSE 8000
-
-#What database are ready
+# Copiar script para esperar DB
 COPY wait-for-db.sh /wait-for-db.sh
 RUN chmod +x /wait-for-db.sh
 
-# Comando para iniciar el servidor ASGI
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
- 
+# Recoger archivos estáticos
+RUN python manage.py collectstatic --noinput
+
+# Comando para ejecutar la app
+CMD ["/wait-for-db.sh", "daphne", "-b", "0.0.0.0", "-p", "8000", "LogInventory.asgi:application"]
