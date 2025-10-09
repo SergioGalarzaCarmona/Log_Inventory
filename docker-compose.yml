@@ -50,4 +50,5 @@ services:
 volumes:
   postgres_data:
   media_data:
+  static_volume:
   media_volume:
