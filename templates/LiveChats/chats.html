@@ -52,7 +52,11 @@
             <div id="chat-log" class="chat-log">
                 {% for message in chat.messages.all %}
                     <div class="message {% if message.sender.username == user.username %}bg-success{% else %} bg-light {% endif %}">
+                        {% if message.sender.profile %}
                         <span class="sender">{{ message.sender }}:</span>
+                        {% else %}
+                        <span class="sender">{{ message.sender.first_name }} {{ message.sender.last_name }}:</span>
+                        {% endif %}
                         <span class="text">{{ message.text }}</span>
                         <span class="time">{{ message.created_at|date:"d-m-Y H:i"}}</span>
                     </div>
@@ -84,7 +88,7 @@
     <!-- Scripts -->
     <script>
     const chatId = "{{ chat.id }}";
-    const receiver = "{{ receiver }}"
+    const receiver = "{{ receiver_username }}"
     if (chatId) {
         const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${chatId}/`);
 
@@ -96,12 +100,8 @@
         div.classList.add("message");
         if (receiver == data.sender) {
             div.classList.add('bg-light')
-            console.log(receiver)
-            console.log(data.sender)
         } else {
             div.classList.add('bg-success')
-            console.log(receiver)
-            console.log(data.sender)
         }
 
         let time = `{% now "d-m-Y H:i" %}`

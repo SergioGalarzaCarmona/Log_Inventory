@@ -72,9 +72,11 @@ def live_chat(request, id):
     try:
         requested_profile = requested_user.profile
         receiver = requested_user.username
+        receiver_username = receiver    
     except:
         requested_subprofile = requested_user.subprofile
         receiver = f'{requested_user.first_name} {requested_user.last_name} '
+        receiver_username = requested_user.username
     if requested_user != None:
         chat = LiveChat.objects.filter(users__in=[user, requested_user]) \
             .annotate(num_users=Count("users")) \
@@ -97,7 +99,8 @@ def live_chat(request, id):
                 "subusers": subprofiles,
                 'chat' : chat,
                 "profile_admin" : profile_admin,
-                'receiver' : receiver
+                'receiver' : receiver,
+                'receiver_username' : receiver_username
             })
     
         
