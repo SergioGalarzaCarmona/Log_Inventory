@@ -34,17 +34,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return 
 
         timestamp = timezone.now().strftime("%H:%M")
-        try:
-            profile = user.profile
-            sender = user.username
-        except:
-            sender = f"{user.first_name} {user.last_name}"
+        
         await self.channel_layer.group_send(
             self.chat_group_name,
             {
                 'type': 'chat_message',
                 'message': message,
-                'sender': sender,
+                'sender': user.username,
                 'timestamp': timestamp,
             }
         )
