@@ -87,6 +87,8 @@
     const receiver = "{{ receiver }}"
     if (chatId) {
         const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${chatId}/`);
+
+        console.log(socket)
         socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const log = document.querySelector("#chat-log");
