@@ -96,8 +96,12 @@
         div.classList.add("message");
         if (receiver == data.sender) {
             div.classList.add('bg-light')
+            console.log(receiver)
+            console.log(data.sender)
         } else {
             div.classList.add('bg-success')
+            console.log(receiver)
+            console.log(data.sender)
         }
 
         let time = `{% now "d-m-Y H:i" %}`
