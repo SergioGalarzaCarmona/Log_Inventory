@@ -35,7 +35,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         timestamp = timezone.now().strftime("%H:%M")
         try:
-            user.profile
+            profile = user.profile
             sender = user.username
         except:
             sender = f"{user.first_name} {user.last_name}"
