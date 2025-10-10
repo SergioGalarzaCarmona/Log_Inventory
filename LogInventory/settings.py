@@ -132,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'es-mx'
 
 TIME_ZONE = 'America/Bogota'
 
@@ -158,6 +158,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
