@@ -103,7 +103,13 @@
         } else {
             div.classList.add('bg-success')
         }
+        let sender
+        if (data.sender.profile) {
+            sender = data.sender            
+        } else {
+            sender = `${data.sender.first_name} ${data.sender.last_name} `
 
+        }
         let time = `{% now "d-m-Y H:i" %}`
         div.innerHTML = `<span class= "sender">${data.sender}:</span> <span class="text">${data.message}</span> <span class="time">${time}</span>`;
         log.appendChild(div);
