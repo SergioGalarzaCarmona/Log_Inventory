@@ -218,7 +218,7 @@ class RegisterSubuser(UserCreationForm):
             "placeholder": "Nombre",
             "class" : "retricted",
         }
-        self.fields['first_mame'].label = "Nombres"
+        self.fields['first_name'].label = "Nombres"
         self.fields["last_name"].required = True
         self.fields["last_name"].widget.attrs = {
             "placeholder": "Apellido",
