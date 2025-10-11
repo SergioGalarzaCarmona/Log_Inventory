@@ -209,3 +209,16 @@ document.querySelectorAll(".group-header").forEach((header) => {
       }
     });
 });
+
+
+// This script handles the subprofiles group image upload and deletion functionality.(subprofiles group)
+document.querySelectorAll('input[type="file"]').forEach((input) => {
+  input.addEventListener("change", () => {
+    id = input.id;
+    instance_id = id.split("_")[2];
+    const button_submit = document.getElementById(`id_submit_${instance_id}`);
+    if (button_submit) {
+      button_submit.click();
+    }
+  });
+});
