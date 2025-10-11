@@ -16,13 +16,13 @@ class RegisterUser(UserCreationForm):
     image = forms.ImageField(
         label="Imagen de Perfil",
         required=False,
-        widget=forms.FileInput(attrs={"class": ""}),
+        widget=forms.FileInput(attrs={"class": "","placeholder" : "Archivo no seleccionado"}),
     )
     username = forms.CharField(
         max_length=30,
         label="Nombre de Usuario",
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class": ""}),
+        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class": "restricted"}),
     )
     email = forms.EmailField(
         max_length=254,
@@ -95,7 +95,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
     image = forms.ImageField(
         required=False,
         label="imagen",
-        widget=forms.FileInput(attrs={"class": "", "id": "image_group"}),
+        widget=forms.FileInput(attrs={"class": "", "id": "image_group","placeholder" : "Archivo no seleccionado"}),
     )
 
     description = forms.CharField(
@@ -192,7 +192,7 @@ class RegisterSubuser(UserCreationForm):
     image = forms.ImageField(
         label="Imagen de Perfil",
         required=False,
-        widget=forms.FileInput(attrs={"class": ""}),
+        widget=forms.FileInput(attrs={"class": "","placeholder" : "Archivo no seleccionado"}),
     )
 
     class Meta:
@@ -216,11 +216,15 @@ class RegisterSubuser(UserCreationForm):
         self.fields["first_name"].required = True
         self.fields["first_name"].widget.attrs = {
             "placeholder": "Nombre",
+            "class" : "retricted",
         }
+        self.fields['first_mame'].label = "Nombres"
         self.fields["last_name"].required = True
         self.fields["last_name"].widget.attrs = {
             "placeholder": "Apellido",
+            "class" : "retricted",
         }
+        self.fields['last_name'].label = "Apellidos"
 
     def create_subprofile(self, user, group_id, image):
         main_user = User.objects.get(pk=self.user_pk)
@@ -354,7 +358,7 @@ class EditUserForm(forms.ModelForm):
             "is_too_short": "El nombre de usuario debe tener al menos 8 caracteres.",
             "invalid": "La contraseña no coincide.",
         },
-        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class": ""}),
+        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class" : "retricted",}),
     )
     email = forms.EmailField(
         max_length=254,
@@ -453,11 +457,15 @@ class EditSubprofileForm(forms.ModelForm):
         self.fields["first_name"].required = True
         self.fields["first_name"].widget.attrs = {
             "placeholder": "Nombre",
+            "class" : "retricted",
         }
+        self.fields['first_name'].label = "Nombres"
         self.fields["last_name"].required = True
         self.fields["last_name"].widget.attrs = {
             "placeholder": "Apellido",
+            "class" : "retricted",
         }
+        self.fields['last_name'].label = "Apellidos"
 
     def clean(self):
         cleaned_data = super().clean()

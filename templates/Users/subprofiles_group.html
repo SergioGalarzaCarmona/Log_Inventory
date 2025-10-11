@@ -46,7 +46,7 @@
             <input type="checkbox" {{checked_group}} id="create-group">
             <form class="create-group" method="POST" action="{% url 'manage_subusers' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{group_form}}
+               {{group_form}} 
                 <input type="submit" value="Crear Grupo">
             </form>
             <form action="{% url 'delete' %}" method="POST" id="delete-form" hidden>{% csrf_token %}</form>
@@ -168,5 +168,7 @@
     <script src="{%static '/SCRIPTS/subusersgroupScript.js'%}"></script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
     <script src="{% static '/SCRIPTS/deleteScript.js' %}"></script>
+    <script src="{% static '/SCRIPTS/restrictedCaractersScript.js' %}"></script>
+
 </body>
 </html>
