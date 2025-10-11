@@ -22,7 +22,7 @@ class RegisterUser(UserCreationForm):
         max_length=30,
         label="Nombre de Usuario",
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class": "restricted"}),
+        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class" : "restricted",}),
     )
     email = forms.EmailField(
         max_length=254,
