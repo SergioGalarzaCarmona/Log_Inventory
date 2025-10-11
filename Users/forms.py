@@ -22,7 +22,7 @@ class RegisterUser(UserCreationForm):
         max_length=30,
         label="Nombre de Usuario",
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class": ""}),
+        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class" : "restricted",}),
     )
     email = forms.EmailField(
         max_length=254,
@@ -216,11 +216,15 @@ class RegisterSubuser(UserCreationForm):
         self.fields["first_name"].required = True
         self.fields["first_name"].widget.attrs = {
             "placeholder": "Nombre",
+            "class" : "restricted",
         }
+        self.fields['first_name'].label = "Nombres"
         self.fields["last_name"].required = True
         self.fields["last_name"].widget.attrs = {
             "placeholder": "Apellido",
+            "class" : "restricted",
         }
+        self.fields['last_name'].label = "Apellidos"
 
     def create_subprofile(self, user, group_id, image):
         main_user = User.objects.get(pk=self.user_pk)
@@ -354,7 +358,7 @@ class EditUserForm(forms.ModelForm):
             "is_too_short": "El nombre de usuario debe tener al menos 8 caracteres.",
             "invalid": "La contraseña no coincide.",
         },
-        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class": ""}),
+        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class" : "restricted",}),
     )
     email = forms.EmailField(
         max_length=254,
@@ -453,11 +457,15 @@ class EditSubprofileForm(forms.ModelForm):
         self.fields["first_name"].required = True
         self.fields["first_name"].widget.attrs = {
             "placeholder": "Nombre",
+            "class" : "restricted",
         }
+        self.fields['first_name'].label = "Nombres"
         self.fields["last_name"].required = True
         self.fields["last_name"].widget.attrs = {
             "placeholder": "Apellido",
+            "class" : "restricted",
         }
+        self.fields['last_name'].label = "Apellidos"
 
     def clean(self):
         cleaned_data = super().clean()
