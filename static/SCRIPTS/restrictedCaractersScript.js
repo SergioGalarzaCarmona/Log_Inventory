@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".restricted").forEach(input => {
-    input.addEventListener("input", e => {
-      const pattern = "/[a-zA-Z]/" 
-      const expression = new RegExp(pattern)
-      console.log(e.target.value)
+    input.addEventListener("keydown", e => {
+      const expression = /[a-zA-Z]/ 
       if (!expression.test(e.target.value)) {
-        console.log(e.target.value)
         e.preventDefault()
       }
     })
