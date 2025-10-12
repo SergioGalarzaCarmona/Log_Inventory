@@ -6,7 +6,7 @@
     -webkit-user-select: none; 
     -moz-user-select: none;
     -ms-user-select: none; 
-}
+} 
 
 body {
     --bg-color: #fff;
@@ -27,6 +27,7 @@ nav {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 10;
 }
 
 .home-link__container  a {
@@ -413,5 +414,11 @@ form > h2 {
 
     .container.active .log-in {
         transform: translateY(-100%);
+    }
+}
+
+@media (max-height: 800px) and (max-width: 768px) {
+    nav {
+        top: 5dvh;
     }
 }

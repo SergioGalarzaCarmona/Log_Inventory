@@ -399,6 +399,10 @@ form select {
         display: none;
     }
 
+    .filter-bar__filter-container > .filter-bar__name {
+        display: none;
+    }
+
     .history-container {
         padding: 10px;
         margin-top: 2dvh;
