@@ -21,10 +21,12 @@ jobs:
       - name: Deploy to Hetzner
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.HETZNER_USER }}@${{ secrets.HETZNER_HOST }} "
-          cd /opt/app &&
-          git pull &&
-          docker compose down &&
-          docker compose up -d --build &&
-          docker compose exec -T web python manage.py migrate &&
-          docker compose exec -T web python manage.py collectstatic --noinput
+            cd /root/Log_Inventory && \
+            git fetch origin main && \
+            git reset --hard origin/main && \
+            mv DockerFile dockerfile
+            docker compose down && \
+            docker compose up -d --build && \
+            docker compose exec -T web python manage.py migrate && \
+            docker compose exec -T web python manage.py collectstatic --noinput
           "
