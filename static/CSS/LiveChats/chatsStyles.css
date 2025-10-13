@@ -232,6 +232,11 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     .sidebar__form {
         display: none;
     }
+
+    .chat-container.container {
+      width: 92.5%;
+      margin: calc(calc(calc(100dvh - calc(2rem + 44.78px)) - 82.5dvh) / 2) 3.75%;
+    }
 }
 
 @media (min-width: 576px) {

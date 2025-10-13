@@ -506,4 +506,8 @@ dialog {
     .modal-content {
         width: 80%;
     }
+
+    .img-overlay {
+        display: block;
+    }
 }

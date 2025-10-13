@@ -699,6 +699,11 @@ input[type="checkbox"].delete-checkbox {
     .modal-content {
         width: 80%;
     }
+
+    .group-image .image-overlay {
+        opacity: 1;
+        background-color: transparent;
+    }
 }
 
 @media (max-height: 840px) and (max-width: 1024px) {

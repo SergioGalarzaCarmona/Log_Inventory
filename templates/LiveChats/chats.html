@@ -22,7 +22,7 @@
     <main> 
         <div class="filter-bar container"> 
             <div class="filter-bar__filter-container row">
-                <div class="filter-bar__select-container col-md-4 col-6">
+                <div class="filter-bar__select-container col-md-4 col-12">
                     <select id="chatSelect" class="filter-bar__select-chat">
                       <option value="" selected disabled>Seleccionar chat...</option>
                       {% if permissions == "Estudiante" %}
@@ -37,7 +37,7 @@
                       {% endfor %}
                     </select>
                 </div>
-                <div class="filter-bar__name col-md-3 col-6">
+                <div class="filter-bar__name col-md-3">
                     {% if receiver %}
                     <p class="text-center text-white">Chat: {{ receiver }}</p>
                     {% endif %}
@@ -124,11 +124,8 @@
         } 
     })
 }
-
-    
     </script>
     <script src="{%static '/SCRIPTS/sidebarScript.js'%}"></script>
-    <script src="{%static '/SCRIPTS/chatsScript.js'%}"></script>
-    
+    <script src="{%static '/SCRIPTS/chatsScript.js'%}"></script>   
 </body>
 </html>

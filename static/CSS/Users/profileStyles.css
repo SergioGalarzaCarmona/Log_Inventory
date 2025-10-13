@@ -73,7 +73,8 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     margin: 2.5px 0px;
 }
 
-a.subusers-link span.material-symbols-outlined {
+a.subusers-link > span.material-symbols-outlined {
+    display: block;
     position: absolute;
     top: calc(calc(2rem + 44.78px) + 10px);
     margin-left: 15px;
@@ -166,7 +167,7 @@ a.subusers-link span.material-symbols-outlined:hover {
 
 .info-container form {
     display: flex; 
-    align-items: center;
+    align-items: center; 
     justify-content: center;
     flex-direction: column;
     padding: 20px 30px;
@@ -506,5 +507,9 @@ dialog {
         bottom: 17.5%;
         height: 50%;
         border-radius: 0 0 20px 20px;
+    }
+
+    .img-overlay {
+        display: block;
     }
 }
