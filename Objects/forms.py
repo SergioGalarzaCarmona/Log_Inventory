@@ -25,7 +25,7 @@ class ObjectForm(forms.ModelForm):
     )
 
     description = forms.CharField(
-        label="Descripción", required=True, widget=forms.Textarea(attrs={})
+        label="Descripción", required=False, widget=forms.Textarea(attrs={})
     )
 
     group = forms.ModelChoiceField(

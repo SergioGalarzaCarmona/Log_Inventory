@@ -767,7 +767,7 @@ def manage_subusers_group(request):
                         "forms": forms,
                         "form_post": form_post,
                         "group": group,
-                        "image_form": SetImageForm(instance=group),
+                        "image_form": SetImageForm(),
                         "groups": query_subgroups,
                         "subuser_form": RegisterSubuser(user_pk=request.user.pk),
                         "group_form": RegisterSubprofileGroup(),

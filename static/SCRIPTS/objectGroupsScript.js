@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Manage dialog to confirm group deletion
 document.addEventListener("DOMContentLoaded", () => {
   const deleteButtons = document.querySelectorAll(".delete-button");
-  const modal = document.getElementById("deleteModal");
+  const modal = document.getElementById("groupDeleteModal");
   const cancelBtn = document.getElementById("cancelDelete");
   const confirmBtn = document.getElementById("confirmDelete");
 
@@ -166,6 +166,7 @@ if (label_group){
     e.preventDefault()
   } 
   else {
+    document.querySelector('main').scrollTop = 0
     create_object.checked = false;
   }
 });
@@ -177,6 +178,7 @@ if (label_object) {
     e.preventDefault()
   }
   else {
+    document.querySelector('main').scrollTop = 0
     create_group.checked = false;
   }
 });
@@ -189,10 +191,12 @@ document.addEventListener("DOMContentLoaded", () => {
       object_groups.classList.add("hidden");
       closeFormGroup.classList.add("hidden");
       closeFormObject.classList.remove("hidden");
+    
     } else if (create_group.checked) {
       object_groups.classList.add("hidden");
       closeFormObject.classList.add("hidden");
       closeFormGroup.classList.remove("hidden");
+     
     } else {
       object_groups.classList.remove("hidden");
       closeFormGroup.classList.add("hidden");

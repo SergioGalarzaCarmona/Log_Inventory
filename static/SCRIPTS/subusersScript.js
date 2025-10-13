@@ -50,6 +50,7 @@ label_group.addEventListener("click", e => {
     e.preventDefault()
   }
   else {
+    document.querySelector('main').scrollTop = 0
     create_subuser.checked = false;
   }
 });
@@ -58,6 +59,7 @@ label_subuser.addEventListener("click", e => {
     e.preventDefault()
   }
   else {
+    document.querySelector('main').scrollTop = 0
     create_group.checked = false;
   }
 });
