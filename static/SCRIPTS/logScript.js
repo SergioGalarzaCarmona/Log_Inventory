@@ -9,6 +9,7 @@ const objects_log = document.querySelector(".objectsLog");
 const object_groups_log = document.querySelector(".objectgroupsLog");
 
 if (label_users_log){
+  document.querySelector('main').scrollTop = 0
   label_users_log.addEventListener("click", () => {
   users_log.classList.remove("hidden");
   groups_log.classList.add("hidden");
@@ -18,6 +19,7 @@ if (label_users_log){
 }
 
 if (label_groups_log) {
+  document.querySelector('main').scrollTop = 0
   label_groups_log.addEventListener("click", () => {
   users_log.classList.add("hidden");
   groups_log.classList.remove("hidden");
@@ -28,6 +30,7 @@ if (label_groups_log) {
 
 
 label_objects_log.addEventListener("click", () => {
+  document.querySelector('main').scrollTop = 0
   if (users_log) {
     users_log.classList.add("hidden");
     groups_log.classList.add("hidden");
@@ -37,6 +40,7 @@ label_objects_log.addEventListener("click", () => {
 });
 
 label_objectgroups_log.addEventListener("click", () => {
+  document.querySelector('main').scrollTop = 0
   if (users_log) {
     users_log.classList.add("hidden");
     groups_log.classList.add("hidden");

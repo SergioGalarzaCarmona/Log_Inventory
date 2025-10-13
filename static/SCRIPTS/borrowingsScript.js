@@ -16,11 +16,13 @@ const editForm = document.getElementById('edit-borrowing-form')
 const borrowingsTable = document.querySelector(".borrowings-table__container");
 
 labelCreate.addEventListener('click', ()=>{
+  document.querySelector('main').scrollTop = 0
   editBorrowing.checked = false
 })
 
 labelsEdit.forEach((label)=>{
   label.addEventListener('click', ()=>{
+    document.querySelector('main').scrollTop = 0
     createBorrowing.checked = false
   })
 })

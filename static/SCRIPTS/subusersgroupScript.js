@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 document.addEventListener("DOMContentLoaded", () => {
   const deleteButtons = document.querySelectorAll(".delete-button");
-  const modal = document.getElementById("deleteModal");
+  const modal = document.getElementById("groupDeleteModal");
   const cancelBtn = document.getElementById("cancelDelete");
   const confirmBtn = document.getElementById("confirmDelete");
 
@@ -87,6 +87,7 @@ label_group.addEventListener("click", e => {
     e.preventDefault()
   }
   else {
+    document.querySelector('main').scrollTop = 0
     create_subuser.checked = false;
   }
 });
@@ -95,6 +96,7 @@ label_subuser.addEventListener("click",  e => {
     e.preventDefault()
   }
   else {
+    document.querySelector('main').scrollTop = 0
     create_group.checked = false;
   }
 });
@@ -208,4 +210,16 @@ document.querySelectorAll(".group-header").forEach((header) => {
         header.classList.toggle("active");
       }
     });
+});
+
+// This script handles the subprofiles group image upload and deletion functionality.(subprofiles group)
+document.querySelectorAll('input[type="file"]').forEach((input) => {
+  input.addEventListener("change", () => {
+    id = input.id;
+    instance_id = id.split("_")[2];
+    const button_submit = document.getElementById(`id_submit_${instance_id}`);
+    if (button_submit) {
+      button_submit.click();
+    }
+  });
 });

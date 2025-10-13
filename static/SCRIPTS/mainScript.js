@@ -121,6 +121,7 @@ if (label_group) {
     if (deleteCheckbox.checked) {
       e.preventDefault();
     } else {
+      document.querySelector('main').scrollTop = 0
       create_object.checked = false;
     }
   });
@@ -131,6 +132,7 @@ if (label_object) {
     if (deleteCheckbox.checked) {
       e.preventDefault();
     } else {
+      document.querySelector('main').scrollTop = 0
       create_group.checked = false;
     }
   });

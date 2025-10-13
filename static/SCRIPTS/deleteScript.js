@@ -4,6 +4,7 @@ const deleteSelector = document.querySelectorAll(".delete-checkbox");
 const deleteOptions = document.querySelector(".delete-options");
 const cancelDeleteButton = document.querySelector(".cancel-delete");
 const userCounter = document.querySelectorAll(".user-counter");
+const groupHeaders = document.querySelectorAll(".group-header");
 
 document.addEventListener("DOMContentLoaded", () => {
   if (deleteOptions) {
@@ -27,6 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".table-row").forEach((row) => {
           row.removeAttribute("onclick");
         });
+        groupHeaders.forEach((header) => {
+          const container = header.parentElement;
+          container.classList.remove("open");
+          header.classList.remove("active");
+        });
+
         toggleDeleteOptions();
       }
     });
