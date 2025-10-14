@@ -26,9 +26,7 @@ def manage_chats(request):
         logout(request)
         return redirect("authenticate", type="deactivate")
     if permissions != 'Estudiante': 
-        subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True)
-        if permissions == "Profesor":
-            subprofiles.exclude(pk=profile.id)
+        subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True).exclude(pk=profile.pk)
     else:
         subprofiles = Subprofile.objects.filter(profile=profile_admin, is_active = True, group__permissions__name = "Profesor")
     if request.method == "GET":

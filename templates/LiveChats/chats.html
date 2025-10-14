@@ -25,7 +25,7 @@
                 <div class="filter-bar__select-container col-md-4 col-12">
                     <select id="chatSelect" class="filter-bar__select-chat">
                       <option value="" selected disabled>Seleccionar chat...</option>
-                      {% if permissions == "Estudiante" %}
+                      {% if permissions != "admin" %}
                         <option value="{% url 'live_chat' profile_admin.user.id %}">
                             {{ profile_admin.user.username }} - Administrador
                         </option>
