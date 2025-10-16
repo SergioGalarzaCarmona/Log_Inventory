@@ -28,7 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["log-inventory.com","www.log-inventory.com"]
 
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://log-inventory.com",
+    "https://www.log-inventory.com",
+]
 # Application definition
 
 INSTALLED_APPS = [
