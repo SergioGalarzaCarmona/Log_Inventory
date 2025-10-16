@@ -90,7 +90,7 @@
     const chatId = "{{ chat.id }}";
     const receiver = "{{ receiver_username }}"
     if (chatId) {
-        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${chatId}/`);
+        const socket = new WebSocket(`wss://${window.location.host}/ws/chat/${chatId}/`);
 
         socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
