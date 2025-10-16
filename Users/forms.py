@@ -250,7 +250,7 @@ class RegisterSubuser(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        if Subprofile.objects.filter(user__email=email).exists():
+        if User.objects.filter(email = email).exists():
             error = ValidationError(
                 self.fields["email"].error_messages["invalid_email"],
                 code="invalid_email",
