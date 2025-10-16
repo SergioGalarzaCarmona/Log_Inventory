@@ -25,6 +25,7 @@ jobs:
             git fetch origin main && \
             git reset --hard origin/main && \
             mv DockerFile dockerfile
+            docker run --rm -it -v $(pwd)/certbot/www:/var/www/certbot -v $(pwd)/certbot/conf:/etc/letsencrypt certbot/certbot certonly --webroot -w /var/www/certbot -d log-inventory.com -d www.log-inventory.com
             docker compose down && \
             docker compose up -d --build && \
             docker compose exec -T web python manage.py migrate && \
