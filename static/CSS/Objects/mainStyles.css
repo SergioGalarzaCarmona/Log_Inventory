@@ -155,6 +155,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     border: #335a94 solid 2px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
+    overflow: hidden;
 }
 
 .object-card:hover {
