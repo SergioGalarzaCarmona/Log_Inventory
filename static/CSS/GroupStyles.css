@@ -569,6 +569,10 @@ input[type="checkbox"].delete-checkbox {
     align-items: center;
 }
 
+.save-button.profesores {
+    width: 100%;
+}
+
 .save-button {
   width: calc(100% - 10% - 1rem);
   background: var(--fb-color);

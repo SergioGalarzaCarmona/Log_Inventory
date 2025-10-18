@@ -111,8 +111,10 @@
                 </div>
                 {% if permissions != 'Estudiante' %}
                 <div class="button-container">
+                    {% if permissions == 'admin' %}
                     <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined" id="delete-button" title="Eliminar Objeto">
-                    <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
+                    {% endif %}
+                    <input type="submit" value="Guardar cambios" class="submit-button {% if permissions == 'Profesor' %}profesores{% endif %}" id="submit">
                 </div>
                 {% endif %}
             </form>

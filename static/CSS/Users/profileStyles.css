@@ -269,6 +269,10 @@ form > div {
     filter: drop-shadow(0 0 5px #e24);
 }
 
+#submit.profesores {
+    width: 100%;
+}
+
 #submit {
     width: 85%;
     background-color: var(--fb-color);

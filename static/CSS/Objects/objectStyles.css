@@ -247,6 +247,10 @@ form > div {
     outline: none;
 }
 
+#submit.profesores {
+    width: 100%;
+}
+
 .button-container {
     display: flex;
     justify-content: space-between;

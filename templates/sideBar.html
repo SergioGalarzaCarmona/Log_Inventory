@@ -14,7 +14,7 @@
                     <label for="create-object" class="sidebar__item-link create-object-label">
                         <span class="material-symbols-outlined">add</span>
                         <p>Crear Objeto</p>
-                    </label>
+                    </label> 
                 </div> 
                 <div class="sidebar__item">
                     <label for="create-group" class="sidebar__item-link create-group-label">
@@ -22,6 +22,7 @@
                         <p>Crear Grupo de Objetos</p>
                     </label>
                 </div>  
+                {% if permissions == 'admin'%}
                 <div class="sidebar__item">
                     <label for="delete" class="sidebar__item-link delete-object-label">
                         <span class="material-symbols-outlined">delete</span>
@@ -32,6 +33,7 @@
                         </div>
                     </label>
                 </div>
+                {% endif %}
             </li>
             {% endif %}
             {% elif path == "manage_subusers" or path == "manage_subusergroups"%}
@@ -48,7 +50,8 @@
                         <span class="material-symbols-outlined">group_add</span>
                         <p>Crear Grupo de Usuarios</p>
                     </label>
-                </div> 
+                </div>
+                {% if permissions == 'admin'%}
                 <div class="sidebar__item">
                     <label for="delete" class="sidebar__item-link delete-object-label">
                         <span class="material-symbols-outlined">delete</span>
@@ -59,6 +62,7 @@
                         </div>
                     </label>
                 </div>
+                {% endif %}
             </li> 
             {% elif path == "log"  %}
             {% if permissions == 'admin' or permissions == "Profesor"  %}

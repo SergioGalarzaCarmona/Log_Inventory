@@ -139,7 +139,14 @@ aside:has(input[type="checkbox"]:checked) ~ main {
     height: auto;
     padding: 1.15rem 2.3rem;
     row-gap: 2rem;
-} 
+}
+
+.no-objects {
+    font-size: 1.25rem;
+    color:rgb(70, 151, 231);
+    filter: contrast(.5);
+    font-weight: bold;
+}
 
 .object-card {
     width: 22.5dvw;
@@ -630,7 +637,7 @@ textarea {
         height: 17.5dvh;
     }
 
-    .object-card__quantity {
+    .object-card__quantity, .no-objects {
         display: none;
     }
 }

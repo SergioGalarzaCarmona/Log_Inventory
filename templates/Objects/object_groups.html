@@ -97,7 +97,9 @@
                 <input type="submit" value="Crear Grupo" id="create-group-button">
                 <a id="link-button" hidden href="{% url 'manage_subusers' %}"></a>
             </form>
-            <form action="{% url 'delete' %}" hidden id="delete-form" method="POST">{% csrf_token %}</form>
+            {% if permissions == 'admin' %}
+            <form action="{% url 'delete' %}" method="POST" id="delete-form" hidden>{% csrf_token %}</form>
+            {% endif %}
 			<!-- Modal to create group if it ain't selected.-->
             <div id="createGroupModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
@@ -183,8 +185,10 @@
                 </div>
                 <form class="group-buttons" method="POST">
                     {% csrf_token %}
+                    {% if permissions == 'admin' %}
                     <input type="submit" value="delete" class="delete-button material-symbols-outlined" id="delete-button-{{form.instance.id}}" form="delete_group_{{form.instance.id}}">
-                    <input type="submit" value="Guardar" class="save-button" form="{{form.instance.id}}_form">
+                    {% endif %}
+                    <input type="submit" value="Guardar" class="save-button {% if permissions == 'Profesor' %}profesores{% endif %}" form="{{form.instance.id}}_form">
                 </form>
                 <form method="POST">
                     {% csrf_token %}
