@@ -583,7 +583,7 @@ textarea {
 
 
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (min-height: 380px) {
     .sidebar__form, .filter-bar__filter-container > .filter-bar__logo-container {
         display: none;
     }
