@@ -1,50 +1,42 @@
-from .models import ObjectsGroup, Subprofile
-
-
-def create_transaction_description(object: object, type: str, **kwargs):
-    if type == "Object":
+def create_transaction_description(instance, model_type):
+    """Crea una descripción de los cambios entre el estado anterior y el actual."""
+    if model_type == "Object":
+        # Datos iniciales (de la BD)
         initial = {
-            "name": object["name"],
-            "description": object["description"],
-            "stock": object["stock"],
-            "group": ObjectsGroup.objects.get(id=object["group"]).name,
-            "in_charge": Subprofile.objects.get(id=object["in_charge"]).__str__(),
+            "nombre": instance._old_instance.name,
+            "descripción": instance._old_instance.description,
+            "stock": instance._old_instance.stock,
+            "grupo": instance._old_instance.group.name,
+            "encargado": str(instance._old_instance.in_charge),
         }
 
-        updated = kwargs.get("updated_data", {})
-
-        updated_dict = {
-            "name": updated.get("name", initial["name"]),
-            "description": updated.get("description", initial["description"]),
-            "stock": updated.get("stock", initial["stock"]),
-            "group": ObjectsGroup.objects.get(
-                id=updated.get("group_id", object["group"])
-            ).name,
-            "in_charge": Subprofile.objects.get(
-                id=updated.get("in_charge_id", object["in_charge"])
-            ).__str__(),
+        # Datos actualizados (nuevos)
+        updated = {
+            "nombre": instance.name,
+            "descripción": instance.description,
+            "stock": instance.stock,
+            "grupo": instance.group.name,
+            "encargado": str(instance.in_charge),
         }
-    elif type == "ObjectGroup":
+
+    elif model_type == "ObjectGroup":
         initial = {
-            "name": object["name"],
-            "description": object["description"],
-            "in_charge": Subprofile.objects.get(id=object["in_charge"]).__str__(),
+            "nombre": instance._old_instance.name,
+            "descripción": instance._old_instance.description,
+            "encargado": str(instance._old_instance.in_charge),
         }
 
-        updated = kwargs.get("updated_data", {})
-
-        updated_dict = {
-            "name": updated.get("name", initial["name"]),
-            "description": updated.get("description", initial["description"]),
-            "in_charge": Subprofile.objects.get(
-                id=updated.get("in_charge_id", object["in_charge"])
-            ).__str__(),
+        updated = {
+            "nombre": instance.name,
+            "descripción": instance.description,
+            "encargado": str(instance.in_charge),
         }
 
+    # Detectar los cambios
     changes = [
-        f"Cambio en  {key}, antes: {initial[key]}, después: {updated_dict[key]}"
+        f"Cambio en {key}, antes: {initial[key]}, después: {updated[key]}"
         for key in initial.keys()
-        if initial[key] != updated_dict[key]
+        if initial[key] != updated[key]
     ]
 
-    return ", \n".join(changes)
+    return ", \n".join(changes) if changes else None

@@ -105,16 +105,6 @@ def main(request):
             object = form.save(commit=False)
             object.user = profile.user if type == "profile" else profile.profile.user
             object.save()
-            Transaction.objects.create(
-                user=profile.user if type == "profile" else profile.profile.user,
-                type=TypeTransaction.objects.get(name="Create"),
-                object=object,
-                in_charge=request.user,
-                stock_before=0,
-                stock_after=object.stock,
-                description=f"Se creó el objeto {object.name} con stock inicial de {object.stock}.",
-            )
-
             messages.success(request, "Objeto creado correctamente.")
             return redirect("main")
         else:
@@ -150,13 +140,6 @@ def main(request):
             group = form.save(commit=False)
             group.user = profile.user if type == "profile" else profile.profile.user
             group.save()
-            GroupObjectsChanges.objects.create(
-                main_user=profile.user if type == "profile" else profile.profile.user,
-                group_changed=group,
-                user=request.user,
-                type_change=TypeChanges.objects.get(value="Create"),
-                description=f"Se creó el grupo de objetos {group.name}",
-            )
             messages.success(request, "Grupo de objetos creado correctamente.")
             return redirect("object_groups")
 
@@ -214,15 +197,6 @@ def manage_object(request, id):
         if request.POST.get("delete_object", False):
             object.is_active = False
             object.save()
-            Transaction.objects.create(
-                user=profile.user if type == "profile" else profile.profile.user,
-                type=TypeTransaction.objects.get(name="Delete"),
-                object=object,
-                in_charge=request.user,
-                stock_before=object.stock,
-                stock_after=0,
-                description=f"Se eliminó el objeto {object.name} que tenía un stock de {object.stock}.",
-            )
             messages.success(request, "El objeto se eliminó con éxito.")
             return redirect("main")
 
@@ -266,7 +240,7 @@ def manage_object(request, id):
                 in_charge=request.user,
                 stock_before=object.stock,
                 stock_after=object.stock,
-                description=f"Cambio en imagen, antes: {object_image} después: {image}.",
+                description=f"Cambio en imagen, antes: {object_image} después: Ninguna.",
             )
             messages.success(request, "La imagen se cambió con éxito.")
             return redirect("main")
@@ -309,23 +283,6 @@ def manage_object(request, id):
                 },
             )
         object = form.save()
-        if not "stock" in form.changed_data:
-            type_transaction = TypeTransaction.objects.get(name="Update")
-        if int(form.initial["stock"]) > object.stock:
-            type_transaction = TypeTransaction.objects.get(name="Substract")
-        else:
-            type_transaction = TypeTransaction.objects.get(name="Add")
-        Transaction.objects.create(
-            user=profile.user if type == "profile" else profile.profile.user,
-            type=type_transaction,
-            object=object,
-            in_charge=request.user,
-            stock_before=int(form.initial["stock"]),
-            stock_after=object.stock,
-            description=create_transaction_description(
-                object=form.initial, type="Object", updated_data=object.__dict__
-            ),
-        )
         messages.success(request, "Objeto editado correctamente.")
         return redirect("main")
 
@@ -389,13 +346,6 @@ def manage_object_groups(request):
                 return redirect("object_groups")
             group.is_active = False
             group.save()
-            GroupObjectsChanges.objects.create(
-                main_user=profile.user if type == "profile" else profile.profile.user,
-                group_changed=group,
-                user=request.user,
-                type_change=TypeChanges.objects.get(value="Delete"),
-                description=f"Se eliminó el grupo de objetos {group.name}.",
-            )
             messages.success(request, "El grupo de objetos se eliminó con éxito.")
             return redirect("object_groups")
         if image := request.FILES.get("image", False):
@@ -425,6 +375,7 @@ def manage_object_groups(request):
                     "No se pudo borrar la imagen ya que el grupo no tenía una imagen relacionada.",
                 )
                 return redirect("object_groups")
+            group_image_before = group.image.name.split("/")[1]
             group.image = "default_object_group.jpg"
             group.save()
             GroupObjectsChanges.objects.create(
@@ -484,15 +435,6 @@ def manage_object_groups(request):
                     },
                 )
             group = form.save()
-            GroupObjectsChanges.objects.create(
-                main_user=profile.user if type == "profile" else profile.profile.user,
-                group_changed=group,
-                user=request.user,
-                type_change=TypeChanges.objects.get(value="Update"),
-                description=create_transaction_description(
-                    object=form.initial, type="ObjectGroup", updated_data=group.__dict__
-                ),
-            )
             messages.success(request, "Grupo de objetos editado correctamente.")
             return redirect("object_groups")
 
@@ -688,6 +630,7 @@ def delete(request):
                     else:
                         object.is_active=False
                         object.save()
+                        saved = True
                 case "object_group":
                     url = "object_groups"
                     object_group = ObjectsGroup.objects.get(id=id)

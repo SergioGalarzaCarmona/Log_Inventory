@@ -54,7 +54,7 @@ class RegisterUser(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data["username"]
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username, is_active = True).exists():
             raise forms.ValidationError("El nombre de usuario ya está registrado.")
         if len(username) < 8:
             raise forms.ValidationError(
@@ -64,7 +64,7 @@ class RegisterUser(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email, is_active=True).exists():
             raise forms.ValidationError("El email ya está registrado.")
         return email
 
@@ -135,7 +135,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
         name = self.cleaned_data["name"]
         user = User.objects.get(pk=self.user_pk)
         profile = Profile.objects.get(user=user)
-        if SubprofilesGroup.objects.filter(profile=profile, name=name).exists():
+        if SubprofilesGroup.objects.filter(profile=profile, name=name, is_active=True).exists():
             error = ValidationError(
                 self.fields["name"].error_messages["unique"], code="unique"
             )
@@ -241,7 +241,7 @@ class RegisterSubuser(UserCreationForm):
 
         if first_name and last_name:
             exists = Subprofile.objects.filter(
-                user__first_name=first_name, user__last_name=last_name
+                user__first_name=first_name, user__last_name=last_name, is_active=True
             )
 
             if exists.exists():
@@ -250,7 +250,7 @@ class RegisterSubuser(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        if Subprofile.objects.filter(user__email=email).exists():
+        if User.objects.filter(email = email, is_active=True).exists():
             error = ValidationError(
                 self.fields["email"].error_messages["invalid_email"],
                 code="invalid_email",
@@ -389,7 +389,7 @@ class EditUserForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data["username"]
-        users = User.objects.filter(username=username).exclude(pk=self.user_pk)
+        users = User.objects.filter(username=username, is_active=True).exclude(pk=self.user_pk)
         if len(users) > 0:
             error = ValidationError(
                 self.fields["username"].error_messages["unique"], code="unique"
@@ -405,7 +405,7 @@ class EditUserForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        users = User.objects.filter(email=email).exclude(pk=self.user_pk)
+        users = User.objects.filter(email=email, is_active=True).exclude(pk=self.user_pk)
         if len(users) > 0:
             error = ValidationError(
                 self.fields["email"].error_messages["unique"], code="unique"
@@ -475,7 +475,7 @@ class EditSubprofileForm(forms.ModelForm):
 
         if first_name and last_name:
             exists = Subprofile.objects.filter(
-                user__first_name=first_name, user__last_name=last_name
+                user__first_name=first_name, user__last_name=last_name, is_active=True
             )
 
             # exclude current instance when editing
@@ -488,7 +488,7 @@ class EditSubprofileForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        users = User.objects.filter(email=email).exclude(pk=self.user_pk)
+        users = User.objects.filter(email=email, is_active=True).exclude(pk=self.user_pk)
         if len(users) > 0:
             error = ValidationError(
                 self.fields["email"].error_messages["unique"], code="unique"
@@ -537,7 +537,7 @@ class EditSubprofileGroupForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data["name"]
         profile = Profile.objects.get(user_id=self.user_pk)
-        subgroup = SubprofilesGroup.objects.filter(name=name, profile=profile).exclude(
+        subgroup = SubprofilesGroup.objects.filter(name=name, profile=profile, is_active=True).exclude(
             pk=self.instance.pk
         )
         if subgroup.exists():

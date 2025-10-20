@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from .models import UserSession
 from .functions import _setup_tables
 from asgiref.sync import sync_to_async
+import threading
 
 _tables_ready = False
 
@@ -48,3 +49,21 @@ class SetParameterizedTablesMiddleware:
         response = await self.get_response(request)
         _tables_ready = True
         return response
+
+
+_user = threading.local()
+
+class CurrentUserMiddleware:
+    """Guarda el usuario actual en un hilo local para ser usado en señales."""
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        _user.value = request.user if request.user.is_authenticated else None
+        response = self.get_response(request)
+        _user.value = None  # limpia después de la respuesta
+        return response
+
+def get_current_user():
+    """Permite obtener el usuario actual desde cualquier lugar."""
+    return getattr(_user, "value", None)
