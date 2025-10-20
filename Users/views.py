@@ -239,6 +239,7 @@ def profile(request, id):
                         "form": form,
                         "image_form": SetImageForm(),
                         "permissions": permissions,
+                        "type": "profile"
                     },
                 )
             # if the form is not valid, return the form with the errors
@@ -252,6 +253,7 @@ def profile(request, id):
                         "form_post": form_post,
                         "image_form": SetImageForm(),
                         "permissions": permissions,
+                        "type": "profile"
                     },
                 )
             # if the form is valid, update the user with the data of the form

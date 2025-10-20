@@ -49,11 +49,7 @@
             <div class="info-container">
                 <form method="POST">
                 {% csrf_token %}
-                <div class="message">
-                    <p>
-                        {{message}} 
-                    </p>
-                </div>
+                
                 <div>
                     <label for="id_username">Nombre de Usuario:</label>
                     {{form_post.errors.username}}
