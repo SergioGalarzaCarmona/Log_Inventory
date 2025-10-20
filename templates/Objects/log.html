@@ -74,7 +74,7 @@
             {% for log in log_users %}
             <div class="timeline-entry">
               <div class="entry-time">{{ log.date|time:"H:i" }}, {{log.date |date:"SHORT_DATE_FORMAT"}}</div>
-              <div class="entry-user data_changed">{{log.user_changed.username}}</div> <span class="entry-changer"> Cambio hecho por {{log.user}}</span>
+              <div class="entry-user data_changed">{{log.user_changed.first_name}} {{log.user_changed.last_name}}</div> <span class="entry-changer"> Cambio hecho por {{log.user}}</span>
               <div class="entry-description">
                 {% trans log.description %}
               </div>
