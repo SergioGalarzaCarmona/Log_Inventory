@@ -66,7 +66,7 @@ def after_saving_object_group(sender, instance, created, **kwargs):
     
     if created:
         description = (
-            f"Se creó el grupo de objetos {instance.name}."
+            f"Se creó el grupo de usuarios {instance.name}."
         )
         type_change = TypeChanges.objects.get(value="Create")
         
@@ -75,7 +75,7 @@ def after_saving_object_group(sender, instance, created, **kwargs):
         
         if not instance.is_active:
             
-            description = f"Se eliminó el grupo de objetos {instance.name}."
+            description = f"Se eliminó el grupo de usuarios {instance.name}."
             type_change = TypeChanges.objects.get(value="Delete")
 
         else:
