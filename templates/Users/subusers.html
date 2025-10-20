@@ -48,7 +48,9 @@
                 {{group_form}}
                 <input type="submit" value="Crear Grupo">
             </form>
-            <form action="{% url 'delete' %}" method="POST" hidden id="delete-form">{% csrf_token %}</form>
+            {% if permissions == 'admin' %}
+            <form action="{% url 'delete' %}" method="POST" id="delete-form" hidden>{% csrf_token %}</form>
+            {% endif %}
             <div id="createGroupModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
                     <h3>Deseas crear un grupo?</h3>

@@ -115,8 +115,10 @@
                     <input type="password" name="new_password2" placeholder="Confirmar Contraseña"  maxlength="30" minlength="8"  id="id_new_password2">
                 </div>
                 <div class="button-container">
+                    {% if permissions == 'admin' %}
                     <input type="submit" value="delete" form="delete-form" class="delete-buton material-symbols-outlined" id="delete-button">
-                    <input type="submit" value="Guardar cambios" class="submit-button" id="submit">
+                    {% endif %}
+                    <input type="submit" value="Guardar cambios" class="submit-button {% if permissions == 'Profesor' %}profesores{% endif %}" id="submit">
                 </div>
 
                 {% endif %}

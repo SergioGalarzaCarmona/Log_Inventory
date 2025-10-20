@@ -49,11 +49,11 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 .name {
-    max-width: clamp(100% - 42px, 100% - calc(28dvh - 5px), 100% - 210px);
-    height: 100%;
+    max-width: 60%;
+    white-space: nowrap;  
+    overflow: hidden; 
+    text-overflow: ellipsis;
     padding-left: 20px;
-    display: flex;
-    align-items: center;
     color: var(--bg-color);
     font-size: 1.8rem;
     letter-spacing: 2px;
@@ -74,6 +74,7 @@ aside:has(input[type="checkbox"]:checked) ~ main {
 }
 
 a.subusers-link span.material-symbols-outlined {
+    display: block; 
     position: absolute;
     top: calc(calc(2rem + 44.78px) + 10px);
     margin-left: 15px;
@@ -244,6 +245,10 @@ form > div {
     cursor: pointer;
     transition: box-shadow .3s;
     outline: none;
+}
+
+#submit.profesores {
+    width: 100%;
 }
 
 .button-container {
@@ -478,6 +483,10 @@ dialog {
 @media (max-width: 900px) {
     .sidebar__form, .filter-bar__filter-container > .filter-bar__logo-container {
         display: none;
+    }
+
+    .name {
+        max-width: calc(100% - 20px);
     }
 
     .profile-container {

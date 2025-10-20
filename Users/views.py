@@ -269,10 +269,12 @@ def manage_subusers(request):
     try:
         profile = Profile.objects.get(user=request.user)
         profile_admin = profile
+        type = 'profile'
         permissions = "admin"
     except:
         profile = Subprofile.objects.get(user=request.user)
         profile_admin = profile.profile
+        type = 'subprofile'
         permissions = profile.group.permissions.name
         # if the permissions of the subprofile is 'Estudiante', return a 403 error
         if permissions == "Estudiante":
@@ -289,7 +291,7 @@ def manage_subusers(request):
                 "group_form": RegisterSubprofileGroup(),
                 "subusers": subusers,
                 "profile": profile,
-                "type": "profile",
+                "type": type,
                 "permissions": permissions,
             },
         )
@@ -322,19 +324,20 @@ def manage_subusers(request):
                 group_id=request.POST["group"],
                 image=request.FILES.get("image", "default.jpg"),
             )
-            log = TypeChanges.objects.get(value="Create")
+
             UserChanges.objects.create(
-                main_user=profile_admin.user,
+                main_user=subuser.subprofile.profile.user,
                 user_changed=subuser,
                 user=request.user,
-                description=f'Se creó el usuario "{subuser.username}" perteneciente al grupo "{subuser.subprofile.group.name}"',
-                type_change=log,
-            )
+                description=f'Se creó el usuario "{subuser.first_name} {subuser.last_name}" perteneciente al grupo "{subuser.subprofile.group.name}"',
+                type_change=TypeChanges.objects.get(value="Create")
+                )
+            # SEND EMAIL
             current_site = get_current_site(request)
             subject = "Bienvenido a Log Inventory"
             link = f"http://{current_site.domain}"
             message = render_to_string(
-                "activation_email.html",
+                "notification_email.html",
                 {
                     "user": subuser,
                     'link' : link,
@@ -368,16 +371,8 @@ def manage_subusers(request):
                         "permissions": permissions,
                     },
                 )
-            group = form.create_subprofile_group(
+            form.create_subprofile_group(
                 image=request.FILES.get("image", "default_group.jpg")
-            )
-            log = TypeChanges.objects.get(value="Create")
-            GroupChanges.objects.create(
-                main_user=profile_admin.user,
-                group_changed=group,
-                user=request.user,
-                description=f'Se creó el grupo de usuarios "{group.name}" con nivel de permiso de {group.permissions.name}',
-                type_change=log,
             )
             messages.success(request, "El grupo se creó con éxito.")
             return redirect("subusers_group")
@@ -476,18 +471,12 @@ def subprofile(request, id):
                     "No se puede eliminar el usuario porque tiene objetos o grupos de objetos a cargo. Cambia el encargado de esos objetos e inténtalo de nuevo.",
                 )
                 return redirect("subprofile", id=id)
-            log = TypeChanges.objects.get(value="Delete")
-            UserChanges.objects.create(
-                main_user=subprofile.profile.user,
-                user_changed=subuser,
-                user=request.user,
-                description=f'Se eliminó el usuario "{subuser.username}" perteneciente al grupo "{subprofile.group.name}"',
-                type_change=log,
-            )
+            
             subprofile.is_active = False
             subprofile.save()
             subuser.is_active = False
             subuser.save()
+            
             messages.success(request, "El usuario se eliminó con éxito.")
             return redirect("manage_subusers")
 
@@ -499,7 +488,7 @@ def subprofile(request, id):
         if image:
             image_before = subprofile.image.name
             if image_before == "default.jpg":
-                image_before = ""
+                image_before = "Ninguna"
             subprofile.image = image
             subprofile.save()
             log = TypeChanges.objects.get(value="Update")
@@ -528,7 +517,7 @@ def subprofile(request, id):
                 main_user=subprofile.profile.user,
                 user_changed=subprofile.user,
                 user=request.user,
-                description=f'Cambio en imagen, antes: "{image_before}", despúes: ""',
+                description=f'Cambio en imagen, antes: "{image_before}", despúes: "Ninguna"',
                 type_change=log,
             )
             messages.success(request, "La imagen se borró con éxito.")
@@ -604,21 +593,6 @@ def subprofile(request, id):
                 Subprofile.objects.filter(user=user).update(group=data["group"])
             except:
                 pass
-            log = TypeChanges.objects.get(value="Update")
-            UserChanges.objects.create(
-                main_user=user.subprofile.profile.user,
-                user_changed=user,
-                user=request.user,
-                description=create_description(
-                    object=user,
-                    type="Subuser",
-                    first_name=data["first_name"],
-                    last_name=data["last_name"],
-                    email=data["email"],
-                    group=user.subprofile.group.name,
-                ),
-                type_change=log,
-            )
             messages.success(request, "Los datos se actualizaron con éxito.")
             if permissions == "admin" or permissions == "Profesor":
                 return redirect("manage_subusers")
@@ -673,45 +647,7 @@ def manage_subusers_group(request):
         image = request.FILES.get("image", False)
         delete_image = request.POST.get("delete_image", False)
         delete_group = request.POST.get("delete_group", False)
-        if image:
-            group = SubprofilesGroup.objects.get(pk=request.POST["id"])
-            image_before = group.image.name
-            if image_before == "default_group.jpg":
-                image_before = ""
-            group.image = image
-            group.save()
-            log = TypeChanges.objects.get(value="Update")
-            GroupChanges.objects.create(
-                main_user=group.profile.user,
-                group_changed=group,
-                user=request.user,
-                description=f"Change in image, before: {image_before}, after: {image}",
-                type_change=log,
-            )
-            messages.success(request, "La imagen se cambió con éxito.")
-            return redirect("subusers_group")
-        elif delete_image:
-            group = SubprofilesGroup.objects.get(pk=request.POST["id"])
-            image_before = group.image.name
-            if image_before == "default_group.jpg":
-                messages.error(
-                    request,
-                    f"No se puede borrar la imagen del grupo {group.name} porque no tiene image.",
-                )
-                return redirect("subusers_group")
-            group.image = "default_group.jpg"
-            group.save()
-            log = TypeChanges.objects.get(value="Update")
-            GroupChanges.objects.create(
-                main_user=group.profile.user,
-                group_changed=group,
-                user=request.user,
-                description=f'Change in image, before: "{image_before}", after: ""',
-                type_change=log,
-            )
-            messages.success(request, "La imagen se borró con éxito.")
-            return redirect("subusers_group")
-        elif delete_group:
+        if delete_group:
             group = SubprofilesGroup.objects.get(pk=request.POST["id"])
             subprofiles = Subprofile.objects.filter(group=group)
             if subprofiles.count() > 0:
@@ -733,18 +669,49 @@ def manage_subusers_group(request):
                         "group_form": RegisterSubprofileGroup(),
                     },
                 )
-            log = TypeChanges.objects.get(value="Delete")
-            GroupChanges.objects.create(
-                main_user=profile_admin.user,
-                group_changed=group,
-                user=request.user,
-                description=f"Delete group {group.name} with permissions {group.permissions.name}",
-                type_change=log,
-            )
             group.is_active = False
             group.save()
             messages.success(request, "El grupo se borró con éxito.")
             return redirect("subusers_group")
+        elif image:
+            group = SubprofilesGroup.objects.get(pk=request.POST["id"])
+            image_before = group.image.name
+            if image_before == "default_group.jpg":
+                image_before = "Ninguna"
+            group.image = image
+            group.save()
+            log = TypeChanges.objects.get(value="Update")
+            GroupChanges.objects.create(
+                main_user=group.profile.user,
+                group_changed=group,
+                user=request.user,
+                description=f"Cambio en imagen, antes: {image_before}, después: {image}",
+                type_change=log,
+            )
+            messages.success(request, "La imagen se cambió con éxito.")
+            return redirect("subusers_group")
+        elif delete_image:
+            group = SubprofilesGroup.objects.get(pk=request.POST["id"])
+            image_before = group.image.name
+            if image_before == "default_group.jpg":
+                messages.error(
+                    request,
+                    f"No se puede borrar la imagen del grupo {group.name} porque no tiene imagen.",
+                )
+                return redirect("subusers_group")
+            group.image = "default_group.jpg"
+            group.save()
+            log = TypeChanges.objects.get(value="Update")
+            GroupChanges.objects.create(
+                main_user=group.profile.user,
+                group_changed=group,
+                user=request.user,
+                description=f'Cambio en imagen, antes: "{image_before}", después: "Ninguna"',
+                type_change=log,
+            )
+            messages.success(request, "La imagen se borró con éxito.")
+            return redirect("subusers_group")
+        
         else:
             group = SubprofilesGroup.objects.get(pk=request.POST["id"])
             form = EditSubprofileGroupForm(instance=group, user_pk=user_pk)
@@ -791,18 +758,5 @@ def manage_subusers_group(request):
                     },
                 )
             form_post.save()
-            log = TypeChanges.objects.get(value="Update")
-            GroupChanges.objects.create(
-                main_user=profile_admin.user,
-                group_changed=group,
-                user=request.user,
-                description=create_description(
-                    object=group,
-                    type="SubuserGroup",
-                    name=request.POST["name"],
-                    permissions=request.POST["permissions"],
-                ),
-                type_change=log,
-            )
             messages.success(request, "Los datos se actualizaron con éxito.")
             return redirect("subusers_group")

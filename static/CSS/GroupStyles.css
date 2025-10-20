@@ -445,6 +445,10 @@ input[type="checkbox"].delete-checkbox {
   font-size: 1rem;
   font-weight: 600;
   flex: 1;
+  max-width: 50%;
+  white-space: nowrap;  
+  overflow: hidden; 
+  text-overflow: ellipsis;
 }
 
 .group-container .group-header:has(input[type="checkbox"].delete-checkbox:checked) {
@@ -563,6 +567,10 @@ input[type="checkbox"].delete-checkbox {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.save-button.profesores {
+    width: 100%;
 }
 
 .save-button {
@@ -703,6 +711,10 @@ input[type="checkbox"].delete-checkbox {
     .group-image .image-overlay {
         opacity: 1;
         background-color: transparent;
+    }
+
+    .group-header h3 {
+        max-width: none;
     }
 }
 
