@@ -63,23 +63,43 @@ def _setup_tables():
     TypeChanges.objects.exclude(value__in=REQUIRED).delete()
 
 
-def create_description(object: object, type: str, **kwargs):
-    if type == "Subuser":
+def create_description(instance, model_type):
+    if model_type == "Subuser":
         initial = {
-            "first_name": object.first_name,
-            "last_name": object.last_name,
-            "email": object.email,
-            "group": object.subprofile.group.name,
+            "nombres": instance._old_instance.first_name,
+            "apellidos": instance._old_instance.last_name,
+            "email": instance._old_instance.email,
+            "grupo": str(instance._old_instance.subprofile.group),
         }
-    if type == "SubuserGroup":
-        initial = {"name": object.name, "permissions": str(object.permissions.pk)}
-    return ", \n".join(
-        [
-            f"Cambio en {key}, antes: {initial[key]}, después: {kwargs[key]}"
-            for key in kwargs.keys()
-            if initial[key] != kwargs[key]
-        ]
-    )
+        
+        updated  = {
+            "nombres" : instance.first_name,
+            "apellidos" : instance.last_name,
+            "email" : instance.email,
+            "grupo" : str(instance.subprofile.group),
+        }
+    if model_type == "SubuserGroup":
+        initial = {
+            "nombre": instance._old_instance.name,
+            "descripción": instance._old_instance.description,
+            "permisos": str(instance._old_instance.permissions),
+        }
+
+        updated = {
+            "nombre": instance.name,
+            "descripción": instance.description,
+            "permisos": str(instance.permissions),
+        }
+        
+    
+    changes = [
+        f"Cambio en {key}, antes: {initial[key]}, después: {updated[key]}"
+        for key in initial.keys()
+        if initial[key] != updated[key]
+    ]
+    
+    return ", \n".join(changes) if changes else None
+
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from six import text_type

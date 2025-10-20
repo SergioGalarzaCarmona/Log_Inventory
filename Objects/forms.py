@@ -80,7 +80,7 @@ class ObjectForm(forms.ModelForm):
             )
             self.add_error("name", error)
         if (
-            Objects.objects.filter(name=name, user=self.user)
+            Objects.objects.filter(name=name, user=self.user, is_active=True)
             .exclude(id=self.instance.id)
             .exists()
         ):
@@ -179,7 +179,7 @@ class ObjectsGroupForm(forms.ModelForm):
                 code="invalid_lenght",
             )
             self.add_error("name", error)
-        if ObjectsGroup.objects.filter(name=name, user=self.user).exclude(
+        if ObjectsGroup.objects.filter(name=name, user=self.user, is_active=True).exclude(
             pk=self.instance.pk
         ):
             error = ValidationError(
