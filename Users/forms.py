@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django import forms
 from .models import Profile, Subprofile, SubprofilesGroup, PermissionsGroup
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 
 # Forms to register users and subusers
@@ -51,7 +52,7 @@ class RegisterUser(UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2"]
         help_texts = {k: "" for k in fields}
-
+        
     def clean_username(self):
         username = self.cleaned_data["username"]
         if User.objects.filter(username=username, is_active = True).exists():
@@ -356,9 +357,9 @@ class EditUserForm(forms.ModelForm):
         error_messages={
             "unique": "El nombre de usuario ya está registrado.",
             "is_too_short": "El nombre de usuario debe tener al menos 8 caracteres.",
-            "invalid": "La contraseña no coincide.",
         },
         widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class" : "restricted",}),
+        
     )
     email = forms.EmailField(
         max_length=254,
