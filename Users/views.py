@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView
 from Objects.models import Objects, ObjectsGroup
+from django.db.models import Q
 
 
 # Email imports
@@ -283,7 +284,10 @@ def manage_subusers(request):
             messages.warning(request, "No tienes permiso para ver esa página.")
             return redirect("authenticate", type="deactivate")
     # Get all subusers of the profile(main account)
-    subusers = Subprofile.objects.filter(profile=profile_admin, is_active=True)
+    if type == "profile":
+        subusers = Subprofile.objects.filter(profile=profile_admin, is_active=True)
+    else:
+        subusers = Subprofile.objects.filter(profile=profile_admin, is_active=True).exclude(group__permissions__name=permissions)
     if request.method == "GET":
         return render(
             request,

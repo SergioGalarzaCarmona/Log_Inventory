@@ -9,10 +9,18 @@ from django import forms
 from .models import Profile, Subprofile, SubprofilesGroup, PermissionsGroup
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.utils.html import format_html
+
+class RequiredLabelMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if field.required:
+                field.label = format_html(f"{field.label} <span style='color:red;'>*</span>")
 
 
 # Forms to register users and subusers
-class RegisterUser(UserCreationForm):
+class RegisterUser(RequiredLabelMixin,UserCreationForm):
 
     image = forms.ImageField(
         label="Imagen de Perfil",
@@ -75,7 +83,7 @@ class RegisterUser(UserCreationForm):
         Profile.objects.create(user=user, image=image)
 
 
-class RegisterSubprofileGroup(forms.ModelForm):
+class RegisterSubprofileGroup(RequiredLabelMixin,forms.ModelForm):
     name = forms.CharField(
         max_length=100,
         required=True,
@@ -149,7 +157,7 @@ class RegisterSubprofileGroup(forms.ModelForm):
         return name
 
 
-class RegisterSubuser(UserCreationForm):
+class RegisterSubuser(RequiredLabelMixin,UserCreationForm):
 
     group = forms.ModelChoiceField(
         queryset=None,
@@ -207,13 +215,16 @@ class RegisterSubuser(UserCreationForm):
         super().__init__(*args, **kwargs)
         if user_pk:
             user = User.objects.get(pk=user_pk)
-            try:
+            if hasattr(user, 'profile'):
                 profile = Profile.objects.get(user=user)
-            except Profile.DoesNotExist:
-                profile = None
-            self.fields["group"].queryset = SubprofilesGroup.objects.filter(
+                self.fields["group"].queryset = SubprofilesGroup.objects.filter(
                 profile=profile, is_active=True
             )
+            else:
+                profile = Profile.objects.get(user=user.subprofile.profile.user)
+                self.fields["group"].queryset = SubprofilesGroup.objects.filter(
+                profile=profile, is_active=True
+            ).exclude(permissions__name = "Profesor")
         self.fields["first_name"].required = True
         self.fields["first_name"].widget.attrs = {
             "placeholder": "Nombre",
@@ -282,7 +293,7 @@ class RegisterSubuser(UserCreationForm):
 
 
 # Form to login
-class LoginUser(AuthenticationForm):
+class LoginUser(RequiredLabelMixin,AuthenticationForm):
     username = forms.CharField(
         max_length=30,
         label="Nombre de Usuario",
@@ -308,7 +319,7 @@ class LoginUser(AuthenticationForm):
 
 
 # Forms to reset and set password
-class PasswordReset(PasswordResetForm):
+class PasswordReset(RequiredLabelMixin,PasswordResetForm):
     email = forms.EmailField(
         max_length=254,
         label="Correo Electrónico",
@@ -328,7 +339,7 @@ class PasswordReset(PasswordResetForm):
         return email
 
 
-class SetPassword(SetPasswordForm):
+class SetPassword(RequiredLabelMixin,SetPasswordForm):
     new_password1 = forms.CharField(
         max_length=30,
         label="Nueva contraseña",
@@ -349,7 +360,7 @@ class SetPassword(SetPasswordForm):
 
 
 # Forms to edit the user's or subuser's profile
-class EditUserForm(forms.ModelForm):
+class EditUserForm(RequiredLabelMixin,forms.ModelForm):
     username = forms.CharField(
         max_length=30,
         label="Nombre de Usuario",
@@ -425,7 +436,7 @@ class EditUserForm(forms.ModelForm):
         return password
 
 
-class EditSubprofileForm(forms.ModelForm):
+class EditSubprofileForm(RequiredLabelMixin,forms.ModelForm):
     email = forms.EmailField(
         max_length=254,
         label="Correo Electrónico",
@@ -498,7 +509,7 @@ class EditSubprofileForm(forms.ModelForm):
         return email
 
 
-class EditSubprofileGroupForm(forms.ModelForm):
+class EditSubprofileGroupForm(RequiredLabelMixin,forms.ModelForm):
     name = forms.CharField(
         max_length=24,
         required=True,
@@ -563,7 +574,7 @@ class EditSubprofileGroupForm(forms.ModelForm):
         fields = ["name", "permissions", "description"]
 
 
-class SetImageForm(forms.Form):
+class SetImageForm(RequiredLabelMixin,forms.Form):
     image = forms.ImageField(
         label="Imagen de Perfil",
         required=True,
