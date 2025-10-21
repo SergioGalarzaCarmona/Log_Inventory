@@ -2,10 +2,10 @@ from django import forms
 from .models import Borrowings
 from Objects.models import Objects
 from Users.models import Subprofile
-from django.core.exceptions import ValidationError
+from Users.forms import RequiredLabelMixin
 
 
-class BorrowingForm(forms.ModelForm):
+class BorrowingForm(RequiredLabelMixin,forms.ModelForm):
     object = forms.ModelChoiceField(
         label="Objeto", queryset=None, widget=forms.Select()
     )

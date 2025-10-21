@@ -2,9 +2,9 @@ from django import forms
 from .models import Objects, ObjectsGroup
 from Users.models import Subprofile
 from django.core.exceptions import ValidationError
+from Users.forms import RequiredLabelMixin
 
-
-class ObjectForm(forms.ModelForm):
+class ObjectForm(RequiredLabelMixin,forms.ModelForm):
     name = forms.CharField(
         label="Nombre",
         required=True,
@@ -121,7 +121,7 @@ class ObjectForm(forms.ModelForm):
         return in_charge
 
 
-class ObjectsGroupForm(forms.ModelForm):
+class ObjectsGroupForm(RequiredLabelMixin,forms.ModelForm):
     name = forms.CharField(
         label="Nombre",
         required=True,
@@ -189,7 +189,7 @@ class ObjectsGroupForm(forms.ModelForm):
         return name
 
 
-class ExportLogForm(forms.Form):
+class ExportLogForm(RequiredLabelMixin,forms.Form):
     start_date = forms.DateField(
         label="Fecha de inicio",
         required=True,
