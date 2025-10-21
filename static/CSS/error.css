@@ -1,0 +1,18 @@
+@media screen and (min-device-width: 320px) and (max-device-width: 1000px) and (orientation: landscape) {
+    body {
+        min-height: 0;
+    }
+    
+    .sidebar {
+        position: absolute;
+        height: 100dvh;
+    }
+
+    .sidebar__nav {
+        height: fit-content;
+    }
+
+    .sidebar__profile {
+        top: 30dvh;
+    }
+}
