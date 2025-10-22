@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0!5sff-zy51at=)uvkz2iwi=lsna4b93vn-c=s$9n5vluccb=!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["log-inventory.com","www.log-inventory.com"]
 
