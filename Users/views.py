@@ -317,9 +317,7 @@ def manage_subusers(request):
                     },
                 )
             subuser = form.save(commit=False)
-            subuser.username = subuser.first_name.replace(
-                " ", ""
-            ) + subuser.last_name.replace(" ", "")
+            subuser.username = subuser.first_name + subuser.last_name
             subuser.save()
             form.create_subprofile(
                 user=subuser,

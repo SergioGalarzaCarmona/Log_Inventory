@@ -10,6 +10,10 @@ from .models import Profile, Subprofile, SubprofilesGroup, PermissionsGroup
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
+class CustomUsernameValidator(RegexValidator):
+    regex = r'^[^\d]+$'
+    message = "El nombre de usuario no puede contener números."
+    flags = 0
 
 # Forms to register users and subusers
 class RegisterUser(UserCreationForm):
@@ -53,6 +57,7 @@ class RegisterUser(UserCreationForm):
         fields = ["username", "email", "password1", "password2"]
         help_texts = {k: "" for k in fields}
         
+
     def clean_username(self):
         username = self.cleaned_data["username"]
         if User.objects.filter(username=username, is_active = True).exists():
