@@ -19,7 +19,7 @@ body, div, ul, li, a, h1, h2, p {
 body {
       height: 100dvh;
   width: 100%;
-  --bg-color: #fff;
+  --bg-color: #fff; 
   --dark-color: #222;
   --accent: #009688;
   --blue-dark: #002d5c;
@@ -78,6 +78,10 @@ nav {
 .navbar-toggler {
     border: none;
     padding: 0;
+}
+
+.navbar-collapse {
+  justify-content: space-evenly;
 }
 
 
@@ -165,7 +169,7 @@ h1 {
 /* ========== MAIN SECTIONS ========== */
 .preview-carousel {
   background-color: #f5f9fc;
-  padding: 4rem 0;
+  padding: 8rem 0;
 }
 
 .preview__title {
@@ -212,8 +216,7 @@ h1 {
   color: #616161;
   font-size: 0.95rem;
   line-height: 1.35;
-  text-align: left;
-  margin-top: auto;
+  text-align: justify;
 }
 
 .preview__item:hover {
@@ -233,24 +236,13 @@ h1 {
   border: none;
 }
 
-.carousel-indicators [data-bs-target] {
-  background-color: #cfd8dc;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.carousel-indicators .active {
-  background-color: var(--accent);
-}
-
 /* ======================================================
    SECCIÓN MANUAL
    ====================================================== */
 .manual {
   background-color: var(--blue-dark);
   color: #fff;
-  padding: 4rem 10%;
+  padding: 8rem 10%;
   text-align: center;
 }
 
@@ -286,7 +278,7 @@ h1 {
    ====================================================== */
 .about-section {
   background-color: #eef5f8;
-  padding: 4rem 0;
+  padding: 8rem 0;
 }
 
 .about-card {
@@ -299,34 +291,39 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   gap: 2rem;
 }
 
 .about-left {
-  flex: 1 1 560px;
+  max-width: 55%;
   min-width: 260px;
 }
 
 .about-right {
-  flex: 0 0 280px;
+  width: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
 }
 
-.about__title {
+.about__title, .contact__title {
   color: var(--blue-dark);
   font-weight: 700;
   font-size: 1.3rem;
   margin-bottom: 0.6rem;
 }
 
+.contact__title {
+  margin-top: 1rem;
+}
+
 .about__description {
   color: #555;
   line-height: 1.5;
   font-size: 0.98rem;
+  text-align: justify;
 }
 
 .about__description a {
@@ -337,13 +334,6 @@ h1 {
 
 .about__description a:hover {
   text-decoration: underline;
-}
-
-.contact-small-title {
-  color: var(--blue-dark);
-  font-weight: 700;
-  font-size: 1rem;
-  margin-top: 1rem;
 }
 
 .contact__info p {
@@ -371,7 +361,7 @@ h1 {
 }
 
 .logos__image {
-  height: 64px;
+  height: 20dvh;
   width: auto;
   object-fit: contain;
 }
@@ -454,8 +444,12 @@ footer .p-3 {
     padding: 1rem;
   }
 
+  .contact__title {
+    margin-top: 5dvh;
+  }
+
   .logos__image {
-    height: 56px;
+    height: 12.5dvh;
   }
 
   .manual__description {
