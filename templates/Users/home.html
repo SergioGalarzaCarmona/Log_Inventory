@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{%static '/CSS/Users/homeStyles.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <title>Log Inventory</title>
     <link rel="icon" href="{%static '/IMAGES/LogoMini.webp' %}" type="image/webp">
     <meta name="description" content="Home software de inventario Log Inventory">
@@ -18,7 +19,7 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid p-0">
+            <div class="container-fluid p-0"> 
                 <div class="navbar-brand">
                     <img src="{%static '/IMAGES/logo_transparente_blanco.webp'%}" alt="Logo" class="navbar-brand__logo">
                 </div>
@@ -27,9 +28,6 @@
                 </button>
                 <div class="collapse navbar-collapse navbar__nav" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item"> 
-                            <a class="nav-link text-white" href="#about">Sobre Nosotros</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="#services">Servicio</a>
                         </li>
@@ -37,7 +35,7 @@
                             <a class="nav-link active text-white" aria-current="page" href="#manual">Manual</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#contact">Contacto</a>
+                            <a class="nav-link text-white" href="#about">Sobre Nosotros</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url 'authenticate' type='deactivate' %}">Iniciar Sesión</a>
@@ -45,7 +43,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav> 
         <section class="hero">
             <h1 class="hero__title">¡Gestiona tu inventario!</h1>
             <p class="hero__description">Log Inventory es un software de inventario online gratuito, desarrollado con un enfoque accesible para instituciones educativas, ¡únetenos y disfruta de nuestras herramientas!</p>
@@ -55,82 +53,122 @@
         </section>
     </header>
     <main>
-        <section class="about" id="about">
-            <h2 class="about__title">Sobre nosotros</h2>
-            <p class="about__description">
-                El equipo de Log Inventory está conformado por estudiantes de <a href="https://iegabo.edu.co/" target="_blank">La I.E Gabo</a> y aprendices del <a href="https://www.sena.edu.co/es-co/Paginas/default.aspx" target="_blank">SENA</a>, hemos desarrollado este proyecto por iniciativa propia con el objetivo de facilitar la gestión de inventarios en instituciones educativas sin la posibilidad de acceder a un software de esta clase, nuestro software es gratuito y de código abierto.
-                A pesar de nuestra inexperiencia, hemos dado lo mejor de nosotros a Log Inventory, esperamos ayudar a muchas personas e instituciones. Si desean aportar de alguna manera al proyecto por favor contáctenos; por otro lado esperamos que Log Inventory sea fuente de inspiración para los que incursionen en el mundo de la programación y los que desean cambiar la realidad de su comunidad.
-            </p>
-        </section>
-        <section class="preview" id="services">
-            <h2 class="preview__title">Nuestros Servicios</h2>
-            <div class="preview__grid">
-              <!-- Vista General -->
-              <div class="preview__item">
-                  <img src="{%static '/IMAGES/dashboard.webp'%}" alt="Vista General Log Inventory">
-                  <h3>Vista General</h3>
-                  <p>Accede a todas las herramientas de gestión de manera rápida e intuitiva.</p>
-              </div>
-              
-               <!-- Gestión de Objetos -->
-              <div class="preview__item">
-                  <img src="{%static '/IMAGES/objetos.webp'%}" alt="Gestión de objetos en Log Inventory">
-                  <h3>Gestión de Objetos</h3>
-                  <p>Administra los recursos físicos de la institución, con control de disponibilidad, stock, grupos asignados, responsables, modificaciones y más.</p>
-              </div>
-              
-              <!-- Gestión de Usuarios -->
-              <div class="preview__item">
-                  <img src="{%static '/IMAGES/usuarios.webp'%}" alt="Gestión de usuarios en Log Inventory">
-                  <h3>Gestión de Usuarios</h3>
-                  <p>Crea y organiza usuarios dentro de grupos, con roles definidos y acceso limitado según sus funciones.</p>
-              </div>
-            
-              <!-- Historial -->
-              <div class="preview__item">
-                  <img src="{%static '/IMAGES/historial.webp'%}" alt="Historial en Log Inventory">
-                  <h3>Historial de Objetos</h3>
-                  <p>Consulta todos los movimientos de stock, préstamos, creación, modificación, y eliminación de elementos registrados en la plataforma, con fechas y responsables.</p>
-              </div>
- 
-               <!-- Gestión de Prestamos -->
-              <div class="preview__item">
-                  <img src="{%static '/IMAGES/prestamos.webp'%}" alt="Gestión de prestamos en Log Inventory">
-                  <h3>Gestión de Prestamos</h3>
-                  <p>Administra los préstamos de recursos físicos de la institución, con control de disponibilidad, fechas y usuarios responsables.</p>
-              </div>
+        <!-- ===== PREVIEWS COMO CARRUSEL (3 cards por slide) ===== -->
+<section class="preview-carousel" id="services">
+  <div class="container">
+    <h2 class="preview__title">Nuestros Servicios</h2>
 
-              <!-- Gestión de Cuenta -->
-              <div class="preview__item">
-                  <img src="{%static '/IMAGES/cuenta.webp'%}" alt="Gestión de cuenta en Log Inventory">
-                  <h3>Gestión de Cuenta</h3>
-                  <p>Edita fácilmente tu información de usuario y mantén tu cuenta actualizada de manera segura.</p>
-              </div>
+    <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        <!-- SLIDE 1: items 1..3 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center gap-4 flex-wrap">
+            <!-- item 1 -->
+            <div class="preview__item">
+              <span class="material-symbols-outlined">visibility</span>
+              <h3>Vista General</h3>
+              <p>Accede a todas las herramientas de gestión de manera rápida e intuitiva.</p>
+            </div>
+
+            <!-- item 2 -->
+            <div class="preview__item">
+              <span class="material-symbols-outlined">view_object_track</span>
+              <h3>Gestión de Objetos</h3>
+              <p>Administra los recursos físicos de la institución, con control de disponibilidad, stock, grupos asignados, responsables, modificaciones y más.</p>
+            </div>
+
+            <!-- item 3 -->
+            <div class="preview__item">
+              <span class="material-symbols-outlined">manage_accounts</span>
+              <h3>Gestión de Usuarios</h3>
+              <p>Crea y organiza usuarios dentro de grupos, con roles definidos y acceso limitado según sus funciones.</p>
+            </div>
           </div>
-        </section>
-        <div class="additional-info">
-            <section class="manual" id="manual">
-                <h2 class="manual__title">Manual de Usuario</h2>
-                <p class="manual__description">Descarga nuestro manual de usuario para obtener una guía completa sobre cómo utilizar todas las funcionalidades de Log Inventory.</p>
-                <a href="{%static '/DOCUMENTS/Manual_de_usuario_Log_Inventory.pdf'%}" download class="manual__button">Descargar Manual</a>
-            </section>
-            <section class="contact" id="contact">
-                <h2 class="contact__title">Contacto</h2>
-                <div class="contact__info">
-                    <p>Correo Electrónico: <a href="mailto:log.inventory2406@gmail.com">log.inventory2406@gmail.com</a></p>
-                    <p>Teléfono: +57 3128107264</p>
-                </div>
-            </section>
         </div>
-        <section class="logos">
-            <img src="{%static '/IMAGES/Gabo.webp'%}" alt="Logo I.E Gabo" class="logos__image">
-            <img src="{%static '/IMAGES/sena.webp'%}" alt="Logo SENA" class="logos__image">
+
+        <!-- SLIDE 2: items 4..6 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center gap-4 flex-wrap">
+            <!-- item 4 -->
+            <div class="preview__item">
+              <span class="material-symbols-outlined">event_note</span>
+              <h3>Historial de Objetos</h3>
+              <p>Consulta todos los movimientos de stock, préstamos, creación, modificación, y eliminación de elementos registrados en la plataforma.</p>
+            </div>
+
+            <!-- item 5 -->
+            <div class="preview__item">
+              <span class="material-symbols-outlined">partner_exchange</span>
+              <h3>Gestión de Prestamos</h3>
+              <p>Administra los préstamos de recursos físicos de la institución, con control de disponibilidad, fechas y usuarios responsables.</p>
+            </div>
+
+            <!-- item 6 -->
+            <div class="preview__item">
+              <span class="material-symbols-outlined">account_circle</span>
+              <h3>Gestión de Cuenta</h3>
+              <p>Edita fácilmente tu información de usuario y mantén tu cuenta actualizada de manera segura.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controles -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+
+    </div>
+  </div>
+</section>
+
+        <section class="manual" id="manual">
+            <h2 class="manual__title">¿Cómo se usa esta página?</h2>
+            <p class="manual__description">Descarga nuestro manual de usuario para obtener una guía completa sobre cómo utilizar todas las funcionalidades de Log Inventory.</p>
+            <a href="{%static '/DOCUMENTS/Manual_de_usuario_Log_Inventory.pdf'%}" download class="manual__button">Descargar Manual</a>
         </section>
+        <!-- ===== SOBRE NOSOTROS (tarjeta grande con logos y contacto) ===== -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-card d-flex align-items-center gap-4 p-4">
+      <!-- izquierda: texto -->
+      <div class="about-left">
+        <h2 class="about__title">Sobre Nosotros</h2>
+        <p class="about__description">
+          El equipo de Log Inventory está conformado por estudiantes de <a href="https://iegabo.edu.co/" target="_blank" rel="noopener">La I.E Gabo</a> y aprendices del <a href="https://www.sena.edu.co/es-co/Paginas/default.aspx" target="_blank" rel="noopener">SENA</a>. Hemos desarrollado este proyecto por iniciativa propia con el objetivo de facilitar la gestión de inventarios en instituciones educativas sin la posibilidad de acceder a un software de esta clase. Nuestro software es gratuito y de código abierto.
+        </p>
+
+        <h2 class="contact__title">Contactanos</h2>
+        <div class="contact__info small">
+          <p>Correo Electrónico: <a href="mailto:log.inventory2406@gmail.com">log.inventory2406@gmail.com</a></p>
+          <p>Teléfono: +57 312 8107264</p>
+        </div>
+      </div>
+
+      <!-- derecha: logos -->
+      <div class="about-right d-flex flex-column align-items-center gap-3">
+        <div class="logos-inline d-flex align-items-center gap-3 p-2">
+          <img src="{%static '/IMAGES/Gabo.webp'%}" alt="Logo I.E Gabo" class="logos__image">
+          <img src="{%static '/IMAGES/SENA.webp'%}" alt="Logo SENA" class="logos__image">
+        </div>
+        <!-- espacio para otro contenido o notas si hace falta -->
+      </div>
+    </div>
+  </div>
+</section>
+
     </main>
     <footer class="text-center text-lg-start">
         <div class="container d-flex justify-content-center py-5">
             <button type="button" class="btn btn-primary btn-lg btn-floating mx-2">
-                <i class="bi bi-facebook"></i>
+                <i class="bi bi-whatsapp"></i>
             </button>
             <button onclick="window.open('https://www.instagram.com/loginventoryoficial/', '_blank')" type="button" class="btn btn-primary btn-lg btn-floating mx-2">
                 <i class="bi bi-instagram"></i>
