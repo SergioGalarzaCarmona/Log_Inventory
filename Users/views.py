@@ -26,7 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView
 from Objects.models import Objects, ObjectsGroup
-from django.db.models import Q
+from Borrowings.models import Borrowings
 
 
 # Email imports
@@ -69,7 +69,7 @@ def Logout(request):
 def logIn(request):
     # authenticate user
     try:
-        user = User.objects.get(email=request.POST["email"])
+        user = User.objects.get(email=request.POST["email"], is_active=True)
     except ObjectDoesNotExist:
         messages.error(request, "Usuario o contraseña incorrectos")
         return render(request, "Users/authenticate.html", {"form": RegisterUser()})
@@ -321,7 +321,7 @@ def manage_subusers(request):
                     },
                 )
             subuser = form.save(commit=False)
-            subuser.username = subuser.first_name + subuser.last_name
+            subuser.username = subuser.first_name + " " + subuser.last_name
             subuser.save()
             form.create_subprofile(
                 user=subuser,
@@ -468,7 +468,8 @@ def subprofile(request, id):
                 Objects.objects.filter(in_charge=subprofile, is_active=True).exists()
                 or ObjectsGroup.objects.filter(
                     in_charge=subprofile, is_active=True
-                ).exists
+                ).exists()
+                or Borrowings.objects.filter(in_charge=subprofile, completed=False).exists()
             ):
                 messages.error(
                     request,
@@ -476,12 +477,13 @@ def subprofile(request, id):
                 )
                 return redirect("subprofile", id=id)
             
-            subprofile.is_active = False
-            subprofile.save()
-            subuser.is_active = False
-            subuser.save()
-            
-            messages.success(request, "El usuario se eliminó con éxito.")
+            if subprofile.is_active:
+                subprofile.is_active = False
+                subprofile.save()
+                subuser.is_active = False
+                subuser.save()
+
+                messages.success(request, "El usuario se eliminó con éxito.")
             return redirect("manage_subusers")
 
         image = request.FILES.get("image", False)
@@ -673,9 +675,11 @@ def manage_subusers_group(request):
                         "group_form": RegisterSubprofileGroup(),
                     },
                 )
-            group.is_active = False
-            group.save()
-            messages.success(request, "El grupo se borró con éxito.")
+            
+            if group.is_active:
+                group.is_active = False
+                group.save()
+                messages.success(request, "El grupo se borró con éxito.")
             return redirect("subusers_group")
         elif image:
             group = SubprofilesGroup.objects.get(pk=request.POST["id"])

@@ -11,20 +11,25 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.html import format_html
 
+
 class RequiredLabelMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
             if field.required:
-                field.label = format_html(f"{field.label} <span style='color:red;'>*</span>")
+                field.label = format_html(
+                    f"{field.label} <span style='color:red;'>*</span>"
+                )
+
 
 class CustomUsernameValidator(RegexValidator):
-    regex = r'^[^\d]+$'
+    regex = r"^[^\d]+$"
     message = "El nombre de usuario no puede contener números."
     flags = 0
 
+
 # Forms to register users and subusers
-class RegisterUser(RequiredLabelMixin,UserCreationForm):
+class RegisterUser(RequiredLabelMixin, UserCreationForm):
 
     image = forms.ImageField(
         label="Imagen de Perfil",
@@ -35,7 +40,12 @@ class RegisterUser(RequiredLabelMixin,UserCreationForm):
         max_length=30,
         label="Nombre de Usuario",
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class" : "restricted",}),
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Nombre de Usuario",
+                "class": "restricted",
+            }
+        ),
     )
     email = forms.EmailField(
         max_length=254,
@@ -64,11 +74,10 @@ class RegisterUser(RequiredLabelMixin,UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2"]
         help_texts = {k: "" for k in fields}
-        
 
     def clean_username(self):
         username = self.cleaned_data["username"]
-        if User.objects.filter(username=username, is_active = True).exists():
+        if User.objects.filter(username=username, is_active=True).exists():
             raise forms.ValidationError("El nombre de usuario ya está registrado.")
         if len(username) < 8:
             raise forms.ValidationError(
@@ -88,7 +97,7 @@ class RegisterUser(RequiredLabelMixin,UserCreationForm):
         Profile.objects.create(user=user, image=image)
 
 
-class RegisterSubprofileGroup(RequiredLabelMixin,forms.ModelForm):
+class RegisterSubprofileGroup(RequiredLabelMixin, forms.ModelForm):
     name = forms.CharField(
         max_length=100,
         required=True,
@@ -149,7 +158,9 @@ class RegisterSubprofileGroup(RequiredLabelMixin,forms.ModelForm):
         name = self.cleaned_data["name"]
         user = User.objects.get(pk=self.user_pk)
         profile = Profile.objects.get(user=user)
-        if SubprofilesGroup.objects.filter(profile=profile, name=name, is_active=True).exists():
+        if SubprofilesGroup.objects.filter(
+            profile=profile, name=name, is_active=True
+        ).exists():
             error = ValidationError(
                 self.fields["name"].error_messages["unique"], code="unique"
             )
@@ -162,7 +173,29 @@ class RegisterSubprofileGroup(RequiredLabelMixin,forms.ModelForm):
         return name
 
 
-class RegisterSubuser(RequiredLabelMixin,UserCreationForm):
+class RegisterSubuser(RequiredLabelMixin, UserCreationForm):
+
+    first_name = forms.CharField(
+        label="Nombres",
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Nombres",
+                "class": "restricted",
+            }
+        ),
+    )
+
+    last_name = forms.CharField(
+        label="Apellidos",
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Apellido",
+                "class": "restricted",
+            }
+        ),
+    )
 
     group = forms.ModelChoiceField(
         queryset=None,
@@ -177,9 +210,7 @@ class RegisterSubuser(RequiredLabelMixin,UserCreationForm):
         widget=forms.EmailInput(
             attrs={"placeholder": "Correo Electrónico", "class": ""}
         ),
-        error_messages={
-            'invalid_email' : 'El email ya está registrado.'
-        }
+        error_messages={"invalid_email": "El email ya está registrado."},
     )
 
     password1 = forms.CharField(
@@ -220,28 +251,16 @@ class RegisterSubuser(RequiredLabelMixin,UserCreationForm):
         super().__init__(*args, **kwargs)
         if user_pk:
             user = User.objects.get(pk=user_pk)
-            if hasattr(user, 'profile'):
+            if hasattr(user, "profile"):
                 profile = Profile.objects.get(user=user)
                 self.fields["group"].queryset = SubprofilesGroup.objects.filter(
-                profile=profile, is_active=True
-            )
+                    profile=profile, is_active=True
+                )
             else:
                 profile = Profile.objects.get(user=user.subprofile.profile.user)
                 self.fields["group"].queryset = SubprofilesGroup.objects.filter(
-                profile=profile, is_active=True
-            ).exclude(permissions__name = "Profesor")
-        self.fields["first_name"].required = True
-        self.fields["first_name"].widget.attrs = {
-            "placeholder": "Nombre",
-            "class" : "restricted",
-        }
-        self.fields['first_name'].label = "Nombres"
-        self.fields["last_name"].required = True
-        self.fields["last_name"].widget.attrs = {
-            "placeholder": "Apellido",
-            "class" : "restricted",
-        }
-        self.fields['last_name'].label = "Apellidos"
+                    profile=profile, is_active=True
+                ).exclude(permissions__name="Profesor")
 
     def create_subprofile(self, user, group_id, image):
         main_user = User.objects.get(pk=self.user_pk)
@@ -262,12 +281,14 @@ class RegisterSubuser(RequiredLabelMixin,UserCreationForm):
             )
 
             if exists.exists():
-                self.add_error("first_name","Este nombre (nombre y apellido) ya está en uso.")
+                self.add_error(
+                    "first_name", "Este nombre (nombre y apellido) ya está en uso."
+                )
         return cleaned_data
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        if User.objects.filter(email = email, is_active=True).exists():
+        if User.objects.filter(email=email, is_active=True).exists():
             error = ValidationError(
                 self.fields["email"].error_messages["invalid_email"],
                 code="invalid_email",
@@ -298,7 +319,7 @@ class RegisterSubuser(RequiredLabelMixin,UserCreationForm):
 
 
 # Form to login
-class LoginUser(RequiredLabelMixin,AuthenticationForm):
+class LoginUser(RequiredLabelMixin, AuthenticationForm):
     username = forms.CharField(
         max_length=30,
         label="Nombre de Usuario",
@@ -324,7 +345,7 @@ class LoginUser(RequiredLabelMixin,AuthenticationForm):
 
 
 # Forms to reset and set password
-class PasswordReset(RequiredLabelMixin,PasswordResetForm):
+class PasswordReset(RequiredLabelMixin, PasswordResetForm):
     email = forms.EmailField(
         max_length=254,
         label="Correo Electrónico",
@@ -344,7 +365,7 @@ class PasswordReset(RequiredLabelMixin,PasswordResetForm):
         return email
 
 
-class SetPassword(RequiredLabelMixin,SetPasswordForm):
+class SetPassword(RequiredLabelMixin, SetPasswordForm):
     new_password1 = forms.CharField(
         max_length=30,
         label="Nueva contraseña",
@@ -365,7 +386,7 @@ class SetPassword(RequiredLabelMixin,SetPasswordForm):
 
 
 # Forms to edit the user's or subuser's profile
-class EditUserForm(RequiredLabelMixin,forms.ModelForm):
+class EditUserForm(RequiredLabelMixin, forms.ModelForm):
     username = forms.CharField(
         max_length=30,
         label="Nombre de Usuario",
@@ -374,8 +395,12 @@ class EditUserForm(RequiredLabelMixin,forms.ModelForm):
             "unique": "El nombre de usuario ya está registrado.",
             "is_too_short": "El nombre de usuario debe tener al menos 8 caracteres.",
         },
-        widget=forms.TextInput(attrs={"placeholder": "Nombre de Usuario", "class" : "restricted",}),
-        
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Nombre de Usuario",
+                "class": "restricted",
+            }
+        ),
     )
     email = forms.EmailField(
         max_length=254,
@@ -406,7 +431,9 @@ class EditUserForm(RequiredLabelMixin,forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data["username"]
-        users = User.objects.filter(username=username, is_active=True).exclude(pk=self.user_pk)
+        users = User.objects.filter(username=username, is_active=True).exclude(
+            pk=self.user_pk
+        )
         if len(users) > 0:
             error = ValidationError(
                 self.fields["username"].error_messages["unique"], code="unique"
@@ -422,7 +449,9 @@ class EditUserForm(RequiredLabelMixin,forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        users = User.objects.filter(email=email, is_active=True).exclude(pk=self.user_pk)
+        users = User.objects.filter(email=email, is_active=True).exclude(
+            pk=self.user_pk
+        )
         if len(users) > 0:
             error = ValidationError(
                 self.fields["email"].error_messages["unique"], code="unique"
@@ -441,7 +470,29 @@ class EditUserForm(RequiredLabelMixin,forms.ModelForm):
         return password
 
 
-class EditSubprofileForm(RequiredLabelMixin,forms.ModelForm):
+class EditSubprofileForm(RequiredLabelMixin, forms.ModelForm):
+    first_name = forms.CharField(
+        label="Nombres",
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Nombres",
+                "class": "restricted",
+            }
+        ),
+    )
+
+    last_name = forms.CharField(
+        label="Apellidos",
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Apellido",
+                "class": "restricted",
+            }
+        ),
+    )
+    
     email = forms.EmailField(
         max_length=254,
         label="Correo Electrónico",
@@ -466,8 +517,7 @@ class EditSubprofileForm(RequiredLabelMixin,forms.ModelForm):
         self.permissions = permissions
         super().__init__(*args, **kwargs)
         self.fields["group"].queryset = SubprofilesGroup.objects.filter(
-            profile=self.instance.subprofile.profile,
-            is_active=True
+            profile=self.instance.subprofile.profile, is_active=True
         )
         self.fields["group"].initial = self.instance.subprofile.group
         if permissions != "admin":
@@ -475,15 +525,15 @@ class EditSubprofileForm(RequiredLabelMixin,forms.ModelForm):
         self.fields["first_name"].required = True
         self.fields["first_name"].widget.attrs = {
             "placeholder": "Nombre",
-            "class" : "restricted",
+            "class": "restricted",
         }
-        self.fields['first_name'].label = "Nombres"
+        self.fields["first_name"].label = "Nombres"
         self.fields["last_name"].required = True
         self.fields["last_name"].widget.attrs = {
             "placeholder": "Apellido",
-            "class" : "restricted",
+            "class": "restricted",
         }
-        self.fields['last_name'].label = "Apellidos"
+        self.fields["last_name"].label = "Apellidos"
 
     def clean(self):
         cleaned_data = super().clean()
@@ -500,12 +550,16 @@ class EditSubprofileForm(RequiredLabelMixin,forms.ModelForm):
                 exists = exists.exclude(pk=self.instance.subprofile.pk)
 
             if exists.exists():
-                self.add_error("first_name", "Este nombre (nombre y apellido) ya está en uso.")
+                self.add_error(
+                    "first_name", "Este nombre (nombre y apellido) ya está en uso."
+                )
         return cleaned_data
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        users = User.objects.filter(email=email, is_active=True).exclude(pk=self.user_pk)
+        users = User.objects.filter(email=email, is_active=True).exclude(
+            pk=self.user_pk
+        )
         if len(users) > 0:
             error = ValidationError(
                 self.fields["email"].error_messages["unique"], code="unique"
@@ -514,7 +568,7 @@ class EditSubprofileForm(RequiredLabelMixin,forms.ModelForm):
         return email
 
 
-class EditSubprofileGroupForm(RequiredLabelMixin,forms.ModelForm):
+class EditSubprofileGroupForm(RequiredLabelMixin, forms.ModelForm):
     name = forms.CharField(
         max_length=24,
         required=True,
@@ -554,9 +608,9 @@ class EditSubprofileGroupForm(RequiredLabelMixin,forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data["name"]
         profile = Profile.objects.get(user_id=self.user_pk)
-        subgroup = SubprofilesGroup.objects.filter(name=name, profile=profile, is_active=True).exclude(
-            pk=self.instance.pk
-        )
+        subgroup = SubprofilesGroup.objects.filter(
+            name=name, profile=profile, is_active=True
+        ).exclude(pk=self.instance.pk)
         if subgroup.exists():
             error = ValidationError(
                 self.fields["name"].error_messages["unique"], code="Unique"
@@ -579,7 +633,7 @@ class EditSubprofileGroupForm(RequiredLabelMixin,forms.ModelForm):
         fields = ["name", "permissions", "description"]
 
 
-class SetImageForm(RequiredLabelMixin,forms.Form):
+class SetImageForm(RequiredLabelMixin, forms.Form):
     image = forms.ImageField(
         label="Imagen de Perfil",
         required=True,
