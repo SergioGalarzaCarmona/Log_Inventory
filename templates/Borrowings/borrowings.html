@@ -116,7 +116,18 @@
                         <td class="small-view">{{borrowing.in_charge.user.first_name}} {{borrowing.in_charge.user.last_name}}</td>
                         <td class="small-view">{{borrowing.stock}}</td>
                         <td class="small-view">{{borrowing.date_limit}}</td>
-                        <td>{% if borrowing.completed %}Completado{% else %}Pendiente{% endif %}</td>
+                        <td>
+                            {% if borrowing.completed %} 
+                                <span style="color: green; font-weight: bold;">Completado</span>
+                            {% else %}
+                                {% now "Y-m-d H:i:s" as current_time %}
+                                {% if borrowing.date_limit|stringformat:"s" < current_time %}
+                                    <span style="color: red; font-weight: bold;">Expirado</span>
+                                {% else %}
+                                    <span style="color: orange; font-weight: bold;">Pendiente</span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
                         {% if permissions != "Estudiante" %}
                         <td>
                             <label 
