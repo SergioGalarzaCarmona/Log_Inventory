@@ -104,7 +104,6 @@ class RegisterSubprofileGroup(RequiredLabelMixin, forms.ModelForm):
         label="Nombre del grupo",
         widget=forms.TextInput(attrs={"placeholder": "Nombre del Grupo", "class": ""}),
         error_messages={
-            "is_too_short": "El nombre del grupo debe tener al menos 8 caracteres.",
             "unique": "El nombre del grupo ya está registrado.",
             "invalid": "El nombre del grupo no puede ser el mismo que el del perfil.",
         },
@@ -163,11 +162,6 @@ class RegisterSubprofileGroup(RequiredLabelMixin, forms.ModelForm):
         ).exists():
             error = ValidationError(
                 self.fields["name"].error_messages["unique"], code="unique"
-            )
-            self.add_error("name", error)
-        if len(name) < 8:
-            error = ValidationError(
-                self.fields["name"].error_messages["is_too_short"], code="is_too_short"
             )
             self.add_error("name", error)
         return name
