@@ -43,7 +43,7 @@ class RegisterUser(RequiredLabelMixin, UserCreationForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Nombre de Usuario",
-                "class": "restricted",
+                "class": "restricted-username",
             }
         ),
     )
@@ -398,7 +398,7 @@ class EditUserForm(RequiredLabelMixin, forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Nombre de Usuario",
-                "class": "restricted",
+                "class": "restricted-username",
             }
         ),
     )
