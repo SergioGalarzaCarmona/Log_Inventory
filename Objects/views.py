@@ -195,9 +195,10 @@ def manage_object(request, id):
         )
     else:
         if request.POST.get("delete_object", False):
-            object.is_active = False
-            object.save()
-            messages.success(request, "El objeto se eliminó con éxito.")
+            if object.is_active:
+                object.is_active = False
+                object.save()
+                messages.success(request, "El objeto se eliminó con éxito.")
             return redirect("main")
 
         image = request.FILES.get("image", False)
@@ -344,9 +345,10 @@ def manage_object_groups(request):
                     "No se puede eliminar el grupo porque hay objetos activos relacionados a él.",
                 )
                 return redirect("object_groups")
-            group.is_active = False
-            group.save()
-            messages.success(request, "El grupo de objetos se eliminó con éxito.")
+            if group.is_active:
+                group.is_active = False
+                group.save()
+                messages.success(request, "El grupo de objetos se eliminó con éxito.")
             return redirect("object_groups")
         if image := request.FILES.get("image", False):
             group = ObjectsGroup.objects.get(id=request.POST["id"])
@@ -592,25 +594,28 @@ def delete(request):
         return redirect('main')
     
     post_data = request.POST.copy()
+    saved = False
+    message = False
     for input in post_data:
         if input != "csrfmiddlewaretoken":
             type,id = input.split('-')
-            saved = False
-            message = False
+            
+            
             match type:
                 case "user":
                     url = "manage_subusers"
                     subprofile = Subprofile.objects.get(id=id)
-                    if Objects.objects.filter(in_charge = subprofile, is_active=True).exists() or ObjectsGroup.objects.filter(in_charge = subprofile, is_active=True):
+                    if Objects.objects.filter(in_charge = subprofile, is_active=True).exists() or ObjectsGroup.objects.filter(in_charge = subprofile, is_active=True) or Borrowings.objects.filter(in_charge=subprofile, completed=False).exists():
                         messages.error(request,f'El usuario {subprofile.__str__()} no se pudo eliminar porque tiene objetos o grupos bajo su cargo.')
-                        message = 'Los demas usuarios se eliminaron con éxito.'
+                        message = 'Los demás usuarios se eliminaron con éxito.'
                     else:
-                        subuser = subprofile.user
-                        subprofile.is_active=False
-                        subuser.is_active = False
-                        subprofile.save()
-                        subuser.save()
-                        saved = True
+                        if subprofile.is_active:
+                            subuser = subprofile.user
+                            subprofile.is_active=False
+                            subuser.is_active = False
+                            subprofile.save()
+                            subuser.save()
+                            saved = True
                 case "user_group":
                     url = "subusers_group"
                     subuser_group = SubprofilesGroup.objects.get(id=id)
@@ -618,19 +623,21 @@ def delete(request):
                         messages.error(request,f'El grupo {subuser_group.name} no se pudo borrar porque tiene objetos asociados')
                         message = 'Los demás grupos fueron eliminados con éxito.'
                     else:
-                        subuser_group.is_active=False
-                        subuser_group.save()
-                        saved = True
+                        if subuser_group.is_active:
+                            subuser_group.is_active=False
+                            subuser_group.save()
+                            saved = True
                 case "object":
                     url = "main"
                     object = Objects.objects.get(id=id)
                     if Borrowings.objects.filter(object=object, completed=False).exists():
                         messages.error(request,'El objeto no se puede eliminar porque tiene préstamos activos.')
-                        message = 'Los demas objetos se eliminaron con éxito.'
+                        message = 'Los demás objetos se eliminaron con éxito.'
                     else:
-                        object.is_active=False
-                        object.save()
-                        saved = True
+                        if object.is_active:
+                            object.is_active=False
+                            object.save()
+                            saved = True
                 case "object_group":
                     url = "object_groups"
                     object_group = ObjectsGroup.objects.get(id=id)
@@ -638,9 +645,10 @@ def delete(request):
                         messages.error(request,f'El grupo {object_group.name} no se pudo borrar porque tiene objetos asociados')
                         message = 'Los demás grupos fueron eliminados con éxito.'
                     else:
-                        object_group.is_active=False
-                        object_group.save()
-                        saved = True
+                        if object_group.is_active:
+                            object_group.is_active=False
+                            object_group.save()
+                            saved = True
     if saved:
-        messages.success(request,'Los elementos seleccionados se eliminaron correctamente.' if not message else message)
+        messages.success(request,"Los elementos seleccionados se eliminaron correctamente." if not message else message)
     return redirect(f'{url}')
