@@ -132,7 +132,7 @@
         <section class="manual" id="manual">
             <h2 class="manual__title">¿Cómo se usa esta página?</h2>
             <p class="manual__description">Descarga nuestro manual de usuario para obtener una guía completa sobre cómo utilizar todas las funcionalidades de Log Inventory.</p>
-            <a href="{%static '/DOCUMENTS/Manual_de_usuario_Log_Inventory.pdf'%}" download class="manual__button">Descargar Manual</a>
+            <a href="{%static '/FILES/Manual_LogInventory.pdf'%}" download class="manual__button">Descargar Manual</a>
         </section>
         <!-- ===== SOBRE NOSOTROS (tarjeta grande con logos y contacto) ===== -->
 <section class="about-section" id="about">
@@ -181,6 +181,22 @@
         </div> 
         <!-- Copyright -->
     </footer>
+    <script>
+      document.getElementById("downloadBtn").addEventListener("click", () => {
+          fetch("?download=true")
+              .then(response => {
+                  if (!response.ok) throw new Error("Error al descargar el archivo");
+                  return response.blob();
+              })
+              .then(blob => {
+                  const link = document.createElement("a");
+                  link.href = URL.createObjectURL(blob);
+                  link.download = "informe.pdf"; // nombre del archivo
+                  link.click();
+              })
+              .catch(err => console.error(err));
+      });
+      </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
