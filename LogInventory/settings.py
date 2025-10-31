@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0!5sff-zy51at=)uvkz2iwi=lsna4b93vn-c=s$9n5vluccb=!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["log-inventory.com","www.log-inventory.com"]
 
@@ -176,7 +176,7 @@ EMAIL_HOST = 'smtp.hostinger.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'soporte@log-inventory.com'
-EMAIL_HOST_PASSWORD = 'mazamorra'
+EMAIL_HOST_PASSWORD = 'Mazamorraconavena-1'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
   
