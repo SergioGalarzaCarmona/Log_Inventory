@@ -339,7 +339,7 @@ def manage_subusers(request):
             # SEND EMAIL
             current_site = get_current_site(request)
             subject = "Bienvenido a Log Inventory"
-            link = f"http://{current_site.domain}"
+            link = f"https://{current_site.domain}"
             message = render_to_string(
                 "notification_email.html",
                 {
