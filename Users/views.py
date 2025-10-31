@@ -114,7 +114,7 @@ def signUp(request):
     subject = "Activa tu cuenta"
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = account_activation_token.make_token(user)
-    activation_link = f"http://{current_site.domain}{reverse('activate', kwargs={'uidb64': uid, 'token': token})}"
+    activation_link = f"https://{current_site.domain}{reverse('activate', kwargs={'uidb64': uid, 'token': token})}"
     message = render_to_string(
         "activation_email.html",
         {
